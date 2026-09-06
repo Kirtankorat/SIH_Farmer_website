@@ -606,7 +606,8 @@
     document.addEventListener('DOMContentLoaded', () => {
       const user = getUser();
       if (user) {
-        document.getElementById('farmerNameLabel').textContent = '🌾 ' + user.name;
+        const lbl = document.getElementById('farmerNameLabel');
+        if (lbl) lbl.textContent = '🌾 ' + user.name;
         document.querySelector('.dp-name').textContent = user.name;
       }
     });

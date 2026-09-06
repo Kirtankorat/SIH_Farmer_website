@@ -156,7 +156,8 @@
     document.addEventListener('DOMContentLoaded', () => {
       const user = getUser();
       if (user) {
-        document.getElementById('entreNameLabel').textContent = '💼 ' + user.name;
+        const lbl = document.getElementById('entreNameLabel');
+        if (lbl) lbl.textContent = '💼 ' + user.name;
         document.getElementById('entreSidebarName').textContent = user.name;
         document.getElementById('entreHeading').textContent = user.name;
       }

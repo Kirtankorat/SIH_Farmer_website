@@ -188,7 +188,8 @@
     document.addEventListener('DOMContentLoaded', () => {
       const user = getUser();
       if (user) {
-        document.getElementById('coopNameLabel').textContent = '🤝 ' + user.name;
+        const lbl = document.getElementById('coopNameLabel');
+        if (lbl) lbl.textContent = '🤝 ' + user.name;
         document.getElementById('coopSidebarName').textContent = user.name;
         document.getElementById('coopHeading').textContent = user.name;
       }

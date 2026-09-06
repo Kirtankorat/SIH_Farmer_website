@@ -181,7 +181,8 @@
     document.addEventListener('DOMContentLoaded', () => {
       const user = getUser();
       if (user) {
-        document.getElementById('fpoNameLabel').textContent = '🏢 ' + user.name;
+        const lbl = document.getElementById('fpoNameLabel');
+        if (lbl) lbl.textContent = '🏢 ' + user.name;
         document.getElementById('fpoSidebarName').textContent = user.name;
         document.getElementById('fpoHeading').textContent = user.name;
       }

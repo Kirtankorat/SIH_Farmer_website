@@ -189,7 +189,8 @@
     document.addEventListener('DOMContentLoaded', () => {
       const user = getUser();
       if (user) {
-        document.getElementById('bulkNameLabel').textContent = '📦 ' + user.name;
+        const lbl = document.getElementById('bulkNameLabel');
+        if (lbl) lbl.textContent = '📦 ' + user.name;
         document.getElementById('bulkSidebarName').textContent = user.name;
         document.getElementById('bulkHeading').textContent = user.name;
       }
