@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Product — HarvestLink</title>
+  <meta name="description" content="View full product details, farmer information, and place an order on HarvestLink.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="features.css">
+</head>
+<body>
+
+  <nav class="navbar" id="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="nav-logo"><span class="logo-leaf">⬟</span> HARVESTLINK</a>
+      <ul class="nav-links">
+        <li><a href="marketplace.html" class="nav-link">Marketplace</a></li>
+        <li><a href="farmers.html" class="nav-link">Farmers</a></li>
+      </ul>
+      <div class="nav-actions nav-actions-inject"></div>
+      <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+    </div>
+    <div class="mobile-menu" id="mobileMenu">
+      <ul><li><a href="marketplace.html">Marketplace</a></li></ul>
+    </div>
+  </nav>
+
+  <div class="product-detail-page">
+    <div class="container">
+      <div style="margin-bottom:20px;">
+        <a href="marketplace.html" style="font-size:13px;font-weight:700;color:var(--text-muted);">← Back to Marketplace</a>
+      </div>
+      <div class="product-detail-grid" id="productDetailGrid">
+        <!-- filled by JS -->
+      </div>
+
+      <!-- Related products -->
+      <div style="margin-top:64px;">
+        <div class="section-label">More Produce</div>
+        <h2 class="section-heading" style="font-size:28px;">Related products.</h2>
+        <div class="product-grid" id="relatedGrid" style="grid-template-columns: repeat(4, 1fr); margin-top:24px;">
+          <!-- filled by JS -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bulk Buy Modal -->
+  <div class="modal-overlay" id="bulkModal">
+    <div class="modal-box">
+      <button class="modal-close" onclick="closeBulk()">✕</button>
+      <div class="modal-title">Request Bulk Order</div>
+      <div class="modal-sub" id="bulkModalSub">Getting fresh produce in large quantities.</div>
+      <div class="modal-form" id="bulkModalForm">
+        <div class="modal-form-row">
+          <div>
+            <label>Required Quantity</label>
+            <input type="number" id="blkQty" placeholder="500">
+          </div>
+          <div>
+            <label>Unit</label>
+            <select id="blkUnit"><option>kg</option><option>litre</option><option>quintal</option><option>tonne</option></select>
+          </div>
+        </div>
+        <div>
+          <label>Delivery Location</label>
+          <input type="text" id="blkLoc" placeholder="City, State">
+        </div>
+        <div>
+          <label>Required Date</label>
+          <input type="date" id="blkDate">
+        </div>
+        <div>
+          <label>Message (optional)</label>
+          <textarea rows="3" id="blkMsg" placeholder="Any special requirements..."></textarea>
+        </div>
+        <button class="auth-btn-primary" style="width:100%" onclick="submitBulk()">Send Bulk Request →</button>
+      </div>
+      <div id="bulkSuccess" style="display:none;text-align:center;padding:20px 0">
+        <div style="font-size:40px;margin-bottom:16px">✅</div>
+        <div style="font-size:18px;font-weight:700;color:var(--brown);margin-bottom:8px">Bulk request submitted!</div>
+        <div style="font-size:14px;color:var(--text-muted)">We'll help connect you with suitable suppliers for your requirements.</div>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const productId = parseInt(params.get('id')) || 1;
+    const product = PRODUCTS.find(p => p.id === productId) || PRODUCTS[0];
+
+    let qty = 1;
+
+    function renderProduct() {
+      const practiceMap = { organic: '🌿 Organic', natural: '☀️ Natural Farming', conventional: '🏡 Conventional' };
+      const sellerBadgeMap = { farmer: 'badge-farmer', fpo: 'badge-fpo', cooperative: 'badge-coop', entrepreneur: 'badge-entre' };
+      const stars = '★'.repeat(Math.floor(product.rating)) + '☆'.repeat(5 - Math.floor(product.rating));
+      const availLabel = product.availability === 'available' ? '✅ In Stock' : '⚠️ Limited Stock';
+      const availColor = product.availability === 'available' ? 'var(--green)' : 'var(--terracotta)';
+
+      document.getElementById('productDetailGrid').innerHTML = `
+        <div class="pd-image-area" style="font-size:120px;">${product.emoji}</div>
+        <div class="pd-info">
+          <span class="seller-badge ${sellerBadgeMap[product.sellerType] || 'badge-farmer'}">${product.badge}</span>
+          <h1 class="pd-name">${product.name}</h1>
+          <div class="pd-rating-row">
+            <span class="pd-rating">${stars}</span>
+            <span class="pd-reviews">${product.rating} rating · ${Math.floor(Math.random()*40+15)} reviews</span>
+            <span style="font-size:12px;font-weight:700;color:${availColor}">${availLabel}</span>
+          </div>
+          <div class="pd-price-wrap">
+            <span class="pd-price">${product.price}</span>
+            <span class="pd-unit"> / ${product.unit}</span>
+          </div>
+          <div class="pd-qty-row">
+            <span class="pd-qty-label">Quantity</span>
+            <div class="qty-control">
+              <button class="qty-btn" onclick="changeQty(-1)">−</button>
+              <span class="qty-display" id="pdQty">1</span>
+              <button class="qty-btn" onclick="changeQty(1)">+</button>
+            </div>
+            <span style="font-size:13px;color:var(--text-muted);font-weight:600">${product.unit}</span>
+          </div>
+          <div class="pd-buttons">
+            <button class="pd-btn-cart" onclick="addPdToCart()">Add to Cart</button>
+            <button class="pd-btn-buy" onclick="addPdToCart(); window.location.href='cart.html'">Buy Now</button>
+          </div>
+          <button class="pd-bulk-btn" onclick="openBulk()">📦 Buy in Bulk</button>
+
+          <div class="pd-seller-card">
+            <div class="pd-seller-title">Grown by</div>
+            <div class="pd-seller-name">${product.farmer}</div>
+            <div class="pd-seller-loc">📍 ${product.location}</div>
+            <div class="pd-seller-meta">
+              <span class="seller-badge ${sellerBadgeMap[product.sellerType] || 'badge-farmer'}">${product.badge}</span>
+              <span style="font-size:12px;color:var(--green);font-weight:700">✓ Verified</span>
+              <span style="font-size:12px;color:var(--text-muted)">${practiceMap[product.practice]}</span>
+            </div>
+            <a href="farmers.html" style="display:inline-block;margin-top:12px;font-size:13px;font-weight:700;color:var(--green)">View Seller Profile →</a>
+          </div>
+        </div>
+      `;
+    }
+
+    function changeQty(delta) {
+      qty = Math.max(1, qty + delta);
+      document.getElementById('pdQty').textContent = qty;
+    }
+
+    function addPdToCart() {
+      addToCart({ ...product, qty: 0 });
+      // update qty to actual
+      const cart = getCart();
+      const item = cart.find(i => i.id === product.id);
+      if (item) { item.qty = qty; saveCart(cart); }
+      showCartToast(product.name);
+    }
+
+    function openBulk() {
+      document.getElementById('bulkModalSub').textContent = `Requesting bulk supply of ${product.name} from ${product.farmer}.`;
+      document.getElementById('bulkModal').classList.add('open');
+    }
+    function closeBulk() {
+      document.getElementById('bulkModal').classList.remove('open');
+      document.getElementById('bulkModalForm').style.display = 'flex';
+      document.getElementById('bulkSuccess').style.display = 'none';
+    }
+    function submitBulk() {
+      document.getElementById('bulkModalForm').style.display = 'none';
+      document.getElementById('bulkSuccess').style.display = 'block';
+    }
+
+    // Related products
+    function renderRelated() {
+      const related = PRODUCTS.filter(p => p.id !== productId && p.category === product.category).slice(0, 4);
+      if (!related.length) return;
+      document.getElementById('relatedGrid').innerHTML = related.map(p => renderProductCard(p)).join('');
+    }
+
+    renderProduct();
+    renderRelated();
+  </script>
+</body>
+</html>

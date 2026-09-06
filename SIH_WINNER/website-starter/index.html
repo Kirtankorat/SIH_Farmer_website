@@ -2,55 +2,765 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Your Site</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HarvestLink — From Farm. Direct to Market.</title>
+  <meta name="description" content="Buy fresh produce directly from verified farmers and FPOs. HarvestLink connects farmers with consumers and bulk buyers through smarter demand planning and logistics.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="features.css">
 </head>
 <body>
-  <nav class="navbar">
-    <div class="container">
-      <h1 class="logo">Brand</h1>
-      <ul class="nav-links">
-        <li><a href="#home">Home</a></li>
-        <li><a href="#about">About</a></li>
-        <li><a href="#contact">Contact</a></li>
+
+  <!-- NAVIGATION -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="nav-logo">
+        <span class="logo-leaf">⬟</span>
+        HARVESTLINK
+      </a>
+
+      <ul class="nav-links" id="navLinks">
+        <li><a href="index.html" class="nav-link active">Home</a></li>
+        <li><a href="marketplace.html" class="nav-link">Marketplace</a></li>
+        <li><a href="farmers.html" class="nav-link">Farmers</a></li>
+        <li><a href="businesses.html" class="nav-link">Businesses</a></li>
+        <li><a href="#how-it-works" class="nav-link">How It Works</a></li>
+        <li><a href="#ai-logistics" class="nav-link">AI & Logistics</a></li>
       </ul>
+
+      <div class="nav-actions nav-actions-inject">
+        <!-- injected by app.js -->
+      </div>
+
+      <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+
+    <!-- Mobile menu -->
+    <div class="mobile-menu" id="mobileMenu">
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="marketplace.html">Marketplace</a></li>
+        <li><a href="farmers.html">Farmers</a></li>
+        <li><a href="businesses.html">Businesses</a></li>
+        <li><a href="#how-it-works">How It Works</a></li>
+        <li><a href="#ai-logistics">AI & Logistics</a></li>
+      </ul>
+      <div class="mobile-actions">
+        <a href="#" class="btn-outline-full">Login</a>
+        <a href="register.html" class="btn-primary-full">Join as Farmer</a>
+        <a href="marketplace.html" class="btn-green-full">Shop Produce</a>
+      </div>
     </div>
   </nav>
 
-  <main>
-    <section id="home" class="hero">
-      <div class="container">
-        <h2>Welcome</h2>
-        <p>Build something amazing</p>
-        <button class="btn" onclick="alert('Let\'s go')">Start</button>
+  <!-- HERO SECTION -->
+  <section class="hero" id="home">
+    <div class="hero-inner">
+      <div class="hero-text">
+        <div class="hero-badge">Agricultural Marketplace · India</div>
+        <h1 class="hero-headline">Fresh produce.<br><em>Direct from farmers.</em></h1>
+        <p class="hero-sub">Buy fresh produce directly from verified farmers and FPOs, while smarter demand planning and logistics help move food efficiently from farm to market.</p>
+        <div class="hero-buttons">
+          <a href="marketplace.html" class="btn-hero-primary">Shop Fresh Produce</a>
+          <a href="register.html" class="btn-hero-outline">Sell Your Produce</a>
+        </div>
+        <div class="hero-trust">
+          <span>✓ Direct from Farmers</span>
+          <span>✓ Fairer Prices</span>
+          <span>✓ Smarter Delivery</span>
+        </div>
       </div>
-    </section>
-
-    <section id="about" class="about">
-      <div class="container">
-        <h3>About</h3>
-        <p>Your story here.</p>
+      <div class="hero-visual">
+        <div class="hero-image-wrap">
+          <img src="images/hero-farm.jpg" alt="Fresh produce from Indian farmers" class="hero-img" id="heroImg">
+          <div class="hero-stat-card card-top">
+            <div class="stat-icon">🌾</div>
+            <div>
+              <div class="stat-number">2,400+</div>
+              <div class="stat-label">Farmers Listed</div>
+            </div>
+          </div>
+          <div class="hero-stat-card card-bottom">
+            <div class="stat-icon">📦</div>
+            <div>
+              <div class="stat-number">18,000+</div>
+              <div class="stat-label">Orders Delivered</div>
+            </div>
+          </div>
+        </div>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <section id="contact" class="contact">
-      <div class="container">
-        <h3>Get in Touch</h3>
-        <form id="contactForm">
-          <input type="text" placeholder="Name" required>
-          <input type="email" placeholder="Email" required>
-          <textarea placeholder="Message" rows="5" required></textarea>
-          <button type="submit" class="btn">Send</button>
+  <!-- PROBLEM → SOLUTION -->
+  <section class="problem-solution" id="problem">
+    <div class="container">
+      <div class="section-label">Why HarvestLink</div>
+      <h2 class="section-heading">A better connection between<br>farms and markets.</h2>
+
+      <div class="problems-grid">
+        <div class="problem-card">
+          <div class="problem-icon">🧑‍🌾</div>
+          <h3>Farmers</h3>
+          <p>Limited access to buyers and unpredictable demand leaves many farmers dependent on middlemen who take large margins.</p>
+        </div>
+        <div class="problem-divider">→</div>
+        <div class="problem-card">
+          <div class="problem-icon">🛒</div>
+          <h3>Consumers</h3>
+          <p>Higher prices caused by multiple layers in the supply chain — each adding a margin before produce reaches your plate.</p>
+        </div>
+        <div class="problem-divider">→</div>
+        <div class="problem-card">
+          <div class="problem-icon">🚚</div>
+          <h3>Supply Chain</h3>
+          <p>Unnecessary delays and inefficient transportation lead to food waste and avoidable costs at every stage.</p>
+        </div>
+      </div>
+
+      <div class="solution-bridge">
+        <div class="bridge-line"></div>
+        <div class="bridge-text">One connected marketplace.</div>
+        <div class="bridge-line"></div>
+      </div>
+
+      <div class="flow-diagram">
+        <div class="flow-node">
+          <div class="flow-icon">🌱</div>
+          <div class="flow-label">Farmer</div>
+        </div>
+        <div class="flow-arrow">—</div>
+        <div class="flow-node platform-node">
+          <div class="flow-icon">⬟</div>
+          <div class="flow-label">HarvestLink</div>
+        </div>
+        <div class="flow-arrow">—</div>
+        <div class="flow-node">
+          <div class="flow-icon">👨‍👩‍👧</div>
+          <div class="flow-label">Consumer</div>
+        </div>
+        <div class="flow-slash">/</div>
+        <div class="flow-node">
+          <div class="flow-icon">🏪</div>
+          <div class="flow-label">Bulk Buyer</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BENEFITS SECTION -->
+  <section class="benefits" id="benefits">
+    <div class="container">
+      <div class="benefits-grid">
+        <div class="benefit-card benefit-green">
+          <div class="benefit-eyebrow">For Farmers</div>
+          <h3>Better prices,<br>more buyers.</h3>
+          <p>Reach consumers and businesses directly, reducing dependence on unnecessary intermediaries. More of every rupee stays with the farmer.</p>
+          <div class="benefit-visual">
+            <div class="benefit-flow">
+              <span class="bf-node">🌾 Farmer</span>
+              <span class="bf-arrow">→</span>
+              <span class="bf-node highlight">Consumer</span>
+            </div>
+            <div class="benefit-tag">No unnecessary middlemen</div>
+          </div>
+        </div>
+
+        <div class="benefit-card benefit-cream">
+          <div class="benefit-eyebrow">For Consumers</div>
+          <h3>Lower prices,<br>fresher food.</h3>
+          <p>A more direct supply chain can reduce avoidable costs between farm and table. Know exactly where your food comes from.</p>
+          <div class="benefit-visual">
+            <div class="price-comparison">
+              <div class="price-col">
+                <div class="price-label">Traditional</div>
+                <div class="price-val old-price">₹65<span>/kg</span></div>
+              </div>
+              <div class="price-vs">vs</div>
+              <div class="price-col">
+                <div class="price-label">HarvestLink</div>
+                <div class="price-val new-price">₹42<span>/kg</span></div>
+              </div>
+            </div>
+            <div class="benefit-tag">Tomatoes · Illustrative demo pricing</div>
+          </div>
+        </div>
+
+        <div class="benefit-card benefit-brown">
+          <div class="benefit-eyebrow">For Everyone</div>
+          <h3>Smarter supply,<br>less waste.</h3>
+          <p>Better demand visibility and smarter delivery planning can reduce delays, food waste, and transportation inefficiencies.</p>
+          <div class="benefit-visual">
+            <div class="route-mini">
+              <span>Farm</span>
+              <span class="rm-dot"></span>
+              <span>Hub</span>
+              <span class="rm-dot"></span>
+              <span>Buyer</span>
+            </div>
+            <div class="benefit-tag">Optimised logistics</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MARKETPLACE PREVIEW -->
+  <section class="marketplace-preview" id="marketplace">
+    <div class="container">
+      <div class="section-label">Marketplace</div>
+      <h2 class="section-heading">Fresh produce, from the<br>people who grow it.</h2>
+
+      <div class="search-bar-wrap">
+        <div class="search-bar">
+          <span class="search-icon">🔍</span>
+          <input type="text" id="searchInput" placeholder="Search vegetables, fruits, grains..." class="search-input">
+        </div>
+      </div>
+
+      <div class="category-tabs" id="categoryTabs">
+        <button class="cat-btn active" data-cat="all">All</button>
+        <button class="cat-btn" data-cat="vegetables">Vegetables</button>
+        <button class="cat-btn" data-cat="fruits">Fruits</button>
+        <button class="cat-btn" data-cat="grains">Grains</button>
+        <button class="cat-btn" data-cat="pulses">Pulses</button>
+        <button class="cat-btn" data-cat="spices">Spices</button>
+        <button class="cat-btn" data-cat="dairy">Dairy</button>
+      </div>
+
+      <div class="products-grid" id="productsGrid">
+        <!-- JS rendered -->
+      </div>
+
+      <div class="marketplace-cta">
+        <a href="marketplace.html" class="btn-primary-lg">View All Products →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FARMER SECTION -->
+  <section class="farmers-section" id="farmers">
+    <div class="container">
+      <div class="farmers-header">
+        <div>
+          <div class="section-label">Our Farmers</div>
+          <h2 class="section-heading">Meet the people<br>behind your food.</h2>
+        </div>
+        <a href="farmers.html" class="btn-outline-md">View All Farmers</a>
+      </div>
+
+      <div class="farmers-grid">
+        <div class="farmer-card">
+          <div class="farmer-img-wrap">
+            <div class="farmer-placeholder fp-1">👨‍🌾</div>
+            <div class="farmer-badge">✓ Verified</div>
+          </div>
+          <div class="farmer-info">
+            <h4>Ramesh Patel</h4>
+            <div class="farmer-location">📍 Anand, Gujarat</div>
+            <div class="farmer-products">Tomatoes · Okra · Brinjal</div>
+            <div class="farmer-practice organic-tag">Organic</div>
+            <a href="farmers.html" class="btn-sm-outline">View Farm</a>
+          </div>
+        </div>
+
+        <div class="farmer-card">
+          <div class="farmer-img-wrap">
+            <div class="farmer-placeholder fp-2">👩‍🌾</div>
+            <div class="farmer-badge">✓ Verified</div>
+          </div>
+          <div class="farmer-info">
+            <h4>Meena Konkan FPO</h4>
+            <div class="farmer-location">📍 Ratnagiri, Maharashtra</div>
+            <div class="farmer-products">Alphonso Mango · Cashew</div>
+            <div class="farmer-practice natural-tag">Natural Farming</div>
+            <a href="farmers.html" class="btn-sm-outline">View Farm</a>
+          </div>
+        </div>
+
+        <div class="farmer-card">
+          <div class="farmer-img-wrap">
+            <div class="farmer-placeholder fp-3">👨‍🌾</div>
+            <div class="farmer-badge">✓ Verified</div>
+          </div>
+          <div class="farmer-info">
+            <h4>Kisan Collective</h4>
+            <div class="farmer-location">📍 Mehsana, Gujarat</div>
+            <div class="farmer-products">Wheat · Bajra · Mustard</div>
+            <div class="farmer-practice conv-tag">Conventional</div>
+            <a href="farmers.html" class="btn-sm-outline">View Farm</a>
+          </div>
+        </div>
+
+        <div class="farmer-card">
+          <div class="farmer-img-wrap">
+            <div class="farmer-placeholder fp-4">👩‍🌾</div>
+            <div class="farmer-badge">✓ Verified</div>
+          </div>
+          <div class="farmer-info">
+            <h4>Sahyog FPO</h4>
+            <div class="farmer-location">📍 Anand, Gujarat</div>
+            <div class="farmer-products">Turmeric · Ginger · Cumin</div>
+            <div class="farmer-practice organic-tag">Organic</div>
+            <a href="farmers.html" class="btn-sm-outline">View Farm</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="join-farmer-cta">
+        <div class="jfc-text">
+          <h3>Are you a farmer or FPO?</h3>
+          <p>List your produce and reach thousands of buyers directly.</p>
+        </div>
+        <a href="register.html" class="btn-primary-lg">Join as a Farmer →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section class="how-it-works" id="how-it-works">
+    <div class="container">
+      <div class="section-label">The Process</div>
+      <h2 class="section-heading">Simple. Transparent.<br>End to end.</h2>
+
+      <div class="steps-layout">
+        <div class="step-item">
+          <div class="step-num">01</div>
+          <div class="step-body">
+            <h4>Farmers List</h4>
+            <p>Farmers and FPOs create a profile and showcase available produce — with prices, availability, and farming practices.</p>
+          </div>
+        </div>
+        <div class="step-connector"></div>
+        <div class="step-item">
+          <div class="step-num">02</div>
+          <div class="step-body">
+            <h4>Buyers Discover</h4>
+            <p>Consumers and businesses browse products directly, filter by location, category, and price — with full transparency.</p>
+          </div>
+        </div>
+        <div class="step-connector"></div>
+        <div class="step-item">
+          <div class="step-num">03</div>
+          <div class="step-body">
+            <h4>Order Placed</h4>
+            <p>Buyers select quantities and confirm orders. Farmers are notified instantly and can prepare accordingly.</p>
+          </div>
+        </div>
+        <div class="step-connector"></div>
+        <div class="step-item">
+          <div class="step-num">04</div>
+          <div class="step-body">
+            <h4>Delivered</h4>
+            <p>Logistics coordinates pickup and delivery from farm to buyer with route-optimised transport.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="steps-flow-bar">
+        <span>🌱 Farm</span>
+        <span class="sfb-arrow">→</span>
+        <span>🛒 Marketplace</span>
+        <span class="sfb-arrow">→</span>
+        <span>📋 Order</span>
+        <span class="sfb-arrow">→</span>
+        <span>🚛 Delivery</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- BULK BUYER SECTION -->
+  <section class="bulk-buyer" id="businesses">
+    <div class="container">
+      <div class="bulk-grid">
+        <div class="bulk-text">
+          <div class="section-label">For Businesses</div>
+          <h2 class="section-heading">Need produce<br>in bulk?</h2>
+          <p>Connect with farmers and FPOs for larger quantities of fresh produce. Whether you're a restaurant, hotel, or retailer — we help you source directly.</p>
+
+          <div class="buyer-types">
+            <span class="buyer-type">🍽️ Restaurants</span>
+            <span class="buyer-type">🏨 Hotels</span>
+            <span class="buyer-type">🏪 Retailers</span>
+            <span class="buyer-type">📦 Wholesalers</span>
+            <span class="buyer-type">🏫 Institutions</span>
+          </div>
+
+          <div class="bulk-actions">
+            <a href="businesses.html" class="btn-primary-lg">Explore Bulk Supply</a>
+            <a href="#contact" class="btn-outline-md">Request Bulk Order</a>
+          </div>
+        </div>
+
+        <div class="bulk-visual">
+          <div class="bulk-card bc-main">
+            <div class="bc-title">Bulk Order Request</div>
+            <div class="bc-field">
+              <label>Product</label>
+              <div class="bc-value">Fresh Tomatoes</div>
+            </div>
+            <div class="bc-field">
+              <label>Quantity</label>
+              <div class="bc-value">500 kg</div>
+            </div>
+            <div class="bc-field">
+              <label>Delivery</label>
+              <div class="bc-value">Ahmedabad Hub</div>
+            </div>
+            <div class="bc-field">
+              <label>Frequency</label>
+              <div class="bc-value">Weekly</div>
+            </div>
+            <div class="bc-status">✓ Matched with 3 FPOs</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- AI DEMAND FORECASTING -->
+  <section class="ai-section" id="ai-logistics">
+    <div class="container">
+      <div class="ai-header">
+        <div class="section-label">AI Insights · Demo Data</div>
+        <h2 class="section-heading">Know demand before<br>it becomes a problem.</h2>
+        <p class="section-subtext">AI-assisted demand forecasting helps farmers and buyers understand upcoming demand and plan supply more effectively. <em>(Simulated demo data below)</em></p>
+      </div>
+
+      <div class="ai-dashboard">
+        <div class="ai-sidebar">
+          <div class="ai-nav-item active" data-crop="tomato">🍅 Tomato</div>
+          <div class="ai-nav-item" data-crop="onion">🧅 Onion</div>
+          <div class="ai-nav-item" data-crop="potato">🥔 Potato</div>
+          <div class="ai-nav-item" data-crop="wheat">🌾 Wheat</div>
+        </div>
+
+        <div class="ai-main" id="aiMain">
+          <!-- JS renders content -->
+        </div>
+
+        <div class="ai-alerts">
+          <div class="alert-title">🔔 Demand Alerts</div>
+          <div class="alert-item alert-high">
+            <span class="alert-dot"></span>
+            Tomato — High demand next week
+          </div>
+          <div class="alert-item alert-stable">
+            <span class="alert-dot"></span>
+            Onion — Stable. No action needed
+          </div>
+          <div class="alert-item alert-low">
+            <span class="alert-dot"></span>
+            Potato — Moderate drop expected
+          </div>
+          <div class="alert-item alert-stable">
+            <span class="alert-dot"></span>
+            Wheat — Consistent demand
+          </div>
+          <div class="demo-disclaimer">⚠ All data is simulated for demonstration purposes.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- LOGISTICS SECTION -->
+  <section class="logistics-section" id="logistics">
+    <div class="container">
+      <div class="logistics-grid">
+        <div class="logistics-text">
+          <div class="section-label">Smart Logistics</div>
+          <h2 class="section-heading">Smarter routes.<br>Faster movement.</h2>
+          <p>Route optimisation coordinates pickups and deliveries so produce moves efficiently from farm to buyer with minimal delay.</p>
+
+          <div class="logistics-stats">
+            <div class="l-stat">
+              <div class="l-stat-num">12</div>
+              <div class="l-stat-label">Orders</div>
+            </div>
+            <div class="l-stat">
+              <div class="l-stat-num">4</div>
+              <div class="l-stat-label">Delivery Stops</div>
+            </div>
+            <div class="l-stat">
+              <div class="l-stat-num">✓</div>
+              <div class="l-stat-label">Optimised Route</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="logistics-map">
+          <div class="map-card">
+            <div class="map-header">
+              <span>📍 Route Overview</span>
+              <span class="map-live">● Live Demo</span>
+            </div>
+            <div class="route-steps">
+              <div class="route-step active-step">
+                <div class="rs-dot"></div>
+                <div class="rs-info">
+                  <div class="rs-title">Farm A — Ramesh Patel</div>
+                  <div class="rs-sub">Pickup · 7:00 AM</div>
+                </div>
+              </div>
+              <div class="route-line"></div>
+              <div class="route-step">
+                <div class="rs-dot"></div>
+                <div class="rs-info">
+                  <div class="rs-title">Collection Point</div>
+                  <div class="rs-sub">Sorting & Packaging · 9:00 AM</div>
+                </div>
+              </div>
+              <div class="route-line"></div>
+              <div class="route-step">
+                <div class="rs-dot"></div>
+                <div class="rs-info">
+                  <div class="rs-title">Local Hub — Anand</div>
+                  <div class="rs-sub">Distribution · 11:00 AM</div>
+                </div>
+              </div>
+              <div class="route-line"></div>
+              <div class="route-step">
+                <div class="rs-dot rs-buyer"></div>
+                <div class="rs-info">
+                  <div class="rs-title">Customer 1 — Mehul Store</div>
+                  <div class="rs-sub">Delivered · 1:30 PM</div>
+                </div>
+              </div>
+              <div class="route-line"></div>
+              <div class="route-step">
+                <div class="rs-dot rs-buyer"></div>
+                <div class="rs-info">
+                  <div class="rs-title">Customer 2 — Green Kitchen</div>
+                  <div class="rs-sub">Delivered · 2:15 PM</div>
+                </div>
+              </div>
+              <div class="route-line"></div>
+              <div class="route-step">
+                <div class="rs-dot rs-buyer"></div>
+                <div class="rs-info">
+                  <div class="rs-title">Customer 3 — Patel Home</div>
+                  <div class="rs-sub">En route · 3:00 PM</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- LOGISTICS CHAIN -->
+  <section class="logistics-chain">
+    <div class="container">
+      <h2 class="section-heading center">How produce moves.</h2>
+      <div class="chain-steps">
+        <div class="chain-step">
+          <div class="chain-icon">🌾</div>
+          <div class="chain-title">Farm</div>
+          <div class="chain-desc">Produce ready for harvest</div>
+        </div>
+        <div class="chain-arrow">→</div>
+        <div class="chain-step">
+          <div class="chain-icon">📦</div>
+          <div class="chain-title">Collection</div>
+          <div class="chain-desc">Produce collected from farm</div>
+        </div>
+        <div class="chain-arrow">→</div>
+        <div class="chain-step">
+          <div class="chain-icon">⚖️</div>
+          <div class="chain-title">Sorting</div>
+          <div class="chain-desc">Orders prepared & graded</div>
+        </div>
+        <div class="chain-arrow">→</div>
+        <div class="chain-step">
+          <div class="chain-icon">🚛</div>
+          <div class="chain-title">Transport</div>
+          <div class="chain-desc">Route-optimised delivery</div>
+        </div>
+        <div class="chain-arrow">→</div>
+        <div class="chain-step">
+          <div class="chain-icon">🏠</div>
+          <div class="chain-title">Delivery</div>
+          <div class="chain-desc">Buyer receives fresh produce</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- AI + LOGISTICS COMBINED -->
+  <section class="ai-logistics-combined">
+    <div class="container">
+      <div class="section-label">How It All Connects</div>
+      <h2 class="section-heading center">Demand data drives<br>smarter delivery.</h2>
+
+      <div class="combined-flow">
+        <div class="cf-node cf-ai">
+          <div class="cf-icon">📊</div>
+          <div class="cf-label">Demand Forecasting</div>
+          <div class="cf-desc">Predict upcoming demand using sales patterns and trends</div>
+        </div>
+        <div class="cf-arrow">↓</div>
+        <div class="cf-node cf-plan">
+          <div class="cf-icon">📋</div>
+          <div class="cf-label">Supply Planning</div>
+          <div class="cf-desc">Farmers prepare the right quantity at the right time</div>
+        </div>
+        <div class="cf-arrow">↓</div>
+        <div class="cf-node cf-route">
+          <div class="cf-icon">🗺️</div>
+          <div class="cf-label">Route Optimisation</div>
+          <div class="cf-desc">Plan efficient delivery routes based on order clusters</div>
+        </div>
+        <div class="cf-arrow">↓</div>
+        <div class="cf-node cf-result">
+          <div class="cf-icon">✅</div>
+          <div class="cf-label">Better Movement</div>
+          <div class="cf-desc">Less waste, lower costs, faster delivery for everyone</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- IMPACT SECTION -->
+  <section class="impact-section" id="impact">
+    <div class="container">
+      <div class="impact-inner">
+        <div class="impact-header">
+          <h2>From farm to market,<br>with less friction.</h2>
+          <p>HarvestLink is designed to make agricultural markets more direct, transparent, and efficient for everyone involved.</p>
+          <div class="demo-note">Values below are illustrative. Demo purposes only.</div>
+        </div>
+        <div class="impact-metrics">
+          <div class="impact-metric">
+            <div class="im-icon">🌱</div>
+            <div class="im-label">Better Market Access</div>
+            <div class="im-desc">Farmers can reach more buyers directly, without depending on intermediaries.</div>
+          </div>
+          <div class="impact-metric">
+            <div class="im-icon">💰</div>
+            <div class="im-label">Fairer Pricing</div>
+            <div class="im-desc">More direct transactions can reduce unnecessary cost layers between farm and buyer.</div>
+          </div>
+          <div class="impact-metric">
+            <div class="im-icon">🚛</div>
+            <div class="im-label">Efficient Logistics</div>
+            <div class="im-desc">Better planning can reduce avoidable transportation inefficiencies and food waste.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section class="contact-section" id="contact">
+    <div class="container">
+      <div class="contact-grid">
+        <div class="contact-text">
+          <div class="section-label">Get in Touch</div>
+          <h2 class="section-heading">Have a question?<br>We'd love to hear from you.</h2>
+          <p>Whether you're a farmer, a consumer, or a business looking to buy in bulk — reach out and we'll get back to you.</p>
+        </div>
+        <form class="contact-form" id="contactForm">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="contactName">Name</label>
+              <input type="text" id="contactName" placeholder="Your name" required>
+            </div>
+            <div class="form-group">
+              <label for="contactPhone">Phone</label>
+              <input type="tel" id="contactPhone" placeholder="+91 00000 00000">
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="contactEmail">Email</label>
+            <input type="email" id="contactEmail" placeholder="your@email.com" required>
+          </div>
+          <div class="form-group">
+            <label for="contactType">I am a</label>
+            <select id="contactType">
+              <option value="">Select your role</option>
+              <option>Consumer</option>
+              <option>Farmer / FPO</option>
+              <option>Restaurant / Hotel</option>
+              <option>Retailer</option>
+              <option>Wholesaler</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="contactMsg">Message</label>
+            <textarea id="contactMsg" rows="4" placeholder="Tell us how we can help..." required></textarea>
+          </div>
+          <button type="submit" class="btn-submit" id="contactSubmit">Send Message</button>
         </form>
       </div>
-    </section>
-  </main>
+    </div>
+  </section>
 
-  <footer>
-    <p>&copy; 2024. All rights.</p>
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="footer-logo"><span>⬟</span> HARVESTLINK</div>
+          <div class="footer-tagline">From Farm. Direct to Market.</div>
+          <p class="footer-about">A digital marketplace connecting farmers and FPOs directly with consumers and bulk buyers.</p>
+        </div>
+
+        <div class="footer-col">
+          <div class="footer-col-title">Marketplace</div>
+          <ul>
+            <li><a href="marketplace.html">Products</a></li>
+            <li><a href="farmers.html">Farmers</a></li>
+            <li><a href="businesses.html">Bulk Buyers</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <div class="footer-col-title">Platform</div>
+          <ul>
+            <li><a href="#how-it-works">How It Works</a></li>
+            <li><a href="#ai-logistics">AI & Logistics</a></li>
+            <li><a href="#impact">Impact</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <div class="footer-col-title">Company</div>
+          <ul>
+            <li><a href="about.html">About</a></li>
+            <li><a href="faq.html">FAQ</a></li>
+            <li><a href="#contact">Contact</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <div class="footer-col-title">Legal</div>
+          <ul>
+            <li><a href="#">Privacy</a></li>
+            <li><a href="#">Terms</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <span>© 2024 HarvestLink. Built for Indian agriculture.</span>
+        <span class="footer-demo-note">This is a prototype/demo — not a live platform.</span>
+      </div>
+    </div>
   </footer>
 
+  <!-- Cart toast -->
+  <div class="cart-toast" id="cartToast">
+    <span class="toast-icon">✓</span>
+    <span class="toast-msg" id="toastMsg">Added to cart</span>
+  </div>
+
+  <script src="app.js"></script>
   <script src="script.js"></script>
 </body>
 </html>

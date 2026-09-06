@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Join as Farmer — HarvestLink</title>
+  <meta name="description" content="Register as a farmer or FPO on HarvestLink. List your produce and reach thousands of buyers directly.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .register-page {
+      margin-top: 64px;
+      min-height: calc(100vh - 64px);
+      display: flex;
+      align-items: stretch;
+      background: var(--cream);
+    }
+
+    .register-left {
+      flex: 0 0 380px;
+      background: var(--green);
+      padding: 60px 48px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .rl-top {}
+    .rl-logo { font-family: 'Manrope', sans-serif; font-weight: 800; font-size: 18px; color: #fff; margin-bottom: 48px; }
+    .rl-headline { font-family: 'DM Serif Display', serif; font-size: 32px; color: #fff; line-height: 1.2; margin-bottom: 16px; }
+    .rl-sub { font-size: 15px; color: rgba(255,255,255,0.65); line-height: 1.65; }
+
+    .rl-benefits { margin-top: 48px; }
+    .rl-benefit {
+      display: flex;
+      gap: 14px;
+      margin-bottom: 20px;
+      align-items: flex-start;
+    }
+    .rlb-icon {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.15);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px;
+      flex-shrink: 0;
+    }
+    .rlb-text { font-size: 14px; color: rgba(255,255,255,0.7); line-height: 1.5; }
+    .rlb-text strong { color: #fff; display: block; font-size: 14px; }
+
+    .rl-note { font-size: 12px; color: rgba(255,255,255,0.4); margin-top: 40px; }
+
+    /* Form area */
+    .register-right {
+      flex: 1;
+      padding: 60px;
+      overflow-y: auto;
+    }
+
+    .form-progress {
+      display: flex;
+      gap: 0;
+      margin-bottom: 48px;
+    }
+
+    .fp-step {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex: 1;
+    }
+
+    .fp-circle {
+      width: 30px; height: 30px;
+      border-radius: 50%;
+      border: 2px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-muted);
+      background: var(--warm-white);
+      flex-shrink: 0;
+      transition: all var(--transition);
+    }
+
+    .fp-step.active .fp-circle {
+      border-color: var(--green);
+      background: var(--green);
+      color: #fff;
+    }
+
+    .fp-step.done .fp-circle {
+      border-color: var(--green);
+      background: var(--green-muted);
+      color: var(--green);
+    }
+
+    .fp-label {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+    .fp-step.active .fp-label { color: var(--brown); }
+
+    .fp-line {
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+      margin: 0 8px;
+    }
+
+    .step-form { display: none; }
+    .step-form.active { display: block; }
+
+    .step-form h2 { font-size: 26px; color: var(--brown); margin-bottom: 6px; }
+    .step-form .step-desc { font-size: 15px; color: var(--text-secondary); margin-bottom: 32px; }
+
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    .form-group { display: flex; flex-direction: column; gap: 6px; }
+    .form-group.full { grid-column: 1 / -1; }
+    .form-group label { font-size: 13px; font-weight: 600; color: var(--text-secondary); }
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      padding: 11px 14px;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-sm);
+      font-family: 'Manrope', sans-serif;
+      font-size: 14px;
+      color: var(--text-primary);
+      background: var(--warm-white);
+      transition: border-color var(--transition), box-shadow var(--transition);
+    }
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      outline: none;
+      border-color: var(--green);
+      box-shadow: 0 0 0 3px rgba(49,92,58,0.08);
+    }
+
+    /* Practice options */
+    .practice-options {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .practice-opt {
+      padding: 16px;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      transition: all var(--transition);
+      background: var(--warm-white);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .practice-opt:hover, .practice-opt.selected {
+      border-color: var(--green);
+      background: var(--green-muted);
+    }
+    .practice-opt .po-radio {
+      width: 18px; height: 18px;
+      border-radius: 50%;
+      border: 2px solid var(--border);
+      background: #fff;
+      flex-shrink: 0;
+      transition: all var(--transition);
+    }
+    .practice-opt.selected .po-radio {
+      border-color: var(--green);
+      background: var(--green);
+    }
+    .practice-opt-text {}
+    .po-title { font-size: 14px; font-weight: 700; color: var(--brown); }
+    .po-desc { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+
+    /* Form nav */
+    .form-actions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 36px;
+      padding-top: 24px;
+      border-top: 1px solid var(--border);
+    }
+
+    .btn-prev {
+      background: transparent;
+      border: 1.5px solid var(--border);
+      color: var(--text-secondary);
+      padding: 11px 24px;
+      border-radius: var(--radius-sm);
+      font-family: 'Manrope', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all var(--transition);
+    }
+    .btn-prev:hover { border-color: var(--brown); color: var(--brown); }
+
+    .btn-next {
+      background: var(--green);
+      color: #fff;
+      border: none;
+      padding: 12px 28px;
+      border-radius: var(--radius-sm);
+      font-family: 'Manrope', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all var(--transition);
+    }
+    .btn-next:hover { background: var(--green-light); }
+
+    /* Review section */
+    .review-summary {
+      background: var(--cream);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 24px;
+      margin-bottom: 24px;
+    }
+    .rs-title { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted); margin-bottom: 16px; }
+    .rs-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 14px; }
+    .rs-row:last-child { border-bottom: none; }
+    .rs-key { color: var(--text-muted); font-weight: 600; }
+    .rs-val { color: var(--brown); font-weight: 700; }
+
+    /* Success */
+    .success-state {
+      text-align: center;
+      padding: 60px 0;
+    }
+    .success-icon { font-size: 60px; margin-bottom: 20px; }
+    .success-state h2 { font-size: 30px; color: var(--brown); margin-bottom: 12px; }
+    .success-state p { color: var(--text-secondary); font-size: 16px; margin-bottom: 32px; }
+
+    @media (max-width: 900px) {
+      .register-left { display: none; }
+      .register-right { padding: 40px 24px; }
+    }
+    @media (max-width: 600px) {
+      .form-grid { grid-template-columns: 1fr; }
+      .practice-options { grid-template-columns: 1fr; }
+      .form-progress { overflow-x: auto; padding-bottom: 8px; }
+    }
+  </style>
+</head>
+<body>
+  <!-- NAVBAR -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="nav-logo"><span class="logo-leaf">⬟</span> HARVESTLINK</a>
+      <ul class="nav-links">
+        <li><a href="index.html" class="nav-link">Home</a></li>
+        <li><a href="marketplace.html" class="nav-link">Marketplace</a></li>
+        <li><a href="farmers.html" class="nav-link">Farmers</a></li>
+      </ul>
+      <div class="nav-actions">
+        <a href="#" class="nav-login">Login</a>
+        <a href="marketplace.html" class="btn-primary-sm">Shop Produce</a>
+      </div>
+      <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+    </div>
+    <div class="mobile-menu" id="mobileMenu">
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="marketplace.html">Marketplace</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="register-page">
+    <!-- LEFT PANEL -->
+    <div class="register-left">
+      <div class="rl-top">
+        <div class="rl-logo">⬟ HARVESTLINK</div>
+        <div class="rl-headline">Sell your produce.<br>Reach more buyers.</div>
+        <div class="rl-sub">Join HarvestLink as a farmer or FPO to list your produce and connect directly with consumers and bulk buyers across India.</div>
+
+        <div class="rl-benefits">
+          <div class="rl-benefit">
+            <div class="rlb-icon">🌾</div>
+            <div class="rlb-text"><strong>Direct access to buyers</strong>Reach consumers and businesses without depending on intermediaries.</div>
+          </div>
+          <div class="rl-benefit">
+            <div class="rlb-icon">📊</div>
+            <div class="rlb-text"><strong>Demand insights</strong>See upcoming demand trends and plan your supply better.</div>
+          </div>
+          <div class="rl-benefit">
+            <div class="rlb-icon">🚛</div>
+            <div class="rlb-text"><strong>Logistics support</strong>Coordinated pickup and delivery from your farm.</div>
+          </div>
+        </div>
+      </div>
+      <div class="rl-note">This is a demo registration form. No data is stored or submitted.</div>
+    </div>
+
+    <!-- RIGHT PANEL (FORM) -->
+    <div class="register-right">
+      <!-- Progress bar -->
+      <div class="form-progress" id="formProgress">
+        <div class="fp-step active" data-step="1">
+          <div class="fp-circle">1</div>
+          <div class="fp-label">Basic Info</div>
+        </div>
+        <div class="fp-line"></div>
+        <div class="fp-step" data-step="2">
+          <div class="fp-circle">2</div>
+          <div class="fp-label">Farm Details</div>
+        </div>
+        <div class="fp-line"></div>
+        <div class="fp-step" data-step="3">
+          <div class="fp-circle">3</div>
+          <div class="fp-label">Practice</div>
+        </div>
+        <div class="fp-line"></div>
+        <div class="fp-step" data-step="4">
+          <div class="fp-circle">4</div>
+          <div class="fp-label">Review</div>
+        </div>
+      </div>
+
+      <!-- STEP 1 -->
+      <div class="step-form active" id="step1">
+        <h2>Basic Information</h2>
+        <p class="step-desc">Tell us a little about yourself. We'll use this to create your farmer profile.</p>
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="r_fname">First Name</label>
+            <input type="text" id="r_fname" placeholder="Ramesh">
+          </div>
+          <div class="form-group">
+            <label for="r_lname">Last Name / Farm Name</label>
+            <input type="text" id="r_lname" placeholder="Patel">
+          </div>
+          <div class="form-group">
+            <label for="r_phone">Phone Number</label>
+            <input type="tel" id="r_phone" placeholder="+91 00000 00000">
+          </div>
+          <div class="form-group">
+            <label for="r_email">Email (optional)</label>
+            <input type="email" id="r_email" placeholder="your@email.com">
+          </div>
+          <div class="form-group full">
+            <label for="r_type">I am a</label>
+            <select id="r_type">
+              <option value="">Select...</option>
+              <option>Individual Farmer</option>
+              <option>Farmer Producer Organisation (FPO)</option>
+              <option>Cooperative</option>
+              <option>Agri-entrepreneur</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-actions">
+          <span></span>
+          <button class="btn-next" onclick="goStep(2)">Next: Farm Details →</button>
+        </div>
+      </div>
+
+      <!-- STEP 2 -->
+      <div class="step-form" id="step2">
+        <h2>Farm Details</h2>
+        <p class="step-desc">Where is your farm, and what do you grow?</p>
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="r_village">Village / Town</label>
+            <input type="text" id="r_village" placeholder="Anand">
+          </div>
+          <div class="form-group">
+            <label for="r_district">District</label>
+            <input type="text" id="r_district" placeholder="Anand">
+          </div>
+          <div class="form-group">
+            <label for="r_state">State</label>
+            <select id="r_state">
+              <option value="">Select state</option>
+              <option>Gujarat</option>
+              <option>Maharashtra</option>
+              <option>Punjab</option>
+              <option>Uttar Pradesh</option>
+              <option>Madhya Pradesh</option>
+              <option>Rajasthan</option>
+              <option>Karnataka</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="r_size">Farm Size (acres)</label>
+            <input type="number" id="r_size" placeholder="5">
+          </div>
+          <div class="form-group full">
+            <label for="r_products">Products you grow</label>
+            <input type="text" id="r_products" placeholder="e.g. Tomatoes, Wheat, Turmeric">
+          </div>
+          <div class="form-group full">
+            <label for="r_monthly">Average monthly produce (kg)</label>
+            <input type="number" id="r_monthly" placeholder="500">
+          </div>
+        </div>
+        <div class="form-actions">
+          <button class="btn-prev" onclick="goStep(1)">← Back</button>
+          <button class="btn-next" onclick="goStep(3)">Next: Farming Practice →</button>
+        </div>
+      </div>
+
+      <!-- STEP 3 -->
+      <div class="step-form" id="step3">
+        <h2>Farming Practice</h2>
+        <p class="step-desc">How do you farm? This helps buyers make informed choices.</p>
+        <div class="practice-options" id="practiceOptions">
+          <div class="practice-opt" data-val="organic" onclick="selectPractice(this)">
+            <div class="po-radio"></div>
+            <div class="practice-opt-text">
+              <div class="po-title">🌿 Organic</div>
+              <div class="po-desc">No synthetic pesticides or fertilisers</div>
+            </div>
+          </div>
+          <div class="practice-opt" data-val="natural" onclick="selectPractice(this)">
+            <div class="po-radio"></div>
+            <div class="practice-opt-text">
+              <div class="po-title">☀️ Natural Farming</div>
+              <div class="po-desc">Zero-budget natural farming methods</div>
+            </div>
+          </div>
+          <div class="practice-opt" data-val="conventional" onclick="selectPractice(this)">
+            <div class="po-radio"></div>
+            <div class="practice-opt-text">
+              <div class="po-title">🏡 Conventional</div>
+              <div class="po-desc">Standard farming with best practices</div>
+            </div>
+          </div>
+          <div class="practice-opt" data-val="other" onclick="selectPractice(this)">
+            <div class="po-radio"></div>
+            <div class="practice-opt-text">
+              <div class="po-title">🌱 Other</div>
+              <div class="po-desc">Mixed or transitional practices</div>
+            </div>
+          </div>
+        </div>
+        <div class="form-actions">
+          <button class="btn-prev" onclick="goStep(2)">← Back</button>
+          <button class="btn-next" onclick="goStep(4)">Review & Submit →</button>
+        </div>
+      </div>
+
+      <!-- STEP 4 -->
+      <div class="step-form" id="step4">
+        <h2>Review & Submit</h2>
+        <p class="step-desc">Check your information before submitting.</p>
+
+        <div class="review-summary">
+          <div class="rs-title">Basic Information</div>
+          <div class="rs-row"><span class="rs-key">Name</span><span class="rs-val" id="rv_name">—</span></div>
+          <div class="rs-row"><span class="rs-key">Phone</span><span class="rs-val" id="rv_phone">—</span></div>
+          <div class="rs-row"><span class="rs-key">Type</span><span class="rs-val" id="rv_type">—</span></div>
+        </div>
+
+        <div class="review-summary">
+          <div class="rs-title">Farm Details</div>
+          <div class="rs-row"><span class="rs-key">Location</span><span class="rs-val" id="rv_location">—</span></div>
+          <div class="rs-row"><span class="rs-key">Size</span><span class="rs-val" id="rv_size">—</span></div>
+          <div class="rs-row"><span class="rs-key">Products</span><span class="rs-val" id="rv_products">—</span></div>
+        </div>
+
+        <div class="review-summary">
+          <div class="rs-title">Practice</div>
+          <div class="rs-row"><span class="rs-key">Farming Method</span><span class="rs-val" id="rv_practice">—</span></div>
+        </div>
+
+        <div class="form-actions">
+          <button class="btn-prev" onclick="goStep(3)">← Back</button>
+          <button class="btn-next" onclick="submitForm()">Submit Registration ✓</button>
+        </div>
+      </div>
+
+      <!-- SUCCESS STATE -->
+      <div class="step-form" id="stepSuccess">
+        <div class="success-state">
+          <div class="success-icon">🎉</div>
+          <h2>Registration Submitted!</h2>
+          <p>Thank you for joining HarvestLink. Our team will verify your details and get in touch within 2-3 working days.</p>
+          <a href="index.html" class="btn-primary-lg">Back to Home →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+  <script>
+    let currentStep = 1;
+    let selectedPractice = '';
+
+    function goStep(step) {
+      document.querySelectorAll('.step-form').forEach(f => f.classList.remove('active'));
+      document.getElementById('step' + step)?.classList.add('active');
+
+      document.querySelectorAll('.fp-step').forEach(s => {
+        s.classList.remove('active', 'done');
+        const sn = parseInt(s.dataset.step);
+        if (sn < step) s.classList.add('done');
+        if (sn === step) s.classList.add('active');
+      });
+
+      currentStep = step;
+      if (step === 4) populateReview();
+    }
+
+    function selectPractice(el) {
+      document.querySelectorAll('.practice-opt').forEach(o => o.classList.remove('selected'));
+      el.classList.add('selected');
+      selectedPractice = el.dataset.val;
+    }
+
+    function populateReview() {
+      const fname = document.getElementById('r_fname')?.value || '—';
+      const lname = document.getElementById('r_lname')?.value || '';
+      const phone = document.getElementById('r_phone')?.value || '—';
+      const type  = document.getElementById('r_type')?.value || '—';
+      const village = document.getElementById('r_village')?.value || '';
+      const state = document.getElementById('r_state')?.value || '';
+      const size  = document.getElementById('r_size')?.value;
+      const products = document.getElementById('r_products')?.value || '—';
+
+      document.getElementById('rv_name').textContent = `${fname} ${lname}`.trim() || '—';
+      document.getElementById('rv_phone').textContent = phone;
+      document.getElementById('rv_type').textContent = type;
+      document.getElementById('rv_location').textContent = [village, state].filter(Boolean).join(', ') || '—';
+      document.getElementById('rv_size').textContent = size ? `${size} acres` : '—';
+      document.getElementById('rv_products').textContent = products;
+      document.getElementById('rv_practice').textContent = selectedPractice || '—';
+    }
+
+    function submitForm() {
+      document.querySelectorAll('.step-form').forEach(f => f.classList.remove('active'));
+      document.getElementById('stepSuccess')?.classList.add('active');
+      document.getElementById('formProgress').style.opacity = '0.4';
+    }
+  </script>
+</body>
+</html>

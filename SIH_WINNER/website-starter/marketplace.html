@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Marketplace — HarvestLink</title>
+  <meta name="description" content="Shop fresh produce directly from farmers, FPOs, and cooperatives across India.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="features.css">
+</head>
+<body>
+
+  <nav class="navbar" id="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="nav-logo"><span class="logo-leaf">⬟</span> HARVESTLINK</a>
+      <ul class="nav-links">
+        <li><a href="index.html" class="nav-link">Home</a></li>
+        <li><a href="marketplace.html" class="nav-link">Marketplace</a></li>
+        <li><a href="farmers.html" class="nav-link">Farmers</a></li>
+      </ul>
+      <div class="nav-actions nav-actions-inject"></div>
+      <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+    </div>
+    <div class="mobile-menu" id="mobileMenu">
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="farmers.html">Farmers</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="marketplace-page">
+    <!-- Header -->
+    <header class="page-header">
+      <div class="container" style="text-align: center;">
+        <div class="section-label">Fresh & Direct</div>
+        <h1>The Marketplace</h1>
+        <p>Source directly from farmers, FPOs, and cooperatives across India. No middlemen.</p>
+        <div class="search-bar">
+          <input type="text" id="searchInput" placeholder="Search for produce, farmers, or locations..." aria-label="Search">
+          <button class="search-btn">🔍</button>
+        </div>
+      </div>
+    </header>
+
+    <div class="container">
+      <div class="marketplace-layout">
+        
+        <!-- Filters Sidebar -->
+        <aside class="filters-sidebar">
+          <div class="filters-header">
+            <h3>Filters</h3>
+            <button class="clear-filters" onclick="clearFilters()">Clear All</button>
+          </div>
+
+          <div class="filter-group">
+            <h4>Category</h4>
+            <div class="filter-options" id="filter-category">
+              <label><input type="checkbox" value="vegetables"> Vegetables</label>
+              <label><input type="checkbox" value="fruits"> Fruits</label>
+              <label><input type="checkbox" value="grains"> Grains & Cereals</label>
+              <label><input type="checkbox" value="pulses"> Pulses & Dals</label>
+              <label><input type="checkbox" value="spices"> Spices</label>
+              <label><input type="checkbox" value="dairy"> Dairy</label>
+            </div>
+          </div>
+
+          <div class="filter-group">
+            <h4>Farming Practice</h4>
+            <div class="filter-options" id="filter-practice">
+              <label><input type="checkbox" value="organic"> 🌿 Organic</label>
+              <label><input type="checkbox" value="natural"> ☀️ Natural Farming</label>
+              <label><input type="checkbox" value="conventional"> 🏡 Conventional</label>
+            </div>
+          </div>
+
+          <div class="filter-group">
+            <h4>Seller Type</h4>
+            <div class="filter-options" id="filter-sellerType">
+              <label><input type="checkbox" value="farmer"> Individual Farmer</label>
+              <label><input type="checkbox" value="fpo"> FPO</label>
+              <label><input type="checkbox" value="cooperative"> Cooperative</label>
+              <label><input type="checkbox" value="entrepreneur"> Agri Entrepreneur</label>
+            </div>
+          </div>
+
+          <div class="filter-group">
+            <h4>Price Range</h4>
+            <input type="range" id="priceRange" min="0" max="500" value="500" style="width:100%">
+            <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--text-muted);margin-top:8px">
+              <span>₹0</span>
+              <span id="priceVal">₹500</span>
+            </div>
+          </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="marketplace-content">
+          <div class="marketplace-controls">
+            <div class="results-count" id="resultsCount">Loading products...</div>
+            <div class="sort-control">
+              <label for="sortSelect">Sort by:</label>
+              <select id="sortSelect">
+                <option value="recommended">Recommended</option>
+                <option value="price-low">Price: Low to High</option>
+                <option value="price-high">Price: High to Low</option>
+                <option value="rating">Highest Rated</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="product-grid" id="marketplaceGrid">
+            <!-- Products injected by app.js -->
+          </div>
+          
+          <div id="noResults" style="display:none;text-align:center;padding:40px 0;">
+            <div style="font-size:48px;margin-bottom:16px;">🌱</div>
+            <h3 style="font-size:20px;color:var(--brown);margin-bottom:8px">No produce found</h3>
+            <p style="color:var(--text-muted)">Try adjusting your filters or search term.</p>
+            <button class="btn-outline-sm" style="margin-top:16px" onclick="clearFilters()">Clear Filters</button>
+          </div>
+        </main>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+  <script src="script.js"></script>
+  <script>
+    // Marketplace logic
+    let currentProducts = [...PRODUCTS];
+
+    function renderMarketplace() {
+      const grid = document.getElementById('marketplaceGrid');
+      const count = document.getElementById('resultsCount');
+      const noResults = document.getElementById('noResults');
+
+      count.textContent = `Showing ${currentProducts.length} product${currentProducts.length !== 1 ? 's' : ''}`;
+
+      if (currentProducts.length === 0) {
+        grid.style.display = 'none';
+        noResults.style.display = 'block';
+      } else {
+        grid.style.display = 'grid';
+        noResults.style.display = 'none';
+        grid.innerHTML = currentProducts.map(p => renderProductCard(p)).join('');
+      }
+    }
+
+    function applyFilters() {
+      const searchQ = document.getElementById('searchInput').value.toLowerCase();
+      
+      const cats = Array.from(document.querySelectorAll('#filter-category input:checked')).map(el => el.value);
+      const pracs = Array.from(document.querySelectorAll('#filter-practice input:checked')).map(el => el.value);
+      const sellers = Array.from(document.querySelectorAll('#filter-sellerType input:checked')).map(el => el.value);
+      const maxPrice = parseInt(document.getElementById('priceRange').value);
+      const sort = document.getElementById('sortSelect').value;
+
+      currentProducts = PRODUCTS.filter(p => {
+        // Search
+        if (searchQ && !p.name.toLowerCase().includes(searchQ) && !p.farmer.toLowerCase().includes(searchQ) && !p.location.toLowerCase().includes(searchQ) && !p.category.toLowerCase().includes(searchQ)) return false;
+        // Checkboxes
+        if (cats.length > 0 && !cats.includes(p.category)) return false;
+        if (pracs.length > 0 && !pracs.includes(p.practice)) return false;
+        if (sellers.length > 0 && !sellers.includes(p.sellerType)) return false;
+        // Price
+        if (p.priceNum > maxPrice) return false;
+        return true;
+      });
+
+      // Sort
+      if (sort === 'price-low') currentProducts.sort((a,b) => a.priceNum - b.priceNum);
+      else if (sort === 'price-high') currentProducts.sort((a,b) => b.priceNum - a.priceNum);
+      else if (sort === 'rating') currentProducts.sort((a,b) => b.rating - a.rating);
+      // else 'recommended' uses default order
+
+      renderMarketplace();
+    }
+
+    function clearFilters() {
+      document.querySelectorAll('.filter-options input').forEach(el => el.checked = false);
+      document.getElementById('searchInput').value = '';
+      document.getElementById('priceRange').value = 500;
+      document.getElementById('priceVal').textContent = '₹500';
+      document.getElementById('sortSelect').value = 'recommended';
+      applyFilters();
+    }
+
+    // Event Listeners
+    document.querySelectorAll('.filter-options input').forEach(el => {
+      el.addEventListener('change', applyFilters);
+    });
+    document.getElementById('searchInput').addEventListener('input', applyFilters);
+    document.getElementById('sortSelect').addEventListener('change', applyFilters);
+    document.getElementById('priceRange').addEventListener('input', e => {
+      document.getElementById('priceVal').textContent = '₹' + e.target.value;
+      applyFilters();
+    });
+
+    // Init
+    document.addEventListener('DOMContentLoaded', () => {
+      // Allow app.js to build navbar first
+      setTimeout(() => {
+        applyFilters();
+      }, 50);
+    });
+  </script>
+</body>
+</html>

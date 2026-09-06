@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login — HarvestLink</title>
+  <meta name="description" content="Login to your HarvestLink account to buy fresh produce or manage your farm listings.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="features.css">
+</head>
+<body>
+
+  <nav class="navbar" id="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="nav-logo"><span class="logo-leaf">⬟</span> HARVESTLINK</a>
+      <div class="nav-actions nav-actions-inject"></div>
+      <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+    </div>
+  </nav>
+
+  <div class="auth-page">
+    <div class="auth-card">
+      <div class="auth-logo"><span>⬟</span> HARVESTLINK</div>
+
+      <h2 class="auth-heading">Welcome back.</h2>
+      <p class="auth-sub">Connect with farmers, buyers, and fresh produce.</p>
+
+      <!-- Demo role quick-select -->
+      <div style="margin-bottom: 20px;">
+        <div style="font-size: 12px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 10px;">Demo — Login as</div>
+        <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+          <button class="demo-role-btn" data-role="consumer" data-name="Ananya Sharma">🛒 Consumer</button>
+          <button class="demo-role-btn" data-role="farmer" data-name="Ramesh Patel">🌾 Farmer</button>
+          <button class="demo-role-btn" data-role="fpo" data-name="Konkan FPO">🏢 FPO</button>
+          <button class="demo-role-btn" data-role="bulk" data-name="Green Kitchen">📦 Bulk Buyer</button>
+          <button class="demo-role-btn" data-role="cooperative" data-name="Kisan Collective">🤝 Cooperative</button>
+          <button class="demo-role-btn" data-role="entrepreneur" data-name="Agri Ventures">💼 Entrepreneur</button>
+        </div>
+      </div>
+
+      <div class="auth-divider">OR ENTER CREDENTIALS</div>
+      <br>
+
+      <form class="auth-form" id="loginForm">
+        <div class="auth-field">
+          <label for="loginId">Email / Phone Number</label>
+          <input type="text" id="loginId" placeholder="yourname@email.com or +91 00000 00000">
+        </div>
+        <div class="auth-field">
+          <label for="loginPass">Password</label>
+          <input type="password" id="loginPass" placeholder="Your password" value="demo123">
+        </div>
+        <div class="auth-row">
+          <label class="auth-remember">
+            <input type="checkbox" checked> Remember me
+          </label>
+          <a href="#" class="auth-forgot">Forgot Password?</a>
+        </div>
+        <button type="submit" class="auth-btn-primary">Login</button>
+      </form>
+
+      <div class="auth-divider" style="margin: 20px 0;">OR</div>
+
+      <button class="auth-btn-google" onclick="demoGoogleLogin()">
+        <svg width="18" height="18" viewBox="0 0 18 18"><path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.874 2.684-6.615z"/><path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.184l-2.908-2.258c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332C2.438 15.983 5.482 18 9 18z"/><path fill="#FBBC05" d="M3.964 10.707c-.18-.54-.282-1.117-.282-1.707s.102-1.167.282-1.707V4.961H.957C.347 6.175 0 7.548 0 9s.348 2.825.957 4.039l3.007-2.332z"/><path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0 5.482 0 2.438 2.017.957 4.961L3.964 7.293C4.672 5.166 6.656 3.58 9 3.58z"/></svg>
+        Continue with Google
+      </button>
+
+      <div class="auth-footer">
+        Don't have an account? <a href="role-select.html">Create Account</a>
+      </div>
+    </div>
+  </div>
+
+  <style>
+    .demo-role-btn {
+      padding: 6px 12px;
+      border: 1.5px solid var(--border);
+      border-radius: 100px;
+      background: var(--cream);
+      font-family: 'Manrope', sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .demo-role-btn:hover, .demo-role-btn.active {
+      border-color: var(--green);
+      background: var(--green-muted);
+      color: var(--green);
+    }
+  </style>
+
+  <script src="app.js"></script>
+  <script>
+    let selectedRole = 'consumer';
+    let selectedName = 'Demo User';
+
+    document.querySelectorAll('.demo-role-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.demo-role-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        selectedRole = btn.dataset.role;
+        selectedName = btn.dataset.name;
+        document.getElementById('loginId').value = selectedName.toLowerCase().replace(/\s/g,'') + '@demo.in';
+      });
+    });
+
+    // Pre-select consumer
+    document.querySelector('[data-role="consumer"]').classList.add('active');
+    document.getElementById('loginId').value = 'ananya@demo.in';
+
+    function doLogin(role, name) {
+      setUser({ name, email: name.toLowerCase().replace(/\s/g,'') + '@demo.in' });
+      setRole(role);
+      window.location.href = getDashboardUrl(role);
+    }
+
+    function demoGoogleLogin() {
+      doLogin(selectedRole, selectedName);
+    }
+
+    document.getElementById('loginForm').addEventListener('submit', e => {
+      e.preventDefault();
+      doLogin(selectedRole, selectedName);
+    });
+  </script>
+</body>
+</html>

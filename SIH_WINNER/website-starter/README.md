@@ -1,37 +1,38 @@
-# Minimal Website Starter
+# HarvestLink — Agricultural Digital Marketplace
 
-Lightweight, no-framework website template.
+> **From Farm. Direct to Market.**
 
-## Files
+A frontend prototype for an agricultural digital marketplace connecting farmers/FPOs directly with consumers and bulk buyers.
 
-- `index.html` - HTML structure
-- `style.css` - Styling (CSS variables for easy theming)
-- `script.js` - Vanilla JS (smooth scroll, form handling)
-- `README.md` - This file
+---
 
-## Quick Start
+## Pages
 
-1. Extract zip
-2. Open `index.html` in browser
-3. Edit content & customize colors in `style.css`
+| File | Description |
+|---|---|
+| `index.html` | Homepage — hero, problem-solution, marketplace preview, AI dashboard, logistics |
+| `marketplace.html` | Full marketplace with category filters, search, product grid |
+| `farmers.html` | Farmer & FPO profiles with search and practice filters |
+| `businesses.html` | Bulk buyer page for restaurants, hotels, retailers |
+| `register.html` | Multi-step farmer registration form (4 steps + success) |
+| `dashboard.html` | Farmer dashboard — overview, orders, demand insights, logistics |
+| `about.html` | About page — mission, problem, approach, values |
+| `faq.html` | FAQ with category tabs and accordion |
 
-## Customization
+---
 
-### Colors (in style.css)
-```css
-:root {
-  --primary: #1a1a1a;
-  --accent: #0066ff;
-  --bg: #f8f8f8;
-}
-```
+## Design System
 
-### Add Sections
-Copy a `<section>` block and style with new class.
+- **Primary font:** DM Serif Display (headings) + Manrope (body/UI)
+- **Colors:** Forest Green `#315C3A` · Deep Soil Brown `#3B3028` · Cream `#F7F3EA` · Terracotta `#C87545`
+- **All styles:** `style.css`
+- **All interactions:** `script.js`
 
-## Vibe Coding Tips
+---
 
-- Keep JS vanilla (no deps)
-- Use CSS variables for consistency
-- Minimal but intentional styling
-- Progressive enhancement mindset
+## How to Run
+
+Open `index.html` in any modern browser. No build step required.
+
+> This is a frontend-only prototype. No backend, database, or API is connected.
+> All data is demo/simulated.

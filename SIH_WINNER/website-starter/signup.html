@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Create Account — HarvestLink</title>
+  <meta name="description" content="Create your HarvestLink account as a farmer, FPO, cooperative, consumer or bulk buyer.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="features.css">
+  <style>
+    .signup-container {
+      margin-top: 64px;
+      min-height: calc(100vh - 64px);
+      background: var(--cream);
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 48px 24px 80px;
+    }
+
+    .signup-card {
+      background: var(--warm-white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 44px;
+      width: 100%;
+      max-width: 560px;
+      box-shadow: var(--shadow-md);
+    }
+
+    .signup-logo {
+      font-family: 'Manrope', sans-serif;
+      font-weight: 800;
+      font-size: 16px;
+      color: var(--brown);
+      margin-bottom: 28px;
+      display: flex; align-items: center; gap: 6px;
+    }
+    .signup-logo span { color: var(--green); }
+
+    .signup-step { display: none; }
+    .signup-step.active { display: block; }
+
+    .step-heading { font-size: 24px; color: var(--brown); margin-bottom: 6px; }
+    .step-desc { font-size: 14px; color: var(--text-muted); margin-bottom: 24px; }
+
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .form-grid .full { grid-column: 1 / -1; }
+
+    .sg-field { display: flex; flex-direction: column; gap: 6px; }
+    .sg-field label { font-size: 13px; font-weight: 600; color: var(--text-secondary); }
+    .sg-field input, .sg-field select, .sg-field textarea {
+      padding: 11px 14px;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-sm);
+      font-family: 'Manrope', sans-serif;
+      font-size: 14px;
+      color: var(--text-primary);
+      background: var(--cream);
+      transition: border-color var(--transition);
+      appearance: none;
+    }
+    .sg-field input:focus, .sg-field select:focus, .sg-field textarea:focus {
+      outline: none; border-color: var(--green);
+      box-shadow: 0 0 0 3px rgba(49,92,58,0.08);
+    }
+
+    /* Practice options grid */
+    .practice-opts { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
+    .popt {
+      padding: 14px;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      transition: all var(--transition);
+      display: flex; align-items: center; gap: 10px;
+    }
+    .popt:hover, .popt.selected { border-color: var(--green); background: var(--green-muted); }
+    .popt-radio { width: 16px; height: 16px; border-radius: 50%; border: 2px solid var(--border); flex-shrink: 0; transition: all 0.2s; }
+    .popt.selected .popt-radio { border-color: var(--green); background: var(--green); }
+    .popt-label { font-size: 13px; font-weight: 700; color: var(--brown); }
+
+    /* Navigation buttons */
+    .step-actions {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 24px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border);
+      gap: 12px;
+    }
+    .btn-prev-step {
+      padding: 11px 22px;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-sm);
+      background: transparent;
+      color: var(--text-secondary);
+      font-family: 'Manrope', sans-serif;
+      font-size: 14px; font-weight: 600;
+      cursor: pointer; transition: all var(--transition);
+    }
+    .btn-prev-step:hover { border-color: var(--brown); color: var(--brown); }
+    .btn-next-step {
+      padding: 11px 24px;
+      background: var(--green); color: #fff;
+      border: none; border-radius: var(--radius-sm);
+      font-family: 'Manrope', sans-serif;
+      font-size: 14px; font-weight: 700;
+      cursor: pointer; transition: all var(--transition); flex: 1;
+    }
+    .btn-next-step:hover { background: var(--green-light); }
+
+    /* Progress bar */
+    .signup-progress {
+      display: flex;
+      gap: 4px;
+      margin-bottom: 28px;
+    }
+    .sp-bar {
+      flex: 1; height: 3px;
+      border-radius: 3px;
+      background: var(--border);
+      transition: background 0.3s;
+    }
+    .sp-bar.active { background: var(--green); }
+
+    /* Review boxes */
+    .review-box {
+      background: var(--cream);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 18px 20px;
+      margin-bottom: 14px;
+    }
+    .rb-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted); margin-bottom: 12px; }
+    .rb-row { display: flex; justify-content: space-between; font-size: 13px; padding: 5px 0; border-bottom: 1px solid var(--border); }
+    .rb-row:last-child { border-bottom: none; }
+    .rb-key { color: var(--text-muted); font-weight: 600; }
+    .rb-val { color: var(--brown); font-weight: 700; }
+
+    /* Success */
+    .signup-success {
+      text-align: center;
+      padding: 40px 20px;
+    }
+    .ss-icon { font-size: 56px; margin-bottom: 16px; }
+    .ss-title { font-size: 26px; color: var(--brown); margin-bottom: 10px; }
+    .ss-desc { font-size: 15px; color: var(--text-secondary); margin-bottom: 28px; line-height: 1.65; }
+
+    @media (max-width: 560px) {
+      .signup-card { padding: 28px 20px; }
+      .form-grid { grid-template-columns: 1fr; }
+      .practice-opts { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="navbar" id="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="nav-logo"><span class="logo-leaf">⬟</span> HARVESTLINK</a>
+      <div class="nav-actions nav-actions-inject"></div>
+      <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+    </div>
+  </nav>
+
+  <div class="signup-container">
+    <div class="signup-card">
+      <div class="signup-logo"><span>⬟</span> HARVESTLINK</div>
+
+      <!-- Step 0: Role select -->
+      <div class="signup-step active" id="sg-step0">
+        <div class="step-heading">Create your account.</div>
+        <p class="step-desc">First, tell us who you are so we can personalise your experience.</p>
+
+        <div style="font-size: 12px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 12px;">I want to join as</div>
+        <div class="signup-role-grid" id="rolePickGrid">
+          <div class="signup-role-card" data-role="farmer"><div class="src-icon">🌾</div><div class="src-name">Individual Farmer</div></div>
+          <div class="signup-role-card" data-role="fpo"><div class="src-icon">🏢</div><div class="src-name">FPO</div></div>
+          <div class="signup-role-card" data-role="cooperative"><div class="src-icon">🤝</div><div class="src-name">Cooperative</div></div>
+          <div class="signup-role-card" data-role="entrepreneur"><div class="src-icon">💼</div><div class="src-name">Agri Entrepreneur</div></div>
+          <div class="signup-role-card" data-role="consumer"><div class="src-icon">🛒</div><div class="src-name">Consumer</div></div>
+          <div class="signup-role-card" data-role="bulk"><div class="src-icon">📦</div><div class="src-name">Bulk Buyer</div></div>
+        </div>
+
+        <div class="step-actions" style="border-top:none; margin-top:0;">
+          <span></span>
+          <button class="btn-next-step" onclick="startSignup()">Continue →</button>
+        </div>
+        <div style="text-align:center;margin-top:16px;font-size:14px;color:var(--text-muted)">
+          Already have an account? <a href="login.html" style="color:var(--green);font-weight:700">Login</a>
+        </div>
+      </div>
+
+      <!-- Dynamic form steps -->
+      <div class="signup-step" id="sg-form">
+        <div class="signup-progress" id="progressBars"></div>
+        <div id="sgDynamicContent"></div>
+      </div>
+
+      <!-- Success -->
+      <div class="signup-step" id="sg-success">
+        <div class="signup-success">
+          <div class="ss-icon">🎉</div>
+          <div class="ss-title">Account created!</div>
+          <div class="ss-desc">Welcome to HarvestLink. Your account is ready. Taking you to your dashboard now...</div>
+          <a href="#" id="dashLink" class="btn-primary-lg">Go to Dashboard →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+  <script>
+    // Role selection on step 0
+    let chosenRole = null;
+    const params = new URLSearchParams(window.location.search);
+    const preRole = params.get('role');
+
+    // Role form definitions
+    const roleForms = {
+      farmer: {
+        label: 'Individual Farmer',
+        steps: [
+          {
+            title: 'Basic Information',
+            desc: 'Tell us about yourself.',
+            fields: [
+              { id: 'fn', label: 'First Name', type: 'text', ph: 'Ramesh', half: true },
+              { id: 'ln', label: 'Last Name', type: 'text', ph: 'Patel', half: true },
+              { id: 'phone', label: 'Phone Number', type: 'tel', ph: '+91 00000 00000' },
+              { id: 'email', label: 'Email (optional)', type: 'email', ph: 'your@email.com' }
+            ]
+          },
+          {
+            title: 'Farm Details',
+            desc: 'Where is your farm and what do you grow?',
+            fields: [
+              { id: 'loc', label: 'Village / Town', type: 'text', ph: 'Anand', half: true },
+              { id: 'state', label: 'State', type: 'select', opts: ['Gujarat','Maharashtra','Punjab','UP','MP','Rajasthan','Karnataka','Other'], half: true },
+              { id: 'size', label: 'Farm Size (acres)', type: 'number', ph: '5', half: true },
+              { id: 'produce', label: 'Products You Grow', type: 'text', ph: 'Tomatoes, Okra, Wheat...' }
+            ]
+          },
+          {
+            title: 'Farming Practice',
+            desc: 'How do you farm?',
+            practice: true
+          },
+          {
+            title: 'Review & Submit',
+            desc: 'Check your details before creating your account.',
+            review: true
+          }
+        ]
+      },
+      fpo: {
+        label: 'FPO',
+        steps: [
+          {
+            title: 'FPO Details',
+            desc: 'Tell us about your Farmer Producer Organisation.',
+            fields: [
+              { id: 'fponame', label: 'FPO Name', type: 'text', ph: 'Konkan FPO' },
+              { id: 'reg', label: 'Registration Number', type: 'text', ph: 'FPO/MH/2019/001', half: true },
+              { id: 'members', label: 'Member Farmers', type: 'number', ph: '120', half: true },
+              { id: 'contact', label: 'Contact Person', type: 'text', ph: 'Suresh Kumar', half: true },
+              { id: 'phone', label: 'Phone', type: 'tel', ph: '+91 00000 00000', half: true },
+              { id: 'email', label: 'Email', type: 'email', ph: 'fpo@email.com' },
+              { id: 'loc', label: 'Location (State)', type: 'select', opts: ['Gujarat','Maharashtra','Punjab','UP','MP','Rajasthan','Karnataka','Other'] },
+              { id: 'products', label: 'Main Products', type: 'text', ph: 'Mangoes, Cashew, Vegetables...' }
+            ]
+          },
+          {
+            title: 'Review & Submit',
+            desc: 'Review your FPO registration.',
+            review: true
+          }
+        ]
+      },
+      cooperative: {
+        label: 'Cooperative',
+        steps: [
+          {
+            title: 'Cooperative Details',
+            desc: 'Register your cooperative on HarvestLink.',
+            fields: [
+              { id: 'coopname', label: 'Cooperative Name', type: 'text', ph: 'Kisan Collective' },
+              { id: 'contact', label: 'Contact Person', type: 'text', ph: 'Ramesh Sharma', half: true },
+              { id: 'members', label: 'Member Count', type: 'number', ph: '200', half: true },
+              { id: 'loc', label: 'Location', type: 'text', ph: 'Mehsana, Gujarat' },
+              { id: 'products', label: 'Main Products', type: 'text', ph: 'Wheat, Bajra, Mustard...' },
+              { id: 'phone', label: 'Phone', type: 'tel', ph: '+91 00000 00000', half: true },
+              { id: 'email', label: 'Email', type: 'email', ph: 'coop@email.com', half: true }
+            ]
+          },
+          { title: 'Review & Submit', desc: 'Confirm your cooperative details.', review: true }
+        ]
+      },
+      entrepreneur: {
+        label: 'Agri Entrepreneur',
+        steps: [
+          {
+            title: 'Business Details',
+            desc: 'Tell us about your agricultural business.',
+            fields: [
+              { id: 'bizname', label: 'Business Name', type: 'text', ph: 'Agri Ventures Pvt. Ltd.' },
+              { id: 'owner', label: 'Owner / Contact Person', type: 'text', ph: 'Your name', half: true },
+              { id: 'biztype', label: 'Business Type', type: 'select', opts: ['Trading','Processing','Distribution','Value-add','Other'], half: true },
+              { id: 'loc', label: 'Location', type: 'text', ph: 'City, State' },
+              { id: 'services', label: 'Products / Services', type: 'text', ph: 'Fresh produce trading, dried spices...' },
+              { id: 'phone', label: 'Phone', type: 'tel', ph: '+91 00000 00000', half: true },
+              { id: 'email', label: 'Email', type: 'email', ph: 'biz@email.com', half: true }
+            ]
+          },
+          { title: 'Review & Submit', desc: 'Confirm your business registration.', review: true }
+        ]
+      },
+      consumer: {
+        label: 'Consumer',
+        steps: [
+          {
+            title: 'Create your account.',
+            desc: 'Just a few quick details to get started.',
+            fields: [
+              { id: 'name', label: 'Your Name', type: 'text', ph: 'Ananya Sharma' },
+              { id: 'phone', label: 'Phone / Email', type: 'text', ph: '+91 00000 or your@email.com' },
+              { id: 'password', label: 'Choose a Password', type: 'password', ph: '••••••••' },
+              { id: 'dloc', label: 'Delivery Location', type: 'text', ph: 'Your city, state' }
+            ]
+          }
+        ]
+      },
+      bulk: {
+        label: 'Bulk Buyer',
+        steps: [
+          {
+            title: 'Business Details',
+            desc: 'Register to source produce in bulk from verified farmers and FPOs.',
+            fields: [
+              { id: 'bizname', label: 'Business Name', type: 'text', ph: 'Green Kitchen Pvt. Ltd.' },
+              { id: 'biztype', label: 'Business Type', type: 'select', opts: ['Restaurant','Hotel','Retailer','Wholesaler','Institution','Food Processor','Other'] },
+              { id: 'contact', label: 'Contact Person', type: 'text', ph: 'Your name', half: true },
+              { id: 'phone', label: 'Phone', type: 'tel', ph: '+91 00000 00000', half: true },
+              { id: 'email', label: 'Email', type: 'email', ph: 'biz@email.com' },
+              { id: 'biz_loc', label: 'Business Location', type: 'text', ph: 'City, State' }
+            ]
+          },
+          { title: 'Review & Submit', desc: 'Confirm your buyer account.', review: true }
+        ]
+      }
+    };
+
+    let formStepIndex = 0;
+    let formData = {};
+
+    // Pre-select role from URL param
+    if (preRole) {
+      chosenRole = preRole;
+      document.querySelectorAll('.signup-role-card').forEach(c => {
+        if (c.dataset.role === preRole) c.classList.add('selected');
+      });
+    }
+
+    document.querySelectorAll('.signup-role-card').forEach(card => {
+      card.addEventListener('click', () => {
+        document.querySelectorAll('.signup-role-card').forEach(c => c.classList.remove('selected'));
+        card.classList.add('selected');
+        chosenRole = card.dataset.role;
+      });
+    });
+
+    function startSignup() {
+      if (!chosenRole) { showToast('Please select a role first'); return; }
+      renderFormStep(0);
+      showStep('sg-form');
+    }
+
+    function showStep(id) {
+      document.querySelectorAll('.signup-step').forEach(s => s.classList.remove('active'));
+      document.getElementById(id)?.classList.add('active');
+    }
+
+    function renderProgressBars(total, current) {
+      const pb = document.getElementById('progressBars');
+      pb.innerHTML = Array.from({length: total}, (_, i) =>
+        `<div class="sp-bar ${i <= current ? 'active' : ''}"></div>`
+      ).join('');
+    }
+
+    function renderFormStep(stepIdx) {
+      formStepIndex = stepIdx;
+      const role = roleForms[chosenRole];
+      const step = role.steps[stepIdx];
+      const isLast = stepIdx === role.steps.length - 1;
+      const isFirst = stepIdx === 0;
+      renderProgressBars(role.steps.length, stepIdx);
+
+      let html = `<h2 class="step-heading">${step.title}</h2><p class="step-desc">${step.desc}</p>`;
+
+      if (step.practice) {
+        // Practice selection step
+        html += `<div class="practice-opts">
+          <div class="popt" data-val="organic" onclick="selectPractice(this)"><div class="popt-radio"></div><span class="popt-label">🌿 Organic</span></div>
+          <div class="popt" data-val="natural" onclick="selectPractice(this)"><div class="popt-radio"></div><span class="popt-label">☀️ Natural Farming</span></div>
+          <div class="popt" data-val="conventional" onclick="selectPractice(this)"><div class="popt-radio"></div><span class="popt-label">🏡 Conventional</span></div>
+          <div class="popt" data-val="other" onclick="selectPractice(this)"><div class="popt-radio"></div><span class="popt-label">🌱 Other</span></div>
+        </div>`;
+      } else if (step.review) {
+        // Review step
+        html += `<div class="review-box"><div class="rb-title">Your Information</div>`;
+        Object.entries(formData).forEach(([k,v]) => {
+          if (v) html += `<div class="rb-row"><span class="rb-key">${k}</span><span class="rb-val">${v}</span></div>`;
+        });
+        html += `</div>`;
+        html += `<div style="font-size:13px;color:var(--text-muted);margin-bottom:16px;font-style:italic;">This is a demo. No data is stored or submitted.</div>`;
+      } else {
+        // Normal fields
+        html += `<div class="form-grid">`;
+        step.fields.forEach(f => {
+          const cls = f.half ? '' : 'full';
+          if (f.type === 'select') {
+            html += `<div class="sg-field ${cls}"><label>${f.label}</label>
+              <select id="sg_${f.id}"><option value="">Select...</option>${f.opts.map(o=>`<option>${o}</option>`).join('')}</select></div>`;
+          } else {
+            html += `<div class="sg-field ${cls}"><label>${f.label}</label>
+              <input type="${f.type}" id="sg_${f.id}" placeholder="${f.ph}" value="${formData[f.label]||''}"></div>`;
+          }
+        });
+        html += `</div>`;
+      }
+
+      // Actions
+      html += `<div class="step-actions">`;
+      if (!isFirst) html += `<button class="btn-prev-step" onclick="renderFormStep(${stepIdx - 1})">← Back</button>`;
+      else html += `<button class="btn-prev-step" onclick="showStep('sg-step0')">← Change Role</button>`;
+
+      if (isLast) {
+        html += `<button class="btn-next-step" onclick="submitSignup()">Create Account ✓</button>`;
+      } else {
+        html += `<button class="btn-next-step" onclick="collectAndNext()">Next →</button>`;
+      }
+      html += `</div>`;
+
+      document.getElementById('sgDynamicContent').innerHTML = html;
+    }
+
+    function collectAndNext() {
+      const role = roleForms[chosenRole];
+      const step = role.steps[formStepIndex];
+      if (step.fields) {
+        step.fields.forEach(f => {
+          const el = document.getElementById('sg_' + f.id);
+          if (el) formData[f.label] = el.value;
+        });
+      }
+      renderFormStep(formStepIndex + 1);
+    }
+
+    function selectPractice(el) {
+      document.querySelectorAll('.popt').forEach(o => o.classList.remove('selected'));
+      el.classList.add('selected');
+      formData['Farming Practice'] = el.dataset.val;
+    }
+
+    function submitSignup() {
+      const role = roleForms[chosenRole];
+      const nameKey = Object.keys(formData).find(k => k.toLowerCase().includes('name')) || 'Name';
+      const name = formData[nameKey] || roleForms[chosenRole].label + ' User';
+      setUser({ name, email: 'demo@harvestlink.in' });
+      setRole(chosenRole);
+      document.getElementById('dashLink').href = getDashboardUrl(chosenRole);
+      showStep('sg-success');
+      setTimeout(() => { window.location.href = getDashboardUrl(chosenRole); }, 2200);
+    }
+
+    // Auto-start if role in URL
+    if (preRole && roleForms[preRole]) {
+      setTimeout(startSignup, 100);
+    }
+  </script>
+</body>
+</html>

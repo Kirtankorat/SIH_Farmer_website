@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FPO Dashboard — HarvestLink</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="features.css">
+  <style>
+    body { background: var(--cream); }
+    .fpo-dash-shell { margin-top: 64px; display: flex; min-height: calc(100vh - 64px); }
+    .dash-sidebar { width: 220px; background: var(--brown); flex-shrink: 0; padding: 32px 0; position: sticky; top: 64px; height: calc(100vh - 64px); overflow-y: auto; }
+    .dp-avatar { width: 48px; height: 48px; border-radius: 50%; background: var(--green); display: flex; align-items: center; justify-content: center; font-size: 24px; margin-bottom: 10px; }
+    .member-row { display: flex; align-items: center; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--border); font-size: 13px; }
+    .member-row:last-child { border-bottom: none; }
+    .mr-name { font-weight: 700; color: var(--brown); }
+    .mr-loc { color: var(--text-muted); font-size: 12px; }
+    .mr-stat { font-weight: 700; color: var(--green); }
+  </style>
+</head>
+<body>
+
+  <nav class="navbar" id="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="nav-logo"><span class="logo-leaf">⬟</span> HARVESTLINK</a>
+      <div class="nav-actions" style="margin-left:auto">
+        <span style="font-size:13px;color:var(--text-muted)" id="fpoNameLabel">🏢 FPO</span>
+        <a href="index.html" class="btn-outline-sm">Back to Site</a>
+        <a href="#" onclick="logout()" class="btn-outline-sm">Logout</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="fpo-dash-shell">
+    <!-- Sidebar -->
+    <aside class="dash-sidebar">
+      <div class="dash-profile">
+        <div class="dp-avatar">🏢</div>
+        <div class="dp-name" id="fpoSidebarName">Konkan FPO</div>
+        <div class="dp-badge">✓ Verified FPO</div>
+      </div>
+      <div class="dash-nav-item active" data-panel="overview"><span class="dni-icon">📊</span> Overview</div>
+      <div class="dash-nav-item" data-panel="members"><span class="dni-icon">🌾</span> Member Farmers</div>
+      <div class="dash-nav-item" data-panel="products"><span class="dni-icon">📦</span> Products</div>
+      <div class="dash-nav-item" data-panel="inventory"><span class="dni-icon">📋</span> Inventory</div>
+      <div class="dash-nav-item" data-panel="orders"><span class="dni-icon">🛒</span> Orders</div>
+      <div class="dash-nav-item" data-panel="bulk"><span class="dni-icon">📦</span> Bulk Buyers</div>
+      <div class="dash-nav-item" data-panel="demand"><span class="dni-icon">📈</span> Demand Insights</div>
+      <div class="dash-nav-item" data-panel="logistics"><span class="dni-icon">🚛</span> Logistics</div>
+    </aside>
+
+    <main class="dash-main">
+
+      <!-- OVERVIEW -->
+      <div class="dash-panel active" id="panel-overview">
+        <div class="dash-greeting">
+          <div class="dg-text"><h2 id="fpoHeading">Konkan FPO</h2><p style="color:var(--text-muted);font-size:14px">FPO Dashboard · Overview</p></div>
+          <button class="btn-primary-sm" onclick="showToast('Feature available in full version')">+ Add Produce</button>
+        </div>
+        <div class="dash-stats">
+          <div class="stat-card"><div class="sc-label">Member Farmers</div><div class="sc-value">84</div><div class="sc-trend up">↑ 6 this month</div></div>
+          <div class="stat-card"><div class="sc-label">Available Produce</div><div class="sc-value" style="font-size:24px">3,420 kg</div><div class="sc-sub">Across 5 products</div></div>
+          <div class="stat-card"><div class="sc-label">Active Orders</div><div class="sc-value">12</div><div class="sc-trend up">↑ 4 new today</div></div>
+          <div class="stat-card"><div class="sc-label">Bulk Orders</div><div class="sc-value">3</div><div class="sc-sub">Pending fulfillment</div></div>
+        </div>
+        <div class="dash-widgets">
+          <div class="widget">
+            <div class="widget-header"><div class="wh-title">Recent Orders</div><div class="wh-link" onclick="switchPanel('orders')">View all →</div></div>
+            <div class="widget-body">
+              <div class="order-row"><div><div class="or-prod">Alphonso Mango · 25 kg</div><div class="or-meta">Green Kitchen, Mumbai · Today</div></div><span class="or-status status-new">New</span></div>
+              <div class="order-row"><div><div class="or-prod">Alphonso Mango · 40 kg</div><div class="or-meta">Hotel Taj · Mumbai · Yesterday</div></div><span class="or-status status-prep">Preparing</span></div>
+              <div class="order-row"><div><div class="or-prod">Cashew · 15 kg</div><div class="or-meta">Retail Store · Pune · 2 days ago</div></div><span class="or-status status-done">Delivered</span></div>
+            </div>
+          </div>
+          <div class="widget">
+            <div class="widget-header"><div class="wh-title">Demand Insights</div><div class="wh-link" onclick="switchPanel('demand')">Full view →</div></div>
+            <div class="widget-body">
+              <div class="demand-row"><div class="dr-left"><div class="dr-name">🥭 Alphonso Mango</div><div class="dr-rec">Peak season — high demand</div></div><span class="dr-trend dr-up">↑ +34%</span></div>
+              <div class="demand-row"><div class="dr-left"><div class="dr-name">🌰 Cashew</div><div class="dr-rec">Stable demand year-round</div></div><span class="dr-trend dr-stable">→ Stable</span></div>
+              <div class="demand-row"><div class="dr-left"><div class="dr-name">🍅 Tomatoes</div><div class="dr-rec">Moderate increase</div></div><span class="dr-trend dr-up">↑ +12%</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- MEMBERS -->
+      <div class="dash-panel" id="panel-members">
+        <div class="dash-greeting"><div class="dg-text"><h2>Member Farmers</h2><p>84 verified farmers in your FPO.</p></div><button class="btn-primary-sm" onclick="showToast('Add member — available in full version')">+ Add Member</button></div>
+        <div class="widget">
+          <div class="widget-body">
+            <div class="member-row"><div><div class="mr-name">Ramesh Patel</div><div class="mr-loc">📍 Anand, Gujarat</div></div><div class="mr-stat">Tomatoes · 840 kg</div></div>
+            <div class="member-row"><div><div class="mr-name">Suresh Naik</div><div class="mr-loc">📍 Ratnagiri, Maharashtra</div></div><div class="mr-stat">Mango · 1,200 kg</div></div>
+            <div class="member-row"><div><div class="mr-name">Meena Sawant</div><div class="mr-loc">📍 Sindhudurg, Maharashtra</div></div><div class="mr-stat">Cashew · 380 kg</div></div>
+            <div class="member-row"><div><div class="mr-name">Ganesh Chavan</div><div class="mr-loc">📍 Kolhapur, Maharashtra</div></div><div class="mr-stat">Vegetables · 520 kg</div></div>
+            <div class="member-row"><div><div class="mr-name">Anita Desai</div><div class="mr-loc">📍 Nashik, Maharashtra</div></div><div class="mr-stat">Onion · 900 kg</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PRODUCTS -->
+      <div class="dash-panel" id="panel-products">
+        <div class="dash-greeting"><div class="dg-text"><h2>Products</h2><p>Aggregated produce across member farmers.</p></div><button class="btn-primary-sm" onclick="showToast('Add produce — available in full version')">+ Add Produce</button></div>
+        <div class="widget"><div class="widget-body">
+          <div class="product-row"><div><div class="pr-name">🥭 Alphonso Mango</div><div class="pr-meta">Natural · Maharashtra</div></div><div style="display:flex;gap:16px;align-items:center"><span class="pr-price">₹180/kg</span><span style="font-size:13px;color:var(--text-muted)">1,200 kg</span><span class="pr-stock avail-yes" style="background:var(--green-muted);color:var(--green);padding:3px 8px;border-radius:100px;font-size:11px;font-weight:700">Active</span></div></div>
+          <div class="product-row"><div><div class="pr-name">🌰 Cashew</div><div class="pr-meta">Natural · Maharashtra</div></div><div style="display:flex;gap:16px;align-items:center"><span class="pr-price">₹320/kg</span><span style="font-size:13px;color:var(--text-muted)">380 kg</span><span class="pr-stock" style="background:#fff8e1;color:#f57c00;padding:3px 8px;border-radius:100px;font-size:11px;font-weight:700">Limited</span></div></div>
+          <div class="product-row"><div><div class="pr-name">🧅 Onion</div><div class="pr-meta">Conventional · Maharashtra</div></div><div style="display:flex;gap:16px;align-items:center"><span class="pr-price">₹28/kg</span><span style="font-size:13px;color:var(--text-muted)">900 kg</span><span class="pr-stock avail-yes" style="background:var(--green-muted);color:var(--green);padding:3px 8px;border-radius:100px;font-size:11px;font-weight:700">Active</span></div></div>
+        </div></div>
+      </div>
+
+      <!-- INVENTORY -->
+      <div class="dash-panel" id="panel-inventory">
+        <div class="dash-greeting"><div class="dg-text"><h2>Inventory</h2><p>Total aggregated stock from all members.</p></div></div>
+        <div class="widget"><div class="widget-body">
+          <div class="demand-row"><div class="dr-left"><div class="dr-name">🥭 Alphonso Mango</div><div class="dr-rec">From 12 member farmers</div></div><span style="font-weight:800;color:var(--brown);font-size:16px">1,200 kg</span></div>
+          <div class="demand-row"><div class="dr-left"><div class="dr-name">🌰 Cashew</div><div class="dr-rec">From 8 member farmers</div></div><span style="font-weight:800;color:var(--brown);font-size:16px">380 kg</span></div>
+          <div class="demand-row"><div class="dr-left"><div class="dr-name">🧅 Onion</div><div class="dr-rec">From 5 member farmers</div></div><span style="font-weight:800;color:var(--brown);font-size:16px">900 kg</span></div>
+          <div class="demand-row"><div class="dr-left"><div class="dr-name">🍅 Tomatoes</div><div class="dr-rec">From 15 member farmers</div></div><span style="font-weight:800;color:var(--brown);font-size:16px">940 kg</span></div>
+        </div></div>
+      </div>
+
+      <!-- ORDERS -->
+      <div class="dash-panel" id="panel-orders">
+        <div class="dash-greeting"><div class="dg-text"><h2>Orders</h2><p>All orders for your aggregated produce.</p></div></div>
+        <div class="widget"><div class="widget-body">
+          <div class="order-row"><div><div class="or-prod">Alphonso Mango · 25 kg</div><div class="or-meta">Green Kitchen, Mumbai · Today</div></div><span class="or-status status-new">New</span></div>
+          <div class="order-row"><div><div class="or-prod">Alphonso Mango · 40 kg</div><div class="or-meta">Hotel Taj, Mumbai · Yesterday</div></div><span class="or-status status-prep">Preparing</span></div>
+          <div class="order-row"><div><div class="or-prod">Onion · 80 kg · Bulk</div><div class="or-meta">Metro Wholesale, Pune · 2 days ago</div></div><span class="or-status status-prep">In Transit</span></div>
+          <div class="order-row"><div><div class="or-prod">Cashew · 15 kg</div><div class="or-meta">Retail Store, Pune · 3 days ago</div></div><span class="or-status status-done">Delivered</span></div>
+        </div></div>
+      </div>
+
+      <!-- BULK BUYERS -->
+      <div class="dash-panel" id="panel-bulk">
+        <div class="dash-greeting"><div class="dg-text"><h2>Bulk Buyers</h2><p>Business buyers sourcing in large quantities.</p></div></div>
+        <div class="widget"><div class="widget-body">
+          <div class="order-row"><div><div class="or-prod">Hotel Taj · 🏨 Hotel</div><div class="or-meta">Mumbai · Alphonso Mango 50 kg/week</div></div><span class="or-status status-new">Active</span></div>
+          <div class="order-row"><div><div class="or-prod">Metro Wholesale · 📦 Wholesaler</div><div class="or-meta">Pune · Onion, Tomato 200 kg/week</div></div><span class="or-status status-new">Active</span></div>
+          <div class="order-row"><div><div class="or-prod">Green Kitchen · 🍽️ Restaurant</div><div class="or-meta">Mumbai · Seasonal fruits 30 kg/week</div></div><span class="or-status status-prep">Pending</span></div>
+        </div></div>
+      </div>
+
+      <!-- DEMAND -->
+      <div class="dash-panel" id="panel-demand">
+        <div class="dash-greeting"><div class="dg-text"><h2>Demand Insights</h2><p style="color:var(--terracotta);font-style:italic;font-size:13px">Simulated demo data.</p></div></div>
+        <div class="widget"><div class="widget-body">
+          <div class="demand-row"><div><div class="dr-name" style="font-size:16px">🥭 Alphonso Mango</div><div class="dr-rec" style="font-size:13px;margin-top:4px">Peak season — strong demand from hotels and restaurants. Prepare 30% more stock than last month.</div></div><span class="dr-trend dr-up" style="padding:6px 14px;font-size:14px;flex-shrink:0;margin-left:16px">↑ +34%</span></div>
+          <div class="demand-row"><div><div class="dr-name" style="font-size:16px">🌰 Cashew</div><div class="dr-rec" style="font-size:13px;margin-top:4px">Consistent year-round demand. Maintain current supply.</div></div><span class="dr-trend dr-stable" style="padding:6px 14px;font-size:14px;flex-shrink:0;margin-left:16px">→ Stable</span></div>
+          <div class="demand-row"><div><div class="dr-name" style="font-size:16px">🧅 Onion</div><div class="dr-rec" style="font-size:13px;margin-top:4px">Slight reduction expected. Adjust procurement from members accordingly.</div></div><span class="dr-trend dr-down" style="padding:6px 14px;font-size:14px;flex-shrink:0;margin-left:16px">↓ -8%</span></div>
+        </div></div>
+      </div>
+
+      <!-- LOGISTICS -->
+      <div class="dash-panel" id="panel-logistics">
+        <div class="dash-greeting"><div class="dg-text"><h2>Logistics</h2><p>Collection from member farms and delivery to buyers.</p></div></div>
+        <div class="dash-widgets">
+          <div class="widget logistics-widget">
+            <div class="widget-header"><div class="wh-title">Today's Pickups</div></div>
+            <div class="widget-body">
+              <div class="pickup-card"><div class="pc-title-w">🚛 Farm Collections</div><div class="pc-time">Today · 2:00 PM – 5:00 PM</div><div class="pc-detail">Collecting from 8 member farms · 1,420 kg total</div></div>
+              <div class="pickup-card"><div class="pc-title-w">📦 Delivery to Buyers</div><div class="pc-time">Tomorrow · 9:00 AM – 1:00 PM</div><div class="pc-detail">3 stops · Hotel Taj, Green Kitchen, Metro Wholesale</div></div>
+            </div>
+          </div>
+          <div class="widget"><div class="widget-header"><div class="wh-title">Pending Shipments</div></div>
+            <div class="widget-body">
+              <div class="order-row"><div class="or-prod">Mango 25 kg → Green Kitchen</div><span class="or-status status-prep">Packing</span></div>
+              <div class="order-row"><div class="or-prod">Onion 80 kg → Metro</div><span class="or-status status-new">Pickup Scheduled</span></div>
+              <div class="order-row"><div class="or-prod">Cashew 15 kg → Retail</div><span class="or-status status-done">Dispatched</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <script src="app.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const user = getUser();
+      if (user) {
+        document.getElementById('fpoNameLabel').textContent = '🏢 ' + user.name;
+        document.getElementById('fpoSidebarName').textContent = user.name;
+        document.getElementById('fpoHeading').textContent = user.name;
+      }
+    });
+
+    function switchPanel(p) {
+      document.querySelectorAll('.dash-panel').forEach(d => d.classList.remove('active'));
+      document.querySelectorAll('.dash-nav-item').forEach(n => n.classList.remove('active'));
+      document.getElementById('panel-'+p)?.classList.add('active');
+      document.querySelector(`[data-panel="${p}"]`)?.classList.add('active');
+    }
+    document.querySelectorAll('.dash-nav-item').forEach(item => {
+      item.addEventListener('click', () => switchPanel(item.dataset.panel));
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Your Cart — HarvestLink</title>
+  <meta name="description" content="Your HarvestLink shopping cart — review items, adjust quantities, and proceed to checkout.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="features.css">
+</head>
+<body>
+
+  <nav class="navbar" id="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="nav-logo"><span class="logo-leaf">⬟</span> HARVESTLINK</a>
+      <ul class="nav-links">
+        <li><a href="index.html" class="nav-link">Home</a></li>
+        <li><a href="marketplace.html" class="nav-link">Marketplace</a></li>
+        <li><a href="farmers.html" class="nav-link">Farmers</a></li>
+      </ul>
+      <div class="nav-actions nav-actions-inject"></div>
+      <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+    </div>
+    <div class="mobile-menu" id="mobileMenu">
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="marketplace.html">Marketplace</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="cart-page">
+    <div class="container">
+
+      <div class="cart-header">
+        <h1>Your Cart</h1>
+        <span class="cart-item-count" id="cartItemCount"></span>
+      </div>
+
+      <div id="cartContent">
+        <!-- Filled by JS -->
+      </div>
+
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+  <script>
+    function renderCart() {
+      const cart = getCart();
+      const content = document.getElementById('cartContent');
+      const countEl = document.getElementById('cartItemCount');
+
+      countEl.textContent = cart.length > 0 ? `${cart.reduce((s,i) => s+i.qty, 0)} items` : '';
+
+      if (cart.length === 0) {
+        content.innerHTML = `
+          <div class="cart-empty">
+            <div class="ce-icon">🛒</div>
+            <div class="ce-title">Your cart is empty.</div>
+            <div class="ce-desc">Discover fresh produce directly from farmers.<br>Add your first item to get started.</div>
+            <a href="marketplace.html" class="btn-primary-lg">Shop Produce →</a>
+          </div>
+        `;
+        return;
+      }
+
+      const DELIVERY = 40;
+      const subtotal = getCartTotal();
+      const discount = subtotal > 500 ? 50 : 0;
+      const total = subtotal + DELIVERY - discount;
+
+      const itemsHtml = cart.map(item => {
+        const lineTotal = (item.priceNum * item.qty).toFixed(0);
+        return `
+          <div class="cart-item" id="cartRow_${item.id}">
+            <div class="cart-item-img">${item.emoji || '🌾'}</div>
+            <div>
+              <div class="ci-name">${item.name}</div>
+              <div class="ci-farmer">${item.farmer}</div>
+              <div class="ci-location">📍 ${item.location}</div>
+              <div class="ci-price">${item.price} <span class="ci-unit">/ ${item.unit}</span></div>
+              <div class="ci-actions">
+                <button class="ci-remove" onclick="cartRemove(${item.id})">Remove</button>
+                <button class="ci-save" onclick="showToast('Saved for later')">Save for Later</button>
+              </div>
+            </div>
+            <div class="cart-item-right">
+              <div class="qty-control">
+                <button class="qty-btn" onclick="cartQty(${item.id}, -1)">−</button>
+                <span class="qty-display" id="qty_${item.id}">${item.qty}</span>
+                <button class="qty-btn" onclick="cartQty(${item.id}, 1)">+</button>
+              </div>
+              <div class="ci-subtotal" id="sub_${item.id}">₹${lineTotal}</div>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      content.innerHTML = `
+        <div class="cart-layout">
+          <div>
+            <div class="cart-items" id="cartItemsList">${itemsHtml}</div>
+            <div style="margin-top:20px;">
+              <a href="marketplace.html" style="font-size:14px;font-weight:700;color:var(--green);">← Continue Shopping</a>
+            </div>
+          </div>
+
+          <div class="cart-summary">
+            <div class="cs-title">Order Summary</div>
+            <div class="cs-row"><span class="cs-label">Subtotal</span><span class="cs-value" id="sumSubtotal">₹${subtotal}</span></div>
+            <div class="cs-row"><span class="cs-label">Delivery</span><span class="cs-value">₹${DELIVERY}</span></div>
+            ${discount > 0 ? `<div class="cs-row"><span class="cs-label" style="color:var(--green)">Discount</span><span class="cs-value" style="color:var(--green)">−₹${discount}</span></div>` : ''}
+            <div class="cs-total">
+              <span class="cs-total-label">Total</span>
+              <span class="cs-total-value" id="sumTotal">₹${total}</span>
+            </div>
+            <button class="auth-btn-primary" style="width:100%;font-size:15px" onclick="doCheckout()">Proceed to Checkout →</button>
+            <div style="text-align:center;margin-top:12px;font-size:12px;color:var(--text-muted)">Free delivery on orders above ₹800</div>
+
+            <div style="margin-top:20px;padding-top:20px;border-top:1px solid var(--border)">
+              <div style="font-size:12px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px">Your Farmers</div>
+              ${[...new Set(cart.map(i => i.farmer))].map(f => `<div style="font-size:13px;color:var(--text-secondary);padding:4px 0">✓ ${f}</div>`).join('')}
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function cartRemove(id) {
+      removeFromCart(id);
+      renderCart();
+    }
+
+    function cartQty(id, delta) {
+      updateCartQty(id, delta);
+      // Re-render just the row values
+      const cart = getCart();
+      const item = cart.find(i => i.id === id);
+      if (!item) { renderCart(); return; }
+      document.getElementById('qty_' + id).textContent = item.qty;
+      document.getElementById('sub_' + id).textContent = '₹' + (item.priceNum * item.qty);
+      // Update totals
+      const DELIVERY = 40;
+      const subtotal = getCartTotal();
+      const discount = subtotal > 500 ? 50 : 0;
+      const total = subtotal + DELIVERY - discount;
+      document.getElementById('sumSubtotal').textContent = '₹' + subtotal;
+      document.getElementById('sumTotal').textContent = '₹' + total;
+    }
+
+    function doCheckout() {
+      const user = getUser();
+      if (!user) {
+        showToast('Please login to checkout');
+        setTimeout(() => { window.location.href = 'login.html'; }, 1200);
+        return;
+      }
+      window.location.href = 'order-tracking.html?new=1';
+    }
+
+    renderCart();
+  </script>
+</body>
+</html>

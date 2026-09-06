@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Join HarvestLink — Choose Your Role</title>
+  <meta name="description" content="Join HarvestLink as a farmer, FPO, cooperative, agri entrepreneur, consumer, or bulk buyer.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="features.css">
+</head>
+<body>
+
+  <nav class="navbar" id="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="nav-logo"><span class="logo-leaf">⬟</span> HARVESTLINK</a>
+      <div class="nav-actions nav-actions-inject"></div>
+      <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+    </div>
+    <div class="mobile-menu" id="mobileMenu">
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="marketplace.html">Marketplace</a></li>
+        <li><a href="login.html">Login</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="role-select-page">
+    <div class="container">
+      <div class="role-page-header">
+        <div class="section-label">Join HarvestLink</div>
+        <h1>How will you use<br>HARVESTLINK?</h1>
+        <p>Choose the role that best describes you. You can always update it later.</p>
+      </div>
+
+      <div class="role-cards-grid">
+
+        <!-- Individual Farmer -->
+        <div class="role-card" data-role="farmer">
+          <div class="rc-icon">🌾</div>
+          <div class="rc-title">Individual Farmer</div>
+          <div class="rc-desc">Sell your produce directly to buyers across India.</div>
+          <ul class="rc-features">
+            <li>List produce and manage stock</li>
+            <li>Receive and manage orders</li>
+            <li>View demand insights</li>
+            <li>Manage pickups and logistics</li>
+            <li>Track your sales</li>
+          </ul>
+          <a href="signup.html?role=farmer" class="rc-cta">Continue as Farmer →</a>
+        </div>
+
+        <!-- FPO -->
+        <div class="role-card" data-role="fpo">
+          <div class="rc-icon">🏢</div>
+          <div class="rc-title">FPO</div>
+          <div class="rc-desc">Manage produce from multiple member farmers as a Farmer Producer Organisation.</div>
+          <ul class="rc-features">
+            <li>Manage farmer members</li>
+            <li>List aggregated produce</li>
+            <li>Manage bulk orders</li>
+            <li>View demand trends</li>
+            <li>Coordinate logistics</li>
+          </ul>
+          <a href="signup.html?role=fpo" class="rc-cta">Continue as FPO →</a>
+        </div>
+
+        <!-- Cooperative -->
+        <div class="role-card" data-role="cooperative">
+          <div class="rc-icon">🤝</div>
+          <div class="rc-title">Cooperative</div>
+          <div class="rc-desc">Coordinate agricultural products across your cooperative members.</div>
+          <ul class="rc-features">
+            <li>Manage cooperative members</li>
+            <li>Collective inventory management</li>
+            <li>List products jointly</li>
+            <li>Manage buyer orders</li>
+            <li>View collective sales</li>
+          </ul>
+          <a href="signup.html?role=cooperative" class="rc-cta">Continue as Cooperative →</a>
+        </div>
+
+        <!-- Agri Entrepreneur -->
+        <div class="role-card" data-role="entrepreneur">
+          <div class="rc-icon">💼</div>
+          <div class="rc-title">Agri Entrepreneur</div>
+          <div class="rc-desc">Build and grow an agricultural business on top of HarvestLink.</div>
+          <ul class="rc-features">
+            <li>Source products from farmers</li>
+            <li>Manage suppliers and customers</li>
+            <li>Bulk procurement</li>
+            <li>Business analytics</li>
+            <li>Manage product listings</li>
+          </ul>
+          <a href="signup.html?role=entrepreneur" class="rc-cta">Continue as Agri Entrepreneur →</a>
+        </div>
+
+        <!-- Consumer -->
+        <div class="role-card" data-role="consumer">
+          <div class="rc-icon">🛒</div>
+          <div class="rc-title">Consumer</div>
+          <div class="rc-desc">Buy fresh produce directly from verified farmers and FPOs.</div>
+          <ul class="rc-features">
+            <li>Browse the full marketplace</li>
+            <li>Search and filter products</li>
+            <li>Add to cart and order</li>
+            <li>Track your deliveries</li>
+            <li>Rate and review</li>
+          </ul>
+          <a href="signup.html?role=consumer" class="rc-cta">Continue as Consumer →</a>
+        </div>
+
+        <!-- Bulk Buyer -->
+        <div class="role-card" data-role="bulk">
+          <div class="rc-icon">📦</div>
+          <div class="rc-title">Bulk Buyer</div>
+          <div class="rc-desc">Source fresh produce in larger quantities for restaurants, hotels, retailers and more.</div>
+          <ul class="rc-features">
+            <li>Search and compare suppliers</li>
+            <li>Request bulk quantities</li>
+            <li>Submit procurement requests</li>
+            <li>Manage bulk orders</li>
+            <li>Track bulk deliveries</li>
+          </ul>
+          <a href="signup.html?role=bulk" class="rc-cta">Continue as Bulk Buyer →</a>
+        </div>
+      </div>
+
+      <div style="text-align:center; margin-top: 36px; font-size: 14px; color: var(--text-muted);">
+        Already have an account? <a href="login.html" style="color: var(--green); font-weight: 700;">Login here</a>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

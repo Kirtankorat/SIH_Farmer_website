@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Track Order — HarvestLink</title>
+  <meta name="description" content="Track your HarvestLink order from farm to delivery.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="features.css">
+  <style>
+    .timeline-step { padding: 16px 0; display: flex; gap: 16px; align-items: flex-start; }
+    .ts-indicator { display: flex; flex-direction: column; align-items: center; flex-shrink: 0; }
+    .ts-line { width: 2px; height: 36px; margin-top: 4px; background: var(--border); }
+    .ts-line.done { background: var(--green); }
+    .timeline-step:last-child .ts-line { display: none; }
+  </style>
+</head>
+<body>
+
+  <nav class="navbar" id="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="nav-logo"><span class="logo-leaf">⬟</span> HARVESTLINK</a>
+      <div class="nav-actions nav-actions-inject"></div>
+      <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+    </div>
+  </nav>
+
+  <div class="tracking-page">
+    <div class="container">
+      <div style="margin-bottom:24px;">
+        <a href="marketplace.html" style="font-size:13px;font-weight:700;color:var(--text-muted)">← Continue Shopping</a>
+      </div>
+
+      <div class="section-label">Order Tracking</div>
+      <h1 style="font-size:clamp(26px,4vw,40px);color:var(--brown);margin-bottom:6px" id="orderNum">Order #HL1024</h1>
+      <p style="font-size:14px;color:var(--text-muted);margin-bottom:36px" id="orderDate">Placed on — · Expected delivery: Tomorrow by 6 PM</p>
+
+      <div class="tracking-grid">
+        <!-- Left -->
+        <div>
+          <!-- Timeline -->
+          <div class="tracking-timeline">
+            <div style="font-size:14px;font-weight:700;color:var(--brown);margin-bottom:4px">Delivery Status</div>
+            <div style="font-size:13px;color:var(--text-muted);margin-bottom:20px" id="statusSummary">Your order is being prepared by the farmer.</div>
+
+            <div id="timeline">
+              <!-- filled by JS -->
+            </div>
+          </div>
+
+          <!-- Farmer card -->
+          <div class="widget" style="margin-top:20px;">
+            <div class="widget-header">
+              <div class="wh-title">Your Farmer</div>
+              <span style="font-size:12px;color:var(--green);font-weight:700">✓ Verified</span>
+            </div>
+            <div class="widget-body" id="farmerInfoBox">
+              <!-- filled by JS -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: Order summary -->
+        <div>
+          <div class="widget">
+            <div class="widget-header"><div class="wh-title">Order Summary</div></div>
+            <div class="widget-body" id="orderSummaryBox">
+              <!-- filled by JS -->
+            </div>
+          </div>
+
+          <div class="widget" style="margin-top:20px;">
+            <div class="widget-body" style="text-align:center;padding:24px">
+              <div style="font-size:32px;margin-bottom:12px">📞</div>
+              <div style="font-size:15px;font-weight:700;color:var(--brown);margin-bottom:6px">Need help?</div>
+              <div style="font-size:13px;color:var(--text-muted);margin-bottom:16px">Our support team can help with order issues.</div>
+              <a href="#" class="btn-primary-sm" style="font-size:13px;padding:10px 20px">Contact Support</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top:40px;text-align:center;">
+        <a href="marketplace.html" class="btn-primary-lg">Shop More Produce →</a>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const isNew = params.get('new') === '1';
+    const cart = getCart();
+
+    // Generate order ID
+    const orderId = 'HL' + (1020 + Math.floor(Math.random() * 100));
+    document.getElementById('orderNum').textContent = 'Order #' + orderId;
+
+    const now = new Date();
+    const tomorrow = new Date(now);
+    tomorrow.setDate(now.getDate() + 1);
+    const options = { weekday:'long', day:'numeric', month:'long' };
+    document.getElementById('orderDate').textContent = `Placed on ${now.toLocaleDateString('en-IN', {day:'numeric',month:'long',year:'numeric'})} · Expected delivery: ${tomorrow.toLocaleDateString('en-IN', options)} by 6 PM`;
+
+    // Timeline steps
+    const steps = [
+      { label: 'Order Placed', time: now.toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'}), status: 'done', desc: 'Your order was received.' },
+      { label: 'Farmer Confirmed', time: (+now+15*60000)|0 > 0 ? addMins(now,15) : '', status: isNew ? 'done' : 'done', desc: 'The farmer confirmed and is preparing your order.' },
+      { label: 'Preparing Produce', time: addMins(now, 60), status: isNew ? 'current' : 'current', desc: 'Produce is being harvested and sorted for you.' },
+      { label: 'Picked Up', time: addMins(now, 240), status: 'pending', desc: 'Our logistics partner will pick up from the farm.' },
+      { label: 'In Transit', time: '', status: 'pending', desc: 'On its way to you.' },
+      { label: 'Delivered', time: tomorrow.toLocaleDateString('en-IN',{day:'numeric',month:'short'}) + ' · by 6 PM', status: 'pending', desc: 'Delivered to your address.' }
+    ];
+
+    function addMins(date, mins) {
+      const d = new Date(date.getTime() + mins * 60000);
+      return d.toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'});
+    }
+
+    document.getElementById('timeline').innerHTML = steps.map((s, i) => {
+      const isLast = i === steps.length - 1;
+      const isDone = s.status === 'done';
+      const isCurrent = s.status === 'current';
+      return `
+        <div class="timeline-step">
+          <div class="ts-indicator">
+            <div class="ts-dot ${isDone ? 'done' : isCurrent ? 'current' : ''}"></div>
+            ${!isLast ? `<div class="ts-line ${isDone ? 'done' : ''}"></div>` : ''}
+          </div>
+          <div class="ts-content">
+            <div class="ts-title ${isDone ? 'done' : isCurrent ? '' : 'pending'}">${isDone ? '✓ ' : isCurrent ? '→ ' : ''}${s.label}</div>
+            <div class="ts-time" style="color:${isCurrent ? 'var(--terracotta)' : ''};font-weight:${isCurrent ? '700' : '400'}">${s.time || (s.status === 'pending' ? 'Upcoming' : '')}</div>
+          </div>
+        </div>
+      `;
+    }).join('');
+
+    // Farmer info
+    const farmer = cart.length > 0 ? (PRODUCTS.find(p => p.id === cart[0].id) || PRODUCTS[0]) : PRODUCTS[0];
+    document.getElementById('farmerInfoBox').innerHTML = `
+      <div style="display:flex;gap:16px;align-items:center">
+        <div style="width:52px;height:52px;border-radius:50%;background:var(--green-muted);display:flex;align-items:center;justify-content:center;font-size:28px;flex-shrink:0">👨‍🌾</div>
+        <div>
+          <div style="font-size:15px;font-weight:700;color:var(--brown)">${farmer.farmer}</div>
+          <div style="font-size:13px;color:var(--text-muted)">📍 ${farmer.location}</div>
+          <span class="seller-badge badge-farmer" style="margin-top:4px">${farmer.badge}</span>
+        </div>
+      </div>
+    `;
+
+    // Order summary
+    const orderItems = cart.length > 0 ? cart : [{ ...PRODUCTS[0], qty: 2 }, { ...PRODUCTS[2], qty: 1 }];
+    const subtotal = orderItems.reduce((s, i) => s + (i.priceNum * i.qty), 0);
+    const DELIVERY = 40;
+    const total = subtotal + DELIVERY;
+
+    document.getElementById('orderSummaryBox').innerHTML = `
+      <div style="margin-bottom:16px">
+        ${orderItems.map(i => `
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border);font-size:14px">
+            <div>
+              <div style="font-weight:700;color:var(--brown)">${i.emoji || '🌾'} ${i.name}</div>
+              <div style="font-size:12px;color:var(--text-muted)">${i.qty} ${i.unit} × ${i.price}</div>
+            </div>
+            <div style="font-weight:700;color:var(--green)">₹${i.priceNum * i.qty}</div>
+          </div>
+        `).join('')}
+      </div>
+      <div class="cs-row"><span class="cs-label">Subtotal</span><span class="cs-value">₹${subtotal}</span></div>
+      <div class="cs-row"><span class="cs-label">Delivery</span><span class="cs-value">₹${DELIVERY}</span></div>
+      <div class="cs-total" style="padding:14px 0 4px;border-top:2px solid var(--border);">
+        <span style="font-size:16px;font-weight:700;color:var(--brown)">Total</span>
+        <span style="font-size:20px;font-weight:800;color:var(--green);font-family:'DM Serif Display',serif">₹${total}</span>
+      </div>
+    `;
+
+    // On new order, clear cart
+    if (isNew) clearCart();
+  </script>
+</body>
+</html>

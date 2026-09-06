@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bulk Buyer Dashboard — HarvestLink</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="features.css">
+  <style>
+    body { background: var(--cream); }
+    .bulk-shell { margin-top: 64px; display: flex; min-height: calc(100vh - 64px); }
+    .dash-sidebar { width: 220px; background: var(--brown); flex-shrink: 0; padding: 32px 0; position: sticky; top: 64px; height: calc(100vh - 64px); overflow-y: auto; }
+    .dp-avatar { width: 48px; height: 48px; border-radius: 50%; background: #6a1b9a; display: flex; align-items: center; justify-content: center; font-size: 24px; margin-bottom: 10px; }
+    .supplier-card { background: var(--cream); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 18px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: flex-start; }
+    .sc-info-title { font-size: 15px; font-weight: 700; color: var(--brown); margin-bottom: 4px; }
+    .sc-info-sub { font-size: 13px; color: var(--text-muted); }
+  </style>
+</head>
+<body>
+
+  <nav class="navbar" id="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="nav-logo"><span class="logo-leaf">⬟</span> HARVESTLINK</a>
+      <div class="nav-actions" style="margin-left:auto">
+        <span style="font-size:13px;color:var(--text-muted)" id="bulkNameLabel">📦 Bulk Buyer</span>
+        <a href="index.html" class="btn-outline-sm">Back to Site</a>
+        <a href="#" onclick="logout()" class="btn-outline-sm">Logout</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="bulk-shell">
+    <aside class="dash-sidebar">
+      <div class="dash-profile">
+        <div class="dp-avatar">📦</div>
+        <div class="dp-name" id="bulkSidebarName">Green Kitchen</div>
+        <div class="dp-badge" style="color:var(--wheat)">Bulk Buyer</div>
+      </div>
+      <div class="dash-nav-item active" data-panel="overview"><span class="dni-icon">📊</span> Overview</div>
+      <div class="dash-nav-item" data-panel="suppliers"><span class="dni-icon">🌾</span> Find Suppliers</div>
+      <div class="dash-nav-item" data-panel="requests"><span class="dni-icon">📋</span> Bulk Requests</div>
+      <div class="dash-nav-item" data-panel="orders"><span class="dni-icon">🛒</span> Orders</div>
+      <div class="dash-nav-item" data-panel="saved"><span class="dni-icon">❤️</span> Saved Suppliers</div>
+      <div class="dash-nav-item" data-panel="delivery"><span class="dni-icon">🚛</span> Delivery</div>
+    </aside>
+
+    <main class="dash-main">
+
+      <!-- OVERVIEW -->
+      <div class="dash-panel active" id="panel-overview">
+        <div class="dash-greeting">
+          <div class="dg-text"><h2 id="bulkHeading">Green Kitchen</h2><p style="color:var(--text-muted);font-size:14px">Bulk Buyer Dashboard</p></div>
+          <button class="btn-primary-sm" onclick="switchPanel('requests')">+ Request Bulk Supply</button>
+        </div>
+        <div class="dash-stats">
+          <div class="stat-card"><div class="sc-label">Active Requests</div><div class="sc-value">3</div><div class="sc-sub">Under review</div></div>
+          <div class="stat-card"><div class="sc-label">Pending Orders</div><div class="sc-value">2</div><div class="sc-trend up">→ In transit</div></div>
+          <div class="stat-card"><div class="sc-label">Saved Suppliers</div><div class="sc-value">6</div><div class="sc-sub">FPOs &amp; Farmers</div></div>
+          <div class="stat-card"><div class="sc-label">Upcoming Deliveries</div><div class="sc-value">2</div><div class="sc-sub">This week</div></div>
+        </div>
+
+        <div class="dash-widgets">
+          <div class="widget">
+            <div class="widget-header"><div class="wh-title">Active Bulk Requests</div><div class="wh-link" onclick="switchPanel('requests')">View all →</div></div>
+            <div class="widget-body">
+              <div class="order-row"><div><div class="or-prod">Tomatoes · 100 kg/week</div><div class="or-meta">Matching in progress · Gujarat suppliers</div></div><span class="or-status status-prep">Matching</span></div>
+              <div class="order-row"><div><div class="or-prod">Leafy Vegetables · 30 kg/week</div><div class="or-meta">Request accepted · Suresh Farms</div></div><span class="or-status status-new">Accepted</span></div>
+              <div class="order-row"><div><div class="or-prod">Okra · 20 kg/week</div><div class="or-meta">Fulfillment confirmed</div></div><span class="or-status status-done">Confirmed</span></div>
+            </div>
+          </div>
+
+          <div class="widget">
+            <div class="widget-header"><div class="wh-title">Upcoming Deliveries</div><div class="wh-link" onclick="switchPanel('delivery')">View →</div></div>
+            <div class="widget-body">
+              <div class="pickup-card"><div class="pc-title-w">📦 Next Delivery</div><div class="pc-time">Tomorrow · 8:00 AM</div><div class="pc-detail">Tomatoes 25 kg + Okra 5 kg · From Ramesh Patel, Gujarat</div></div>
+              <div class="pickup-card"><div class="pc-title-w">📦 Following Delivery</div><div class="pc-time">Thu · 9:00 AM</div><div class="pc-detail">Leafy Vegetables 8 kg · From Suresh Farms, Punjab</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- FIND SUPPLIERS -->
+      <div class="dash-panel" id="panel-suppliers">
+        <div class="dash-greeting"><div class="dg-text"><h2>Find Suppliers</h2><p>Search farmers and FPOs who can supply your requirements.</p></div><a href="marketplace.html" class="btn-primary-sm">Browse Marketplace →</a></div>
+
+        <div style="display:flex;gap:12px;margin-bottom:20px;flex-wrap:wrap">
+          <input type="text" placeholder="Search by product, location, or seller..." style="flex:1;min-width:200px;padding:11px 14px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-family:'Manrope',sans-serif;font-size:14px;background:var(--warm-white)" oninput="filterSuppliers(this.value)">
+          <select style="padding:11px 14px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-family:'Manrope',sans-serif;font-size:13px;background:var(--warm-white)">
+            <option>All Types</option><option>Individual Farmer</option><option>FPO</option><option>Cooperative</option>
+          </select>
+        </div>
+
+        <div id="suppliersGrid">
+          <div class="supplier-card">
+            <div><div class="sc-info-title">Ramesh Patel</div><div class="sc-info-sub">📍 Anand, Gujarat · 🌾 Individual Farmer</div><div style="font-size:12px;color:var(--text-muted);margin-top:6px">Tomatoes, Okra, Brinjal · Organic</div></div>
+            <div style="text-align:right"><span class="seller-badge badge-farmer">✓ Verified</span><br><button class="btn-add-cart" style="margin-top:8px;font-size:12px;padding:7px 12px" onclick="showToast('Request sent to Ramesh Patel')">Request Supply</button></div>
+          </div>
+          <div class="supplier-card">
+            <div><div class="sc-info-title">Konkan FPO</div><div class="sc-info-sub">📍 Ratnagiri, Maharashtra · 🏢 FPO</div><div style="font-size:12px;color:var(--text-muted);margin-top:6px">Alphonso Mango, Cashew, Coconut · Natural</div></div>
+            <div style="text-align:right"><span class="seller-badge badge-fpo">✓ Verified FPO</span><br><button class="btn-add-cart" style="margin-top:8px;font-size:12px;padding:7px 12px" onclick="showToast('Request sent to Konkan FPO')">Request Supply</button></div>
+          </div>
+          <div class="supplier-card">
+            <div><div class="sc-info-title">Kisan Collective</div><div class="sc-info-sub">📍 Mehsana, Gujarat · 🤝 Cooperative</div><div style="font-size:12px;color:var(--text-muted);margin-top:6px">Wheat, Bajra, Onion, Tomatoes · Conventional</div></div>
+            <div style="text-align:right"><span class="seller-badge badge-coop">✓ Cooperative</span><br><button class="btn-add-cart" style="margin-top:8px;font-size:12px;padding:7px 12px" onclick="showToast('Request sent to Kisan Collective')">Request Supply</button></div>
+          </div>
+          <div class="supplier-card">
+            <div><div class="sc-info-title">Vidarbha FPO</div><div class="sc-info-sub">📍 Nagpur, Maharashtra · 🏢 FPO</div><div style="font-size:12px;color:var(--text-muted);margin-top:6px">Toor Dal, Chana, Moong Dal · Natural</div></div>
+            <div style="text-align:right"><span class="seller-badge badge-fpo">✓ Verified FPO</span><br><button class="btn-add-cart" style="margin-top:8px;font-size:12px;padding:7px 12px" onclick="showToast('Request sent to Vidarbha FPO')">Request Supply</button></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- BULK REQUESTS -->
+      <div class="dash-panel" id="panel-requests">
+        <div class="dash-greeting"><div class="dg-text"><h2>Bulk Requests</h2><p>Submit and track procurement requests.</p></div></div>
+
+        <div class="widget" style="margin-bottom:24px">
+          <div class="widget-header"><div class="wh-title">+ New Bulk Request</div></div>
+          <div class="widget-body">
+            <div class="form-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px">
+              <div class="sg-field"><label>Product Required</label><input type="text" placeholder="e.g. Tomatoes"></div>
+              <div class="sg-field"><label>Quantity (kg/week)</label><input type="number" placeholder="100"></div>
+              <div class="sg-field"><label>Delivery Location</label><input type="text" placeholder="City, State"></div>
+              <div class="sg-field"><label>Frequency</label><select><option>Weekly</option><option>Bi-weekly</option><option>Monthly</option></select></div>
+            </div>
+            <button class="btn-submit" onclick="this.textContent='✓ Request Submitted!';this.style.background='var(--green)';setTimeout(()=>{this.textContent='Submit Bulk Request';this.style.background='';},3000)">Submit Bulk Request</button>
+          </div>
+        </div>
+
+        <div class="widget">
+          <div class="widget-header"><div class="wh-title">Previous Requests</div></div>
+          <div class="widget-body">
+            <div class="order-row"><div><div class="or-prod">Tomatoes · 100 kg/week · Gujarat</div><div class="or-meta">Submitted 2 days ago · Weekly</div></div><span class="or-status status-prep">Matching</span></div>
+            <div class="order-row"><div><div class="or-prod">Leafy Vegetables · 30 kg/week</div><div class="or-meta">Submitted 5 days ago · Weekly</div></div><span class="or-status status-new">Accepted</span></div>
+            <div class="order-row"><div><div class="or-prod">Okra · 20 kg/week · Gujarat</div><div class="or-meta">Submitted 2 weeks ago · Weekly</div></div><span class="or-status status-done">Confirmed</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ORDERS -->
+      <div class="dash-panel" id="panel-orders">
+        <div class="dash-greeting"><div class="dg-text"><h2>Orders</h2><p>Your active and completed bulk orders.</p></div></div>
+        <div class="widget"><div class="widget-body">
+          <div class="order-row"><div><div class="or-prod">Tomatoes 25 kg + Okra 5 kg</div><div class="or-meta">Ramesh Patel · Tomorrow 8:00 AM</div></div><span class="or-status status-prep">In Transit</span></div>
+          <div class="order-row"><div><div class="or-prod">Leafy Vegetables 8 kg</div><div class="or-meta">Suresh Farms, Punjab · Thu 9:00 AM</div></div><span class="or-status status-new">Confirmed</span></div>
+          <div class="order-row"><div><div class="or-prod">Tomatoes 25 kg</div><div class="or-meta">Last week · Ramesh Patel</div></div><span class="or-status status-done">Delivered</span></div>
+          <div class="order-row"><div><div class="or-prod">Wheat 50 kg</div><div class="or-meta">2 weeks ago · Kisan Collective</div></div><span class="or-status status-done">Delivered</span></div>
+        </div></div>
+      </div>
+
+      <!-- SAVED SUPPLIERS -->
+      <div class="dash-panel" id="panel-saved">
+        <div class="dash-greeting"><div class="dg-text"><h2>Saved Suppliers</h2><p>Farmers and FPOs you've saved for quick access.</p></div></div>
+        <div class="supplier-card"><div><div class="sc-info-title">Ramesh Patel</div><div class="sc-info-sub">📍 Anand, Gujarat · Organic Vegetables</div></div><div style="text-align:right"><button class="btn-add-cart" style="font-size:12px;padding:7px 12px" onclick="showToast('Request sent')">Request Supply</button></div></div>
+        <div class="supplier-card"><div><div class="sc-info-title">Konkan FPO</div><div class="sc-info-sub">📍 Ratnagiri, Maharashtra · Mango, Cashew</div></div><div style="text-align:right"><button class="btn-add-cart" style="font-size:12px;padding:7px 12px" onclick="showToast('Request sent')">Request Supply</button></div></div>
+        <div class="supplier-card"><div><div class="sc-info-title">Punjab Farms</div><div class="sc-info-sub">📍 Amritsar, Punjab · Leafy Vegetables</div></div><div style="text-align:right"><button class="btn-add-cart" style="font-size:12px;padding:7px 12px" onclick="showToast('Request sent')">Request Supply</button></div></div>
+      </div>
+
+      <!-- DELIVERY -->
+      <div class="dash-panel" id="panel-delivery">
+        <div class="dash-greeting"><div class="dg-text"><h2>Delivery</h2><p>Scheduled deliveries to your business location.</p></div></div>
+        <div class="dash-widgets">
+          <div class="widget logistics-widget">
+            <div class="widget-header"><div class="wh-title">Upcoming Deliveries</div></div>
+            <div class="widget-body">
+              <div class="pickup-card"><div class="pc-title-w">📦 Tomorrow</div><div class="pc-time">Tomorrow · 8:00 AM</div><div class="pc-detail">Tomatoes 25 kg + Okra 5 kg · Ramesh Patel · Green Kitchen, Surat</div></div>
+              <div class="pickup-card"><div class="pc-title-w">📦 Thursday</div><div class="pc-time">Thursday · 9:00 AM</div><div class="pc-detail">Leafy Vegetables 8 kg · Suresh Farms · Green Kitchen, Surat</div></div>
+            </div>
+          </div>
+          <div class="widget">
+            <div class="widget-header"><div class="wh-title">Delivery History</div></div>
+            <div class="widget-body">
+              <div class="order-row"><div class="or-prod">Tomatoes 25 kg · Ramesh Patel</div><span class="or-status status-done">Last week</span></div>
+              <div class="order-row"><div class="or-prod">Wheat 50 kg · Kisan Collective</div><span class="or-status status-done">2 wks ago</span></div>
+              <div class="order-row"><div class="or-prod">Mango 10 kg · Konkan FPO</div><span class="or-status status-done">3 wks ago</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <script src="app.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const user = getUser();
+      if (user) {
+        document.getElementById('bulkNameLabel').textContent = '📦 ' + user.name;
+        document.getElementById('bulkSidebarName').textContent = user.name;
+        document.getElementById('bulkHeading').textContent = user.name;
+      }
+    });
+
+    function filterSuppliers(query) {
+      const q = query.toLowerCase();
+      document.querySelectorAll('.supplier-card').forEach(card => {
+        card.style.display = card.textContent.toLowerCase().includes(q) ? '' : 'none';
+      });
+    }
+
+    function switchPanel(p) {
+      document.querySelectorAll('.dash-panel').forEach(d => d.classList.remove('active'));
+      document.querySelectorAll('.dash-nav-item').forEach(n => n.classList.remove('active'));
+      document.getElementById('panel-'+p)?.classList.add('active');
+      document.querySelector(`[data-panel="${p}"]`)?.classList.add('active');
+    }
+    document.querySelectorAll('.dash-nav-item').forEach(item => {
+      item.addEventListener('click', () => switchPanel(item.dataset.panel));
+    });
+  </script>
+</body>
+</html>
