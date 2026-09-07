@@ -103,9 +103,9 @@ function getDashboardUrl(role) {
 // ──────────────────────────────────────────────
 function updateCartBadge() {
   const count = getCartCount();
-  document.querySelectorAll('.cart-badge, .sidebar-cart-badge').forEach(el => {
+  document.querySelectorAll('.cart-badge').forEach(el => {
     el.textContent = count;
-    el.style.display = count > 0 ? (el.classList.contains('sidebar-cart-badge') ? 'inline-flex' : 'flex') : 'none';
+    el.style.display = count > 0 ? 'flex' : 'none';
   });
   document.querySelectorAll('.cart-count-label').forEach(el => {
     el.textContent = count > 0 ? `(${count})` : '';
@@ -305,221 +305,12 @@ window.addEventListener('scroll', () => {
 });
 
 // ──────────────────────────────────────────────
-// LEFT SIDEBAR DRAWER & NAVIGATION
-// ──────────────────────────────────────────────
-function initLeftSidebar() {
-  // 1. Inject sidebar toggle into navbar if not present
-  const navContainer = document.querySelector('.nav-container');
-  if (navContainer && !document.getElementById('leftSidebarToggle')) {
-    const toggleBtn = document.createElement('button');
-    toggleBtn.className = 'nav-sidebar-toggle';
-    toggleBtn.id = 'leftSidebarToggle';
-    toggleBtn.setAttribute('aria-label', 'Open navigation sidebar');
-    toggleBtn.innerHTML = `
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-        <line x1="3" y1="12" x2="21" y2="12"></line>
-        <line x1="3" y1="6" x2="21" y2="6"></line>
-        <line x1="3" y1="18" x2="21" y2="18"></line>
-      </svg>
-      <span>Menu</span>
-    `;
-    navContainer.insertBefore(toggleBtn, navContainer.firstChild);
-  }
-
-  // 2. Inject left sidebar & backdrop if not present
-  if (!document.getElementById('leftSidebar')) {
-    const user = getUser();
-    const role = getRole();
-    const roleLabels = {
-      consumer: 'Consumer', farmer: 'Farmer', fpo: 'FPO Partner',
-      logistics: 'Logistics Partner', cooperative: 'Cooperative',
-      entrepreneur: 'Agri Entrepreneur', bulk: 'Bulk Buyer'
-    };
-    const userSectionHtml = user ? `
-      <div class="sidebar-user-card">
-        <div class="suc-avatar">${(user.name || 'U')[0].toUpperCase()}</div>
-        <div class="suc-info">
-          <div class="suc-name">${user.name || 'User'}</div>
-          <div class="suc-role">${roleLabels[role] || 'Member'}</div>
-        </div>
-      </div>
-      <div style="margin-top: 10px; display: flex; gap: 8px;">
-        <a href="${getDashboardUrl(role)}" class="btn-primary-sm" style="flex:1; text-align:center; padding: 7px 12px; font-size:12px;">Dashboard</a>
-        <a href="#" onclick="logout(); return false;" class="btn-outline-sm" style="padding: 7px 12px; font-size:12px;">Logout</a>
-      </div>
-    ` : `
-      <div style="font-size: 13px; font-weight: 700; color: var(--brown); margin-bottom: 8px;">Welcome to HarvestLink</div>
-      <div class="suc-guest-actions">
-        <a href="login.html" class="btn-outline-sm" style="flex:1; text-align:center; padding: 7px 10px; font-size:12px;">Login</a>
-        <a href="role-select.html" class="btn-primary-sm" style="flex:1; text-align:center; padding: 7px 10px; font-size:12px;">Join Free</a>
-      </div>
-    `;
-
-    const sidebarHtml = `
-      <div class="left-sidebar-backdrop" id="sidebarBackdrop"></div>
-      <aside class="left-sidebar" id="leftSidebar" aria-label="Main sidebar navigation">
-        <div class="sidebar-header">
-          <a href="index.html" class="sidebar-logo">
-            <span class="logo-leaf">⬟</span> HARVESTLINK
-          </a>
-          <button class="sidebar-close-btn" id="sidebarCloseBtn" aria-label="Close sidebar">✕</button>
-        </div>
-
-        <div class="sidebar-user-section" id="sidebarUserSection">
-          ${userSectionHtml}
-        </div>
-
-        <div class="sidebar-nav-wrap">
-          <div class="sidebar-section-title">Navigation</div>
-          <ul class="sidebar-nav-list" id="sidebarNavList">
-            <li>
-              <a href="index.html" class="sidebar-nav-link" data-path="index.html">
-                <span class="snl-icon">🏠</span>
-                <span class="snl-text">Home</span>
-              </a>
-            </li>
-            <li>
-              <a href="marketplace.html" class="sidebar-nav-link" data-path="marketplace.html">
-                <span class="snl-icon">🛒</span>
-                <span class="snl-text">Marketplace</span>
-                <span class="snl-badge">Fresh</span>
-              </a>
-            </li>
-            <li>
-              <a href="farmers.html" class="sidebar-nav-link" data-path="farmers.html">
-                <span class="snl-icon">🌾</span>
-                <span class="snl-text">Farmers</span>
-              </a>
-            </li>
-            <li>
-              <a href="businesses.html" class="sidebar-nav-link" data-path="businesses.html">
-                <span class="snl-icon">🏢</span>
-                <span class="snl-text">Businesses</span>
-              </a>
-            </li>
-            <li>
-              <a href="index.html#how-it-works" class="sidebar-nav-link" data-path="how-it-works">
-                <span class="snl-icon">⚙️</span>
-                <span class="snl-text">How It Works</span>
-              </a>
-            </li>
-            <li>
-              <a href="index.html#ai-logistics" class="sidebar-nav-link" data-path="ai-logistics">
-                <span class="snl-icon">🚚</span>
-                <span class="snl-text">AI & Logistics</span>
-              </a>
-            </li>
-            <li>
-              <a href="about.html" class="sidebar-nav-link" data-path="about.html">
-                <span class="snl-icon">📖</span>
-                <span class="snl-text">About</span>
-              </a>
-            </li>
-            <li>
-              <a href="faq.html" class="sidebar-nav-link" data-path="faq.html">
-                <span class="snl-icon">❓</span>
-                <span class="snl-text">FAQ</span>
-              </a>
-            </li>
-          </ul>
-
-          <div class="sidebar-section-title" style="margin-top: 18px;">Quick Access</div>
-          <ul class="sidebar-nav-list">
-            <li>
-              <a href="order-tracking.html" class="sidebar-nav-link" data-path="order-tracking.html">
-                <span class="snl-icon">📦</span>
-                <span class="snl-text">Track Order</span>
-              </a>
-            </li>
-            <li>
-              <a href="cart.html" class="sidebar-nav-link" data-path="cart.html">
-                <span class="snl-icon">🛍️</span>
-                <span class="snl-text">My Cart</span>
-                <span class="snl-badge sidebar-cart-badge" style="display:none;">0</span>
-              </a>
-            </li>
-          </ul>
-        </div>
-
-        <div class="sidebar-footer">
-          <div class="sidebar-footer-actions">
-            <a href="marketplace.html" class="btn-primary-sm" style="width:100%; text-align:center; display:block; margin-bottom: 8px;">Explore Marketplace</a>
-            <a href="role-select.html" class="btn-outline-sm" style="width:100%; text-align:center; display:block;">Join as Farmer / Buyer</a>
-          </div>
-          <div class="sidebar-tagline">HarvestLink — Direct Farm to Fork</div>
-        </div>
-      </aside>
-    `;
-
-    document.body.insertAdjacentHTML('beforeend', sidebarHtml);
-  }
-
-  // 3. Highlight current page link
-  const currentPath = window.location.pathname.split('/').pop() || 'index.html';
-  document.querySelectorAll('#sidebarNavList .sidebar-nav-link').forEach(link => {
-    const linkPath = link.getAttribute('data-path');
-    if (linkPath && currentPath.includes(linkPath)) {
-      link.classList.add('active');
-    }
-  });
-
-  // 4. Bind events
-  const sidebar = document.getElementById('leftSidebar');
-  const backdrop = document.getElementById('sidebarBackdrop');
-  const closeBtn = document.getElementById('sidebarCloseBtn');
-  const toggleBtn = document.getElementById('leftSidebarToggle');
-  const hamburger = document.getElementById('hamburger');
-
-  function openSidebar() {
-    sidebar?.classList.add('open');
-    backdrop?.classList.add('active');
-    document.body.style.overflow = 'hidden';
-  }
-
-  function closeSidebar() {
-    sidebar?.classList.remove('open');
-    backdrop?.classList.remove('active');
-    document.body.style.overflow = '';
-  }
-
-  toggleBtn?.addEventListener('click', (e) => {
-    e.stopPropagation();
-    openSidebar();
-  });
-
-  hamburger?.addEventListener('click', (e) => {
-    e.stopPropagation();
-    openSidebar();
-  });
-
-  closeBtn?.addEventListener('click', closeSidebar);
-  backdrop?.addEventListener('click', closeSidebar);
-
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') closeSidebar();
-  });
-
-  sidebar?.querySelectorAll('.sidebar-nav-link, .sidebar-footer a').forEach(a => {
-    a.addEventListener('click', () => {
-      closeSidebar();
-    });
-  });
-
-  updateCartBadge();
-}
-
-// ──────────────────────────────────────────────
-// HAMBURGER MENU & INIT
+// HAMBURGER MENU
 // ──────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
   const ham = document.getElementById('hamburger');
   const mob = document.getElementById('mobileMenu');
-  ham?.addEventListener('click', () => {
-    // If mobileMenu exists and left sidebar is available, opening left sidebar provides superior experience
-    if (mob && !document.getElementById('leftSidebar')) {
-      mob.classList.toggle('open');
-    }
-  });
+  ham?.addEventListener('click', () => mob?.classList.toggle('open'));
   mob?.querySelectorAll('a').forEach(a => a.addEventListener('click', () => mob.classList.remove('open')));
 
   // Smooth scroll
@@ -535,11 +326,11 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
+  // Highlight active navbar link
+  highlightActiveNavLink();
+
   // Build navbar right section
   buildNavbarRight();
-
-  // Initialize Left Sidebar navigation
-  initLeftSidebar();
 
   // Scroll fade sections
   const obs = new IntersectionObserver(entries => {
@@ -559,3 +350,19 @@ document.addEventListener('DOMContentLoaded', () => {
     document.head.appendChild(st);
   }
 });
+
+function highlightActiveNavLink() {
+  const currentPath = window.location.pathname.split('/').pop() || 'index.html';
+  document.querySelectorAll('.nav-links .nav-link, .mobile-menu a').forEach(link => {
+    const href = link.getAttribute('href');
+    if (!href) return;
+    const linkPath = href.split('#')[0];
+    if (linkPath === currentPath || (currentPath === '' && linkPath === 'index.html')) {
+      if (!href.includes('#')) {
+        link.classList.add('active');
+      }
+    } else if (linkPath && !href.startsWith('#')) {
+      link.classList.remove('active');
+    }
+  });
+}
