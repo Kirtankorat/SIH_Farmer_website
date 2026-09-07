@@ -1,21 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>HarvestLink — From Farm. Direct to Market.</title>
-  <meta name="description"
-    content="Buy fresh produce directly from verified farmers and FPOs. HarvestLink connects farmers with businesses, logistics partners, and bulk buyers through smarter demand planning and logistics.">
+  <meta name="description" content="Buy fresh produce directly from verified farmers and FPOs. HarvestLink connects farmers with consumers and bulk buyers through smarter demand planning and logistics.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link
-    href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Manrope:wght@300;400;500;600;700;800&display=swap"
-    rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="features.css">
 </head>
-
 <body>
 
   <!-- NAVIGATION -->
@@ -33,7 +28,6 @@
         <li><a href="businesses.html" class="nav-link">Businesses</a></li>
         <li><a href="#how-it-works" class="nav-link">How It Works</a></li>
         <li><a href="#ai-logistics" class="nav-link">AI & Logistics</a></li>
-        <li><a href="login.html" class="nav-link">Login</a></li>
       </ul>
 
       <div class="nav-actions nav-actions-inject">
@@ -54,11 +48,10 @@
         <li><a href="businesses.html">Businesses</a></li>
         <li><a href="#how-it-works">How It Works</a></li>
         <li><a href="#ai-logistics">AI & Logistics</a></li>
-        <li><a href="login.html">Login</a></li>
       </ul>
       <div class="mobile-actions">
-        <a href="login.html" class="btn-outline-full">Login</a>
-        <a href="role-select.html" class="btn-primary-full">Join HarvestLink</a>
+        <a href="#" class="btn-outline-full">Login</a>
+        <a href="register.html" class="btn-primary-full">Join as Farmer</a>
         <a href="marketplace.html" class="btn-green-full">Shop Produce</a>
       </div>
     </div>
@@ -70,8 +63,7 @@
       <div class="hero-text">
         <div class="hero-badge">Agricultural Marketplace · India</div>
         <h1 class="hero-headline">Fresh produce.<br><em>Direct from farmers.</em></h1>
-        <p class="hero-sub">Buy fresh produce directly from verified farmers and FPOs, while smarter demand planning and
-          logistics help move food efficiently from farm to market.</p>
+        <p class="hero-sub">Buy fresh produce directly from verified farmers and FPOs, while smarter demand planning and logistics help move food efficiently from farm to market.</p>
         <div class="hero-buttons">
           <a href="marketplace.html" class="btn-hero-primary">Shop Fresh Produce</a>
           <a href="register.html" class="btn-hero-outline">Sell Your Produce</a>
@@ -118,9 +110,15 @@
         </div>
         <div class="problem-divider">→</div>
         <div class="problem-card">
+          <div class="problem-icon">🛒</div>
+          <h3>Consumers</h3>
+          <p>Higher prices caused by multiple layers in the supply chain — each adding a margin before produce reaches your plate.</p>
+        </div>
+        <div class="problem-divider">→</div>
+        <div class="problem-card">
           <div class="problem-icon">🚚</div>
-          <h3>Supply Chain & Markets</h3>
-          <p>Unnecessary delays, excessive intermediary layers, and inefficient transportation lead to food waste and avoidable costs.</p>
+          <h3>Supply Chain</h3>
+          <p>Unnecessary delays and inefficient transportation lead to food waste and avoidable costs at every stage.</p>
         </div>
       </div>
 
@@ -142,6 +140,11 @@
         </div>
         <div class="flow-arrow">—</div>
         <div class="flow-node">
+          <div class="flow-icon">👨‍👩‍👧</div>
+          <div class="flow-label">Consumer</div>
+        </div>
+        <div class="flow-slash">/</div>
+        <div class="flow-node">
           <div class="flow-icon">🏪</div>
           <div class="flow-label">Bulk Buyer</div>
         </div>
@@ -156,14 +159,34 @@
         <div class="benefit-card benefit-green">
           <div class="benefit-eyebrow">For Farmers</div>
           <h3>Better prices,<br>more buyers.</h3>
-          <p>Reach buyers and businesses directly, reducing dependence on unnecessary intermediaries. More of every rupee stays with the farmer.</p>
+          <p>Reach consumers and businesses directly, reducing dependence on unnecessary intermediaries. More of every rupee stays with the farmer.</p>
           <div class="benefit-visual">
             <div class="benefit-flow">
               <span class="bf-node">🌾 Farmer</span>
               <span class="bf-arrow">→</span>
-              <span class="bf-node highlight">Buyer</span>
+              <span class="bf-node highlight">Consumer</span>
             </div>
             <div class="benefit-tag">No unnecessary middlemen</div>
+          </div>
+        </div>
+
+        <div class="benefit-card benefit-cream">
+          <div class="benefit-eyebrow">For Consumers</div>
+          <h3>Lower prices,<br>fresher food.</h3>
+          <p>A more direct supply chain can reduce avoidable costs between farm and table. Know exactly where your food comes from.</p>
+          <div class="benefit-visual">
+            <div class="price-comparison">
+              <div class="price-col">
+                <div class="price-label">Traditional</div>
+                <div class="price-val old-price">₹65<span>/kg</span></div>
+              </div>
+              <div class="price-vs">vs</div>
+              <div class="price-col">
+                <div class="price-label">HarvestLink</div>
+                <div class="price-val new-price">₹42<span>/kg</span></div>
+              </div>
+            </div>
+            <div class="benefit-tag">Tomatoes · Illustrative demo pricing</div>
           </div>
         </div>
 
@@ -309,8 +332,7 @@
           <div class="step-num">01</div>
           <div class="step-body">
             <h4>Farmers List</h4>
-            <p>Farmers and FPOs create a profile and showcase available produce — with prices, availability, and farming
-              practices.</p>
+            <p>Farmers and FPOs create a profile and showcase available produce — with prices, availability, and farming practices.</p>
           </div>
         </div>
         <div class="step-connector"></div>
@@ -318,8 +340,7 @@
           <div class="step-num">02</div>
           <div class="step-body">
             <h4>Buyers Discover</h4>
-            <p>Businesses and bulk buyers browse products directly, filter by location, category, and price — with full
-              transparency.</p>
+            <p>Consumers and businesses browse products directly, filter by location, category, and price — with full transparency.</p>
           </div>
         </div>
         <div class="step-connector"></div>
@@ -327,8 +348,7 @@
           <div class="step-num">03</div>
           <div class="step-body">
             <h4>Order Placed</h4>
-            <p>Buyers select quantities and confirm orders. Farmers are notified instantly and can prepare accordingly.
-            </p>
+            <p>Buyers select quantities and confirm orders. Farmers are notified instantly and can prepare accordingly.</p>
           </div>
         </div>
         <div class="step-connector"></div>
@@ -360,8 +380,7 @@
         <div class="bulk-text">
           <div class="section-label">For Businesses</div>
           <h2 class="section-heading">Need produce<br>in bulk?</h2>
-          <p>Connect with farmers and FPOs for larger quantities of fresh produce. Whether you're a restaurant, hotel,
-            or retailer — we help you source directly.</p>
+          <p>Connect with farmers and FPOs for larger quantities of fresh produce. Whether you're a restaurant, hotel, or retailer — we help you source directly.</p>
 
           <div class="buyer-types">
             <span class="buyer-type">🍽️ Restaurants</span>
@@ -409,8 +428,7 @@
       <div class="ai-header">
         <div class="section-label">AI Insights · Demo Data</div>
         <h2 class="section-heading">Know demand before<br>it becomes a problem.</h2>
-        <p class="section-subtext">AI-assisted demand forecasting helps farmers and buyers understand upcoming demand
-          and plan supply more effectively. <em>(Simulated demo data below)</em></p>
+        <p class="section-subtext">AI-assisted demand forecasting helps farmers and buyers understand upcoming demand and plan supply more effectively. <em>(Simulated demo data below)</em></p>
       </div>
 
       <div class="ai-dashboard">
@@ -456,8 +474,7 @@
         <div class="logistics-text">
           <div class="section-label">Smart Logistics</div>
           <h2 class="section-heading">Smarter routes.<br>Faster movement.</h2>
-          <p>Route optimisation coordinates pickups and deliveries so produce moves efficiently from farm to buyer with
-            minimal delay.</p>
+          <p>Route optimisation coordinates pickups and deliveries so produce moves efficiently from farm to buyer with minimal delay.</p>
 
           <div class="logistics-stats">
             <div class="l-stat">
@@ -614,8 +631,7 @@
       <div class="impact-inner">
         <div class="impact-header">
           <h2>From farm to market,<br>with less friction.</h2>
-          <p>HarvestLink is designed to make agricultural markets more direct, transparent, and efficient for everyone
-            involved.</p>
+          <p>HarvestLink is designed to make agricultural markets more direct, transparent, and efficient for everyone involved.</p>
           <div class="demo-note">Values below are illustrative. Demo purposes only.</div>
         </div>
         <div class="impact-metrics">
@@ -627,14 +643,12 @@
           <div class="impact-metric">
             <div class="im-icon">💰</div>
             <div class="im-label">Fairer Pricing</div>
-            <div class="im-desc">More direct transactions can reduce unnecessary cost layers between farm and buyer.
-            </div>
+            <div class="im-desc">More direct transactions can reduce unnecessary cost layers between farm and buyer.</div>
           </div>
           <div class="impact-metric">
             <div class="im-icon">🚛</div>
             <div class="im-label">Efficient Logistics</div>
-            <div class="im-desc">Better planning can reduce avoidable transportation inefficiencies and food waste.
-            </div>
+            <div class="im-desc">Better planning can reduce avoidable transportation inefficiencies and food waste.</div>
           </div>
         </div>
       </div>
@@ -648,8 +662,7 @@
         <div class="contact-text">
           <div class="section-label">Get in Touch</div>
           <h2 class="section-heading">Have a question?<br>We'd love to hear from you.</h2>
-          <p>Whether you're a farmer or a business looking to buy in bulk — reach out and we'll get back to
-            you.</p>
+          <p>Whether you're a farmer, a consumer, or a business looking to buy in bulk — reach out and we'll get back to you.</p>
         </div>
         <form class="contact-form" id="contactForm">
           <div class="form-row">
@@ -670,6 +683,7 @@
             <label for="contactType">I am a</label>
             <select id="contactType">
               <option value="">Select your role</option>
+              <option>Consumer</option>
               <option>Farmer / FPO</option>
               <option>Restaurant / Hotel</option>
               <option>Retailer</option>
@@ -694,7 +708,7 @@
         <div class="footer-brand">
           <div class="footer-logo"><span>⬟</span> HARVESTLINK</div>
           <div class="footer-tagline">From Farm. Direct to Market.</div>
-          <p class="footer-about">A digital marketplace connecting farmers and FPOs directly with businesses and bulk buyers.</p>
+          <p class="footer-about">A digital marketplace connecting farmers and FPOs directly with consumers and bulk buyers.</p>
         </div>
 
         <div class="footer-col">
@@ -749,5 +763,4 @@
   <script src="app.js"></script>
   <script src="script.js"></script>
 </body>
-
 </html>

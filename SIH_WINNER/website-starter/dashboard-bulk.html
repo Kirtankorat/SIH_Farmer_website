@@ -75,8 +75,8 @@
           <div class="widget">
             <div class="widget-header"><div class="wh-title">Upcoming Deliveries</div><div class="wh-link" onclick="switchPanel('delivery')">View →</div></div>
             <div class="widget-body">
-              <div class="order-row"><div><div class="or-prod">📦 Next Delivery</div><div class="or-meta">Tomatoes 25 kg + Okra 5 kg · From Ramesh Patel, Gujarat</div></div><span class="or-status status-new">Tomorrow · 8:00 AM</span></div>
-              <div class="order-row"><div><div class="or-prod">📦 Following Delivery</div><div class="or-meta">Leafy Vegetables 8 kg · From Suresh Farms, Punjab</div></div><span class="or-status status-new">Thu · 9:00 AM</span></div>
+              <div class="pickup-card"><div class="pc-title-w">📦 Next Delivery</div><div class="pc-time">Tomorrow · 8:00 AM</div><div class="pc-detail">Tomatoes 25 kg + Okra 5 kg · From Ramesh Patel, Gujarat</div></div>
+              <div class="pickup-card"><div class="pc-title-w">📦 Following Delivery</div><div class="pc-time">Thu · 9:00 AM</div><div class="pc-detail">Leafy Vegetables 8 kg · From Suresh Farms, Punjab</div></div>
             </div>
           </div>
         </div>
@@ -89,7 +89,7 @@
         <div style="display:flex;gap:12px;margin-bottom:20px;flex-wrap:wrap">
           <input type="text" placeholder="Search by product, location, or seller..." style="flex:1;min-width:200px;padding:11px 14px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-family:'Manrope',sans-serif;font-size:14px;background:var(--warm-white)" oninput="filterSuppliers(this.value)">
           <select style="padding:11px 14px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-family:'Manrope',sans-serif;font-size:13px;background:var(--warm-white)">
-            <option>All Types</option><option>Individual Farmer</option><option>FPO</option>
+            <option>All Types</option><option>Individual Farmer</option><option>FPO</option><option>Cooperative</option>
           </select>
         </div>
 
@@ -103,8 +103,8 @@
             <div style="text-align:right"><span class="seller-badge badge-fpo">✓ Verified FPO</span><br><button class="btn-add-cart" style="margin-top:8px;font-size:12px;padding:7px 12px" onclick="showToast('Request sent to Konkan FPO')">Request Supply</button></div>
           </div>
           <div class="supplier-card">
-            <div><div class="sc-info-title">Gujarat Krishi FPO</div><div class="sc-info-sub">📍 Mehsana, Gujarat · 🏢 FPO</div><div style="font-size:12px;color:var(--text-muted);margin-top:6px">Wheat, Bajra, Onion, Tomatoes · Conventional</div></div>
-            <div style="text-align:right"><span class="seller-badge badge-fpo">✓ Verified FPO</span><br><button class="btn-add-cart" style="margin-top:8px;font-size:12px;padding:7px 12px" onclick="showToast('Request sent to Gujarat Krishi FPO')">Request Supply</button></div>
+            <div><div class="sc-info-title">Kisan Collective</div><div class="sc-info-sub">📍 Mehsana, Gujarat · 🤝 Cooperative</div><div style="font-size:12px;color:var(--text-muted);margin-top:6px">Wheat, Bajra, Onion, Tomatoes · Conventional</div></div>
+            <div style="text-align:right"><span class="seller-badge badge-coop">✓ Cooperative</span><br><button class="btn-add-cart" style="margin-top:8px;font-size:12px;padding:7px 12px" onclick="showToast('Request sent to Kisan Collective')">Request Supply</button></div>
           </div>
           <div class="supplier-card">
             <div><div class="sc-info-title">Vidarbha FPO</div><div class="sc-info-sub">📍 Nagpur, Maharashtra · 🏢 FPO</div><div style="font-size:12px;color:var(--text-muted);margin-top:6px">Toor Dal, Chana, Moong Dal · Natural</div></div>
@@ -166,8 +166,8 @@
           <div class="widget logistics-widget">
             <div class="widget-header"><div class="wh-title">Upcoming Deliveries</div></div>
             <div class="widget-body">
-              <div class="order-row"><div><div class="or-prod">📦 Tomorrow</div><div class="or-meta">Tomatoes 25 kg + Okra 5 kg · Ramesh Patel · Green Kitchen, Surat</div></div><span class="or-status status-new">Tomorrow · 8:00 AM</span></div>
-              <div class="order-row"><div><div class="or-prod">📦 Thursday</div><div class="or-meta">Leafy Vegetables 8 kg · Suresh Farms · Green Kitchen, Surat</div></div><span class="or-status status-new">Thursday · 9:00 AM</span></div>
+              <div class="pickup-card"><div class="pc-title-w">📦 Tomorrow</div><div class="pc-time">Tomorrow · 8:00 AM</div><div class="pc-detail">Tomatoes 25 kg + Okra 5 kg · Ramesh Patel · Green Kitchen, Surat</div></div>
+              <div class="pickup-card"><div class="pc-title-w">📦 Thursday</div><div class="pc-time">Thursday · 9:00 AM</div><div class="pc-detail">Leafy Vegetables 8 kg · Suresh Farms · Green Kitchen, Surat</div></div>
             </div>
           </div>
           <div class="widget">

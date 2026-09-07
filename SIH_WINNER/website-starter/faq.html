@@ -1,17 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>FAQ — HarvestLink</title>
-  <meta name="description"
-    content="Frequently asked questions about HarvestLink — for farmers, businesses, and delivery queries.">
+  <meta name="description" content="Frequently asked questions about HarvestLink — for consumers, farmers, businesses, and delivery queries.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link
-    href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Manrope:wght@300;400;500;600;700;800&display=swap"
-    rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="features.css">
   <style>
@@ -21,17 +17,8 @@
       background: var(--warm-white);
       border-bottom: 1px solid var(--border);
     }
-
-    .faq-hero h1 {
-      font-size: clamp(28px, 4vw, 44px);
-      color: var(--brown);
-      margin-bottom: 10px;
-    }
-
-    .faq-hero p {
-      color: var(--text-secondary);
-      font-size: 16px;
-    }
+    .faq-hero h1 { font-size: clamp(28px, 4vw, 44px); color: var(--brown); margin-bottom: 10px; }
+    .faq-hero p { color: var(--text-secondary); font-size: 16px; }
 
     .faq-layout {
       display: grid;
@@ -60,31 +47,14 @@
       transition: all var(--transition);
       margin-bottom: 4px;
     }
-
-    .faq-tab:hover {
-      background: var(--cream);
-      color: var(--brown);
-    }
-
-    .faq-tab.active {
-      background: var(--green-muted);
-      color: var(--green);
-    }
+    .faq-tab:hover { background: var(--cream); color: var(--brown); }
+    .faq-tab.active { background: var(--green-muted); color: var(--green); }
 
     /* FAQ accordion */
-    .faq-panel {
-      display: none;
-    }
+    .faq-panel { display: none; }
+    .faq-panel.active { display: block; }
 
-    .faq-panel.active {
-      display: block;
-    }
-
-    .faq-panel-title {
-      font-size: 22px;
-      color: var(--brown);
-      margin-bottom: 24px;
-    }
+    .faq-panel-title { font-size: 22px; color: var(--brown); margin-bottom: 24px; }
 
     .faq-item {
       border: 1px solid var(--border);
@@ -94,10 +64,7 @@
       overflow: hidden;
       transition: box-shadow var(--transition);
     }
-
-    .faq-item:hover {
-      box-shadow: var(--shadow-sm);
-    }
+    .faq-item:hover { box-shadow: var(--shadow-sm); }
 
     .faq-q {
       display: flex;
@@ -118,14 +85,8 @@
       flex-shrink: 0;
     }
 
-    .faq-item.open .faq-arrow {
-      transform: rotate(180deg);
-      color: var(--green);
-    }
-
-    .faq-item.open .faq-q {
-      color: var(--green);
-    }
+    .faq-item.open .faq-arrow { transform: rotate(180deg); color: var(--green); }
+    .faq-item.open .faq-q { color: var(--green); }
 
     .faq-a {
       padding: 0 20px;
@@ -150,45 +111,17 @@
       text-align: center;
       margin-top: 40px;
     }
-
-    .faq-cta h3 {
-      font-size: 22px;
-      color: var(--brown);
-      margin-bottom: 8px;
-    }
-
-    .faq-cta p {
-      color: var(--text-secondary);
-      font-size: 15px;
-      margin-bottom: 20px;
-    }
+    .faq-cta h3 { font-size: 22px; color: var(--brown); margin-bottom: 8px; }
+    .faq-cta p { color: var(--text-secondary); font-size: 15px; margin-bottom: 20px; }
 
     @media (max-width: 768px) {
-      .faq-layout {
-        grid-template-columns: 1fr;
-        gap: 32px;
-      }
-
-      .faq-tabs {
-        position: static;
-        display: flex;
-        flex-wrap: wrap;
-        gap: 8px;
-      }
-
-      .faq-tab {
-        padding: 8px 14px;
-        border: 1.5px solid var(--border);
-        border-radius: 100px;
-      }
-
-      .faq-tab.active {
-        border-color: var(--green);
-      }
+      .faq-layout { grid-template-columns: 1fr; gap: 32px; }
+      .faq-tabs { position: static; display: flex; flex-wrap: wrap; gap: 8px; }
+      .faq-tab { padding: 8px 14px; border: 1.5px solid var(--border); border-radius: 100px; }
+      .faq-tab.active { border-color: var(--green); }
     }
   </style>
 </head>
-
 <body>
   <!-- NAVBAR -->
   <nav class="navbar" id="navbar">
@@ -226,7 +159,8 @@
       <div class="faq-layout">
         <!-- TABS -->
         <div class="faq-tabs">
-          <div class="faq-tab active" data-panel="farmers">🌾 Farmers</div>
+          <div class="faq-tab active" data-panel="consumers">🛒 Consumers</div>
+          <div class="faq-tab" data-panel="farmers">🌾 Farmers</div>
           <div class="faq-tab" data-panel="businesses">🏪 Businesses</div>
           <div class="faq-tab" data-panel="delivery">🚛 Delivery</div>
           <div class="faq-tab" data-panel="marketplace">🛍️ Marketplace</div>
@@ -234,39 +168,63 @@
 
         <!-- PANELS -->
         <div>
+          <!-- CONSUMERS -->
+          <div class="faq-panel active" id="faq-consumers">
+            <div class="faq-panel-title">For Consumers</div>
+
+            <div class="faq-item">
+              <div class="faq-q">How do I buy produce on HarvestLink? <span class="faq-arrow">▾</span></div>
+              <div class="faq-a">Browse the marketplace, select your products, add them to cart, and proceed to checkout. You can choose from farmers and FPOs near you or across India.</div>
+            </div>
+
+            <div class="faq-item">
+              <div class="faq-q">Is the produce really from farmers directly? <span class="faq-arrow">▾</span></div>
+              <div class="faq-a">Yes. Every farmer and FPO on HarvestLink is verified. You can see the farmer's name, location, and farming practice on each product listing.</div>
+            </div>
+
+            <div class="faq-item">
+              <div class="faq-q">How is HarvestLink different from a supermarket? <span class="faq-arrow">▾</span></div>
+              <div class="faq-a">Traditional supply chains involve multiple layers — agents, wholesalers, retailers — each taking a margin. HarvestLink connects you more directly to the farmer, which can mean fresher produce at fairer prices.</div>
+            </div>
+
+            <div class="faq-item">
+              <div class="faq-q">What payment methods are accepted? <span class="faq-arrow">▾</span></div>
+              <div class="faq-a">This is a demo platform. In a live version, we would support UPI, debit/credit cards, net banking, and cash on delivery where applicable.</div>
+            </div>
+
+            <div class="faq-item">
+              <div class="faq-q">Can I return or exchange a product? <span class="faq-arrow">▾</span></div>
+              <div class="faq-a">Fresh produce returns would be assessed case by case. If produce arrives damaged or of significantly lower quality than listed, our support team would assist with a resolution.</div>
+            </div>
+          </div>
+
           <!-- FARMERS -->
-          <div class="faq-panel active" id="faq-farmers">
+          <div class="faq-panel" id="faq-farmers">
             <div class="faq-panel-title">For Farmers & FPOs</div>
 
             <div class="faq-item">
               <div class="faq-q">How do I join HarvestLink as a farmer? <span class="faq-arrow">▾</span></div>
-              <div class="faq-a">Click "Join as Farmer" and complete the 4-step registration form. Our team will verify
-                your details and activate your listing within 2-3 working days.</div>
+              <div class="faq-a">Click "Join as Farmer" and complete the 4-step registration form. Our team will verify your details and activate your listing within 2-3 working days.</div>
             </div>
 
             <div class="faq-item">
               <div class="faq-q">Is there a fee to list produce on the platform? <span class="faq-arrow">▾</span></div>
-              <div class="faq-a">This is a demo platform. In the full version, we plan to offer a basic free listing
-                tier and a small commission on sales, with no large upfront fees for farmers.</div>
+              <div class="faq-a">This is a demo platform. In the full version, we plan to offer a basic free listing tier and a small commission on sales, with no large upfront fees for farmers.</div>
             </div>
 
             <div class="faq-item">
               <div class="faq-q">How does demand forecasting help me? <span class="faq-arrow">▾</span></div>
-              <div class="faq-a">The demand insights dashboard shows upcoming demand trends for your products. This
-                helps you plan how much to grow, when to harvest, and how much to stock — reducing guesswork and waste.
-              </div>
+              <div class="faq-a">The demand insights dashboard shows upcoming demand trends for your products. This helps you plan how much to grow, when to harvest, and how much to stock — reducing guesswork and waste.</div>
             </div>
 
             <div class="faq-item">
               <div class="faq-q">Who handles the logistics and pickup? <span class="faq-arrow">▾</span></div>
-              <div class="faq-a">HarvestLink coordinates logistics. After an order is confirmed, our logistics partner
-                arranges pickup from your farm or nearest collection point and delivers to the buyer.</div>
+              <div class="faq-a">HarvestLink coordinates logistics. After an order is confirmed, our logistics partner arranges pickup from your farm or nearest collection point and delivers to the buyer.</div>
             </div>
 
             <div class="faq-item">
               <div class="faq-q">Can FPOs (Farmer Producer Organisations) join? <span class="faq-arrow">▾</span></div>
-              <div class="faq-a">Yes. FPOs can register and list produce on behalf of member farmers. FPO accounts
-                support multiple products and larger volume listings.</div>
+              <div class="faq-a">Yes. FPOs can register and list produce on behalf of member farmers. FPO accounts support multiple products and larger volume listings.</div>
             </div>
           </div>
 
@@ -276,26 +234,22 @@
 
             <div class="faq-item">
               <div class="faq-q">Can restaurants and hotels buy in bulk? <span class="faq-arrow">▾</span></div>
-              <div class="faq-a">Yes. Bulk buyers including restaurants, hotels, retailers, and institutions can place
-                large orders directly with farmers or FPOs. Visit the Businesses page to learn more.</div>
+              <div class="faq-a">Yes. Bulk buyers including restaurants, hotels, retailers, and institutions can place large orders directly with farmers or FPOs. Visit the Businesses page to learn more.</div>
             </div>
 
             <div class="faq-item">
               <div class="faq-q">How do I set up a recurring order? <span class="faq-arrow">▾</span></div>
-              <div class="faq-a">Bulk buyers can request weekly or monthly recurring orders. Once matched with a farmer
-                or FPO, a supply agreement is set up with predictable pricing and delivery frequency.</div>
+              <div class="faq-a">Bulk buyers can request weekly or monthly recurring orders. Once matched with a farmer or FPO, a supply agreement is set up with predictable pricing and delivery frequency.</div>
             </div>
 
             <div class="faq-item">
               <div class="faq-q">What is the minimum order for bulk purchases? <span class="faq-arrow">▾</span></div>
-              <div class="faq-a">Minimum quantities depend on the product and farmer. Typically, bulk orders start from
-                50 kg for vegetables and 100 kg for grains and pulses.</div>
+              <div class="faq-a">Minimum quantities depend on the product and farmer. Typically, bulk orders start from 50 kg for vegetables and 100 kg for grains and pulses.</div>
             </div>
 
             <div class="faq-item">
               <div class="faq-q">Can I get a customised supply plan? <span class="faq-arrow">▾</span></div>
-              <div class="faq-a">Yes. For institutional buyers and larger businesses, we offer a sourcing consultation
-                to match your needs with appropriate farmers or FPOs.</div>
+              <div class="faq-a">Yes. For institutional buyers and larger businesses, we offer a sourcing consultation to match your needs with appropriate farmers or FPOs.</div>
             </div>
           </div>
 
@@ -305,26 +259,22 @@
 
             <div class="faq-item">
               <div class="faq-q">How long does delivery take? <span class="faq-arrow">▾</span></div>
-              <div class="faq-a">Typical delivery time is 1-3 days depending on your location and the farmer's distance.
-                Same-day or next-day options may be available for nearby farms.</div>
+              <div class="faq-a">Typical delivery time is 1-3 days depending on your location and the farmer's distance. Same-day or next-day options may be available for nearby farms.</div>
             </div>
 
             <div class="faq-item">
               <div class="faq-q">What areas do you currently deliver to? <span class="faq-arrow">▾</span></div>
-              <div class="faq-a">This is a demo. In the full version, initial delivery zones would cover Gujarat and
-                Maharashtra, with expansion to other states planned. Check back for coverage updates.</div>
+              <div class="faq-a">This is a demo. In the full version, initial delivery zones would cover Gujarat and Maharashtra, with expansion to other states planned. Check back for coverage updates.</div>
             </div>
 
             <div class="faq-item">
               <div class="faq-q">How are delivery routes planned? <span class="faq-arrow">▾</span></div>
-              <div class="faq-a">Our route optimisation system clusters nearby orders and plans the most efficient
-                route. This reduces transport time and cost, and helps minimise food spoilage during transit.</div>
+              <div class="faq-a">Our route optimisation system clusters nearby orders and plans the most efficient route. This reduces transport time and cost, and helps minimise food spoilage during transit.</div>
             </div>
 
             <div class="faq-item">
               <div class="faq-q">Can I track my order? <span class="faq-arrow">▾</span></div>
-              <div class="faq-a">Yes. Once your order is picked up from the farm, you'll receive status updates —
-                Confirmed → Preparing → Picked Up → In Transit → Delivered.</div>
+              <div class="faq-a">Yes. Once your order is picked up from the farm, you'll receive status updates — Confirmed → Preparing → Picked Up → In Transit → Delivered.</div>
             </div>
           </div>
 
@@ -334,36 +284,29 @@
 
             <div class="faq-item">
               <div class="faq-q">How are farmers verified? <span class="faq-arrow">▾</span></div>
-              <div class="faq-a">Our team reviews farmer registrations, verifies land records and identity documents,
-                and conducts spot checks for FPOs before granting Verified status.</div>
+              <div class="faq-a">Our team reviews farmer registrations, verifies land records and identity documents, and conducts spot checks for FPOs before granting Verified status.</div>
             </div>
 
             <div class="faq-item">
               <div class="faq-q">Are the prices fixed or negotiable? <span class="faq-arrow">▾</span></div>
-              <div class="faq-a">Farmers set their own prices. The platform shows listed prices, which buyers can see
-                before ordering. For bulk orders, direct negotiation with the farmer or FPO is possible.</div>
+              <div class="faq-a">Farmers set their own prices. The platform shows listed prices, which consumers can see before ordering. For bulk orders, direct negotiation with the farmer or FPO is possible.</div>
             </div>
 
             <div class="faq-item">
               <div class="faq-q">What does "Natural Farming" mean on a product? <span class="faq-arrow">▾</span></div>
-              <div class="faq-a">Natural farming refers to zero-budget natural farming (ZBNF) methods — using bio-inputs
-                like Jeevamrut, without synthetic chemicals. It's different from certified organic, but uses traditional
-                sustainable practices.</div>
+              <div class="faq-a">Natural farming refers to zero-budget natural farming (ZBNF) methods — using bio-inputs like Jeevamrut, without synthetic chemicals. It's different from certified organic, but uses traditional sustainable practices.</div>
             </div>
 
             <div class="faq-item">
               <div class="faq-q">How accurate is the AI demand forecasting? <span class="faq-arrow">▾</span></div>
-              <div class="faq-a">The demand forecasting on this demo uses simulated data. In the full platform,
-                forecasting would be based on real historical sales, seasonal patterns, and market signals. All demo
-                forecasts are clearly labelled as illustrative.</div>
+              <div class="faq-a">The demand forecasting on this demo uses simulated data. In the full platform, forecasting would be based on real historical sales, seasonal patterns, and market signals. All demo forecasts are clearly labelled as illustrative.</div>
             </div>
           </div>
 
           <!-- CTA -->
           <div class="faq-cta">
             <h3>Still have questions?</h3>
-            <p>Reach out to us. We're happy to help farmers and businesses understand how HarvestLink works.
-            </p>
+            <p>Reach out to us. We're happy to help farmers, consumers, and businesses understand how HarvestLink works.</p>
             <a href="index.html#contact" class="btn-primary-lg">Get in Touch →</a>
           </div>
         </div>
@@ -378,20 +321,8 @@
           <div class="footer-logo"><span>⬟</span> HARVESTLINK</div>
           <div class="footer-tagline">From Farm. Direct to Market.</div>
         </div>
-        <div class="footer-col">
-          <div class="footer-col-title">Marketplace</div>
-          <ul>
-            <li><a href="marketplace.html">Products</a></li>
-            <li><a href="farmers.html">Farmers</a></li>
-          </ul>
-        </div>
-        <div class="footer-col">
-          <div class="footer-col-title">Company</div>
-          <ul>
-            <li><a href="about.html">About</a></li>
-            <li><a href="faq.html">FAQ</a></li>
-          </ul>
-        </div>
+        <div class="footer-col"><div class="footer-col-title">Marketplace</div><ul><li><a href="marketplace.html">Products</a></li><li><a href="farmers.html">Farmers</a></li></ul></div>
+        <div class="footer-col"><div class="footer-col-title">Company</div><ul><li><a href="about.html">About</a></li><li><a href="faq.html">FAQ</a></li></ul></div>
       </div>
       <div class="footer-bottom"><span>© 2024 HarvestLink. Demo prototype.</span></div>
     </div>
@@ -423,5 +354,4 @@
     });
   </script>
 </body>
-
 </html>

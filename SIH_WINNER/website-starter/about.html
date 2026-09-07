@@ -1,17 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>About — HarvestLink</title>
-  <meta name="description"
-    content="Learn about HarvestLink's mission to connect farmers directly with businesses and bulk buyers through a transparent digital marketplace.">
+  <meta name="description" content="Learn about HarvestLink's mission to connect farmers directly with consumers and bulk buyers through a transparent digital marketplace.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link
-    href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Manrope:wght@300;400;500;600;700;800&display=swap"
-    rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="features.css">
   <style>
@@ -21,32 +17,12 @@
       background: var(--brown);
       color: #fff;
     }
+    .about-hero .section-label { color: var(--wheat); }
+    .about-hero h1 { font-size: clamp(32px, 5vw, 56px); color: #fff; margin-bottom: 20px; line-height: 1.1; }
+    .about-hero p { font-size: 18px; color: rgba(255,255,255,0.65); max-width: 560px; line-height: 1.7; }
 
-    .about-hero .section-label {
-      color: var(--wheat);
-    }
-
-    .about-hero h1 {
-      font-size: clamp(32px, 5vw, 56px);
-      color: #fff;
-      margin-bottom: 20px;
-      line-height: 1.1;
-    }
-
-    .about-hero p {
-      font-size: 18px;
-      color: rgba(255, 255, 255, 0.65);
-      max-width: 560px;
-      line-height: 1.7;
-    }
-
-    .about-section {
-      padding: 80px 0;
-    }
-
-    .about-section.alt {
-      background: var(--warm-white);
-    }
+    .about-section { padding: 80px 0; }
+    .about-section.alt { background: var(--warm-white); }
 
     .about-grid-2 {
       display: grid;
@@ -55,18 +31,8 @@
       align-items: center;
     }
 
-    .about-grid-2 h2 {
-      font-size: clamp(26px, 3.5vw, 40px);
-      color: var(--brown);
-      margin-bottom: 16px;
-    }
-
-    .about-grid-2 p {
-      font-size: 16px;
-      color: var(--text-secondary);
-      line-height: 1.75;
-      margin-bottom: 16px;
-    }
+    .about-grid-2 h2 { font-size: clamp(26px, 3.5vw, 40px); color: var(--brown); margin-bottom: 16px; }
+    .about-grid-2 p { font-size: 16px; color: var(--text-secondary); line-height: 1.75; margin-bottom: 16px; }
 
     .about-visual {
       background: var(--cream);
@@ -83,31 +49,16 @@
       align-items: flex-start;
       gap: 16px;
     }
-
     .av-icon {
-      width: 44px;
-      height: 44px;
+      width: 44px; height: 44px;
       border-radius: 10px;
       background: var(--green-muted);
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      display: flex; align-items: center; justify-content: center;
       font-size: 20px;
       flex-shrink: 0;
     }
-
-    .av-title {
-      font-size: 15px;
-      font-weight: 700;
-      color: var(--brown);
-      margin-bottom: 4px;
-    }
-
-    .av-desc {
-      font-size: 13px;
-      color: var(--text-secondary);
-      line-height: 1.5;
-    }
+    .av-title { font-size: 15px; font-weight: 700; color: var(--brown); margin-bottom: 4px; }
+    .av-desc { font-size: 13px; color: var(--text-secondary); line-height: 1.5; }
 
     /* Values */
     .values-grid {
@@ -124,27 +75,10 @@
       background: var(--cream);
       transition: box-shadow var(--transition);
     }
-
-    .value-card:hover {
-      box-shadow: var(--shadow-md);
-    }
-
-    .value-card .vc-icon {
-      font-size: 28px;
-      margin-bottom: 14px;
-    }
-
-    .value-card h4 {
-      font-size: 17px;
-      color: var(--brown);
-      margin-bottom: 8px;
-    }
-
-    .value-card p {
-      font-size: 14px;
-      color: var(--text-secondary);
-      line-height: 1.65;
-    }
+    .value-card:hover { box-shadow: var(--shadow-md); }
+    .value-card .vc-icon { font-size: 28px; margin-bottom: 14px; }
+    .value-card h4 { font-size: 17px; color: var(--brown); margin-bottom: 8px; }
+    .value-card p { font-size: 14px; color: var(--text-secondary); line-height: 1.65; }
 
     /* Team */
     .team-note {
@@ -154,40 +88,18 @@
       text-align: center;
       border: 1px solid var(--border);
     }
-
-    .team-note h3 {
-      font-size: 26px;
-      color: var(--brown);
-      margin-bottom: 12px;
-    }
-
-    .team-note p {
-      color: var(--text-secondary);
-      font-size: 15px;
-      line-height: 1.7;
-      max-width: 500px;
-      margin: 0 auto 24px;
-    }
+    .team-note h3 { font-size: 26px; color: var(--brown); margin-bottom: 12px; }
+    .team-note p { color: var(--text-secondary); font-size: 15px; line-height: 1.7; max-width: 500px; margin: 0 auto 24px; }
 
     @media (max-width: 900px) {
-      .about-grid-2 {
-        grid-template-columns: 1fr;
-        gap: 40px;
-      }
-
-      .values-grid {
-        grid-template-columns: 1fr 1fr;
-      }
+      .about-grid-2 { grid-template-columns: 1fr; gap: 40px; }
+      .values-grid { grid-template-columns: 1fr 1fr; }
     }
-
     @media (max-width: 600px) {
-      .values-grid {
-        grid-template-columns: 1fr;
-      }
+      .values-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
-
 <body>
   <!-- NAVBAR -->
   <nav class="navbar" id="navbar">
@@ -212,8 +124,8 @@
         <li><a href="faq.html">FAQ</a></li>
       </ul>
       <div class="mobile-actions">
-        <a href="login.html" class="btn-outline-full">Login</a>
-        <a href="role-select.html" class="btn-green-full">Join Free</a>
+        <a href="#" class="btn-outline-full">Login</a>
+        <a href="register.html" class="btn-green-full">Join as Farmer</a>
       </div>
     </div>
   </nav>
@@ -223,8 +135,7 @@
     <div class="container">
       <div class="section-label">Our Mission</div>
       <h1>Making agricultural markets<br>more direct and fair.</h1>
-      <p>HarvestLink is built to reduce unnecessary friction between farmers and buyers — so more value stays with the
-        people who grow our food.</p>
+      <p>HarvestLink is built to reduce unnecessary friction between farmers and buyers — so more value stays with the people who grow our food.</p>
     </div>
   </section>
 
@@ -235,10 +146,8 @@
         <div>
           <div class="section-label">The Problem</div>
           <h2>A fragmented market that leaves farmers behind.</h2>
-          <p>Farmers in India often sell produce through multiple intermediaries — each taking a margin — before it
-            reaches the buyer. This system means farmers earn less while businesses and buyers pay more.</p>
-          <p>At the same time, unpredictable demand and poor logistics visibility make planning difficult. Produce
-            spoils, opportunities are missed, and both sides of the market suffer.</p>
+          <p>Farmers in India often sell produce through multiple intermediaries — each taking a margin — before it reaches the consumer. This system means farmers earn less while consumers pay more.</p>
+          <p>At the same time, unpredictable demand and poor logistics visibility make planning difficult. Produce spoils, opportunities are missed, and both sides of the market suffer.</p>
           <p>These are not new problems. But they're solvable with the right tools and connections.</p>
         </div>
         <div class="about-visual">
@@ -252,7 +161,7 @@
           <div class="av-item">
             <div class="av-icon">🛒</div>
             <div>
-              <div class="av-title">Buyers pay more</div>
+              <div class="av-title">Consumers pay more</div>
               <div class="av-desc">Each step in the supply chain adds cost, passed on to the final buyer.</div>
             </div>
           </div>
@@ -267,8 +176,7 @@
             <div class="av-icon">🚛</div>
             <div>
               <div class="av-title">Logistics are inefficient</div>
-              <div class="av-desc">Poor route planning leads to delays, food waste, and higher transportation costs.
-              </div>
+              <div class="av-desc">Poor route planning leads to delays, food waste, and higher transportation costs.</div>
             </div>
           </div>
         </div>
@@ -285,36 +193,30 @@
             <div class="av-icon">🛒</div>
             <div>
               <div class="av-title">Direct Marketplace</div>
-              <div class="av-desc">Farmers and FPOs list their produce directly. Buyers browse and order without
-                unnecessary intermediaries.</div>
+              <div class="av-desc">Farmers and FPOs list their produce directly. Buyers browse and order without unnecessary intermediaries.</div>
             </div>
           </div>
           <div class="av-item">
             <div class="av-icon">📊</div>
             <div>
               <div class="av-title">Demand Insights</div>
-              <div class="av-desc">AI-assisted forecasting helps farmers understand demand before it spikes or drops, so
-                they can plan supply effectively.</div>
+              <div class="av-desc">AI-assisted forecasting helps farmers understand demand before it spikes or drops, so they can plan supply effectively.</div>
             </div>
           </div>
           <div class="av-item">
             <div class="av-icon">🗺️</div>
             <div>
               <div class="av-title">Route Optimisation</div>
-              <div class="av-desc">Logistics coordination ensures produce moves efficiently from farm to buyer with
-                minimal delay or waste.</div>
+              <div class="av-desc">Logistics coordination ensures produce moves efficiently from farm to buyer with minimal delay or waste.</div>
             </div>
           </div>
         </div>
         <div style="order: 2;">
           <div class="section-label">Our Approach</div>
           <h2>One platform. Three solutions.</h2>
-          <p>HarvestLink is not just a marketplace. It combines direct trading, demand planning tools, and logistics
-            coordination into one connected platform.</p>
-          <p>We focus on simplicity. Farmers shouldn't need technical expertise to use the platform. And buyers should
-            be able to discover, order, and receive fresh produce without complexity.</p>
-          <p>The goal is clear: more of every rupee stays with the farmer, and fresh produce reaches buyers faster
-            and at a lower cost.</p>
+          <p>HarvestLink is not just a marketplace. It combines direct trading, demand planning tools, and logistics coordination into one connected platform.</p>
+          <p>We focus on simplicity. Farmers shouldn't need technical expertise to use the platform. And buyers should be able to discover, order, and receive fresh produce without complexity.</p>
+          <p>The goal is clear: more of every rupee stays with the farmer, and fresh produce reaches the consumer faster and at a lower cost.</p>
         </div>
       </div>
     </div>
@@ -334,7 +236,7 @@
         <div class="value-card">
           <div class="vc-icon">⚖️</div>
           <h4>Fairness</h4>
-          <p>Farmers should earn more for their work. Buyers and businesses should get fresher produce at fairer rates.</p>
+          <p>Farmers should earn more for their work. Consumers should pay less for what they eat.</p>
         </div>
         <div class="value-card">
           <div class="vc-icon">🌱</div>
@@ -349,8 +251,7 @@
         <div class="value-card">
           <div class="vc-icon">🇮🇳</div>
           <h4>India-First</h4>
-          <p>Built for the Indian agricultural context — with local pricing, regional languages, and practical
-            logistics.</p>
+          <p>Built for the Indian agricultural context — with local pricing, regional languages, and practical logistics.</p>
         </div>
         <div class="value-card">
           <div class="vc-icon">📊</div>
@@ -366,8 +267,7 @@
     <div class="container">
       <div class="team-note">
         <h3>Built as a hackathon prototype.</h3>
-        <p>HarvestLink is currently a frontend demonstration built to showcase the product concept, user experience, and
-          core flows. This is not a live platform — it is a working prototype developed for a national hackathon.</p>
+        <p>HarvestLink is currently a frontend demonstration built to showcase the product concept, user experience, and core flows. This is not a live platform — it is a working prototype developed for a national hackathon.</p>
         <a href="index.html" class="btn-primary-lg">Explore the Demo →</a>
       </div>
     </div>
@@ -380,21 +280,8 @@
           <div class="footer-logo"><span>⬟</span> HARVESTLINK</div>
           <div class="footer-tagline">From Farm. Direct to Market.</div>
         </div>
-        <div class="footer-col">
-          <div class="footer-col-title">Marketplace</div>
-          <ul>
-            <li><a href="marketplace.html">Products</a></li>
-            <li><a href="farmers.html">Farmers</a></li>
-          </ul>
-        </div>
-        <div class="footer-col">
-          <div class="footer-col-title">Company</div>
-          <ul>
-            <li><a href="about.html">About</a></li>
-            <li><a href="faq.html">FAQ</a></li>
-            <li><a href="index.html#contact">Contact</a></li>
-          </ul>
-        </div>
+        <div class="footer-col"><div class="footer-col-title">Marketplace</div><ul><li><a href="marketplace.html">Products</a></li><li><a href="farmers.html">Farmers</a></li></ul></div>
+        <div class="footer-col"><div class="footer-col-title">Company</div><ul><li><a href="about.html">About</a></li><li><a href="faq.html">FAQ</a></li><li><a href="index.html#contact">Contact</a></li></ul></div>
       </div>
       <div class="footer-bottom"><span>© 2024 HarvestLink. Demo prototype.</span></div>
     </div>
@@ -403,5 +290,4 @@
   <script src="app.js"></script>
   <script src="script.js"></script>
 </body>
-
 </html>
