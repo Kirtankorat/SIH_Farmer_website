@@ -84,7 +84,7 @@
           </label>
           <a href="#" class="auth-forgot">Forgot password?</a>
         </div>
-        <button type="submit" class="btn-auth-submit">Sign In</button>
+        <button type="submit" class="auth-btn-primary">Sign In →</button>
       </form>
 
       <div class="auth-divider" style="margin: 20px 0;">OR</div>
@@ -144,9 +144,23 @@
     document.getElementById('loginId').value = 'rameshpatel@demo.in';
 
     function doLogin(role, name) {
-      setUser({ name, email: name.toLowerCase().replace(/\s/g,'') + '@demo.in' });
+      const btn = document.querySelector('#loginForm button[type="submit"]');
+      if (btn) {
+        btn.textContent = 'Signing in...';
+        btn.disabled = true;
+        btn.style.opacity = '0.85';
+      }
+
+      const inputVal = document.getElementById('loginId')?.value?.trim();
+      const finalEmail = inputVal && inputVal.includes('@') ? inputVal : `${name.toLowerCase().replace(/\s/g,'')}@demo.in`;
+      const finalName = inputVal && !inputVal.includes('@') && inputVal.length > 0 ? inputVal : name;
+
+      setUser({ name: finalName, email: finalEmail });
       setRole(role);
-      window.location.href = getDashboardUrl(role);
+
+      setTimeout(() => {
+        window.location.href = getDashboardUrl(role);
+      }, 400);
     }
 
     function demoGoogleLogin() {
