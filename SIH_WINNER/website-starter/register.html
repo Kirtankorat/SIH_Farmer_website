@@ -1,13 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Join as Farmer — HarvestLink</title>
-  <meta name="description" content="Register as a farmer or FPO on HarvestLink. List your produce and reach thousands of buyers directly.">
+  <meta name="description"
+    content="Register as a farmer or FPO on HarvestLink. List your produce and reach thousands of buyers directly.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Manrope:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet">
   <link rel="stylesheet" href="style.css">
   <style>
     .register-page {
@@ -28,29 +32,69 @@
     }
 
     .rl-top {}
-    .rl-logo { font-family: 'Manrope', sans-serif; font-weight: 800; font-size: 18px; color: #fff; margin-bottom: 48px; }
-    .rl-headline { font-family: 'DM Serif Display', serif; font-size: 32px; color: #fff; line-height: 1.2; margin-bottom: 16px; }
-    .rl-sub { font-size: 15px; color: rgba(255,255,255,0.65); line-height: 1.65; }
 
-    .rl-benefits { margin-top: 48px; }
+    .rl-logo {
+      font-family: 'Manrope', sans-serif;
+      font-weight: 800;
+      font-size: 18px;
+      color: #fff;
+      margin-bottom: 48px;
+    }
+
+    .rl-headline {
+      font-family: 'DM Serif Display', serif;
+      font-size: 32px;
+      color: #fff;
+      line-height: 1.2;
+      margin-bottom: 16px;
+    }
+
+    .rl-sub {
+      font-size: 15px;
+      color: rgba(255, 255, 255, 0.65);
+      line-height: 1.65;
+    }
+
+    .rl-benefits {
+      margin-top: 48px;
+    }
+
     .rl-benefit {
       display: flex;
       gap: 14px;
       margin-bottom: 20px;
       align-items: flex-start;
     }
+
     .rlb-icon {
-      width: 36px; height: 36px;
+      width: 36px;
+      height: 36px;
       border-radius: 50%;
-      background: rgba(255,255,255,0.15);
-      display: flex; align-items: center; justify-content: center;
+      background: rgba(255, 255, 255, 0.15);
+      display: flex;
+      align-items: center;
+      justify-content: center;
       font-size: 16px;
       flex-shrink: 0;
     }
-    .rlb-text { font-size: 14px; color: rgba(255,255,255,0.7); line-height: 1.5; }
-    .rlb-text strong { color: #fff; display: block; font-size: 14px; }
 
-    .rl-note { font-size: 12px; color: rgba(255,255,255,0.4); margin-top: 40px; }
+    .rlb-text {
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.7);
+      line-height: 1.5;
+    }
+
+    .rlb-text strong {
+      color: #fff;
+      display: block;
+      font-size: 14px;
+    }
+
+    .rl-note {
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.4);
+      margin-top: 40px;
+    }
 
     /* Form area */
     .register-right {
@@ -73,10 +117,13 @@
     }
 
     .fp-circle {
-      width: 30px; height: 30px;
+      width: 30px;
+      height: 30px;
       border-radius: 50%;
       border: 2px solid var(--border);
-      display: flex; align-items: center; justify-content: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       font-size: 12px;
       font-weight: 700;
       color: var(--text-muted);
@@ -102,7 +149,10 @@
       font-weight: 600;
       color: var(--text-muted);
     }
-    .fp-step.active .fp-label { color: var(--brown); }
+
+    .fp-step.active .fp-label {
+      color: var(--brown);
+    }
 
     .fp-line {
       flex: 1;
@@ -111,16 +161,48 @@
       margin: 0 8px;
     }
 
-    .step-form { display: none; }
-    .step-form.active { display: block; }
+    .step-form {
+      display: none;
+    }
 
-    .step-form h2 { font-size: 26px; color: var(--brown); margin-bottom: 6px; }
-    .step-form .step-desc { font-size: 15px; color: var(--text-secondary); margin-bottom: 32px; }
+    .step-form.active {
+      display: block;
+    }
 
-    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-    .form-group { display: flex; flex-direction: column; gap: 6px; }
-    .form-group.full { grid-column: 1 / -1; }
-    .form-group label { font-size: 13px; font-weight: 600; color: var(--text-secondary); }
+    .step-form h2 {
+      font-size: 26px;
+      color: var(--brown);
+      margin-bottom: 6px;
+    }
+
+    .step-form .step-desc {
+      font-size: 15px;
+      color: var(--text-secondary);
+      margin-bottom: 32px;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .form-group.full {
+      grid-column: 1 / -1;
+    }
+
+    .form-group label {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-secondary);
+    }
+
     .form-group input,
     .form-group select,
     .form-group textarea {
@@ -133,12 +215,13 @@
       background: var(--warm-white);
       transition: border-color var(--transition), box-shadow var(--transition);
     }
+
     .form-group input:focus,
     .form-group select:focus,
     .form-group textarea:focus {
       outline: none;
       border-color: var(--green);
-      box-shadow: 0 0 0 3px rgba(49,92,58,0.08);
+      box-shadow: 0 0 0 3px rgba(49, 92, 58, 0.08);
     }
 
     /* Practice options */
@@ -159,25 +242,41 @@
       align-items: center;
       gap: 12px;
     }
-    .practice-opt:hover, .practice-opt.selected {
+
+    .practice-opt:hover,
+    .practice-opt.selected {
       border-color: var(--green);
       background: var(--green-muted);
     }
+
     .practice-opt .po-radio {
-      width: 18px; height: 18px;
+      width: 18px;
+      height: 18px;
       border-radius: 50%;
       border: 2px solid var(--border);
       background: #fff;
       flex-shrink: 0;
       transition: all var(--transition);
     }
+
     .practice-opt.selected .po-radio {
       border-color: var(--green);
       background: var(--green);
     }
+
     .practice-opt-text {}
-    .po-title { font-size: 14px; font-weight: 700; color: var(--brown); }
-    .po-desc { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+
+    .po-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--brown);
+    }
+
+    .po-desc {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
 
     /* Form nav */
     .form-actions {
@@ -201,7 +300,11 @@
       cursor: pointer;
       transition: all var(--transition);
     }
-    .btn-prev:hover { border-color: var(--brown); color: var(--brown); }
+
+    .btn-prev:hover {
+      border-color: var(--brown);
+      color: var(--brown);
+    }
 
     .btn-next {
       background: var(--green);
@@ -215,7 +318,10 @@
       cursor: pointer;
       transition: all var(--transition);
     }
-    .btn-next:hover { background: var(--green-light); }
+
+    .btn-next:hover {
+      background: var(--green-light);
+    }
 
     /* Review section */
     .review-summary {
@@ -225,32 +331,88 @@
       padding: 24px;
       margin-bottom: 24px;
     }
-    .rs-title { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted); margin-bottom: 16px; }
-    .rs-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 14px; }
-    .rs-row:last-child { border-bottom: none; }
-    .rs-key { color: var(--text-muted); font-weight: 600; }
-    .rs-val { color: var(--brown); font-weight: 700; }
+
+    .rs-title {
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
+      margin-bottom: 16px;
+    }
+
+    .rs-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 8px 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 14px;
+    }
+
+    .rs-row:last-child {
+      border-bottom: none;
+    }
+
+    .rs-key {
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    .rs-val {
+      color: var(--brown);
+      font-weight: 700;
+    }
 
     /* Success */
     .success-state {
       text-align: center;
       padding: 60px 0;
     }
-    .success-icon { font-size: 60px; margin-bottom: 20px; }
-    .success-state h2 { font-size: 30px; color: var(--brown); margin-bottom: 12px; }
-    .success-state p { color: var(--text-secondary); font-size: 16px; margin-bottom: 32px; }
+
+    .success-icon {
+      font-size: 60px;
+      margin-bottom: 20px;
+    }
+
+    .success-state h2 {
+      font-size: 30px;
+      color: var(--brown);
+      margin-bottom: 12px;
+    }
+
+    .success-state p {
+      color: var(--text-secondary);
+      font-size: 16px;
+      margin-bottom: 32px;
+    }
 
     @media (max-width: 900px) {
-      .register-left { display: none; }
-      .register-right { padding: 40px 24px; }
+      .register-left {
+        display: none;
+      }
+
+      .register-right {
+        padding: 40px 24px;
+      }
     }
+
     @media (max-width: 600px) {
-      .form-grid { grid-template-columns: 1fr; }
-      .practice-options { grid-template-columns: 1fr; }
-      .form-progress { overflow-x: auto; padding-bottom: 8px; }
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .practice-options {
+        grid-template-columns: 1fr;
+      }
+
+      .form-progress {
+        overflow-x: auto;
+        padding-bottom: 8px;
+      }
     }
   </style>
 </head>
+
 <body>
   <!-- NAVBAR -->
   <nav class="navbar" id="navbar">
@@ -281,20 +443,24 @@
       <div class="rl-top">
         <div class="rl-logo">⬟ HARVESTLINK</div>
         <div class="rl-headline">Sell your produce.<br>Reach more buyers.</div>
-        <div class="rl-sub">Join HarvestLink as a farmer or FPO to list your produce and connect directly with consumers and bulk buyers across India.</div>
+        <div class="rl-sub">Join HarvestLink as a farmer or FPO to list your produce and connect directly with businesses
+          and bulk buyers across India.</div>
 
         <div class="rl-benefits">
           <div class="rl-benefit">
             <div class="rlb-icon">🌾</div>
-            <div class="rlb-text"><strong>Direct access to buyers</strong>Reach consumers and businesses without depending on intermediaries.</div>
+            <div class="rlb-text"><strong>Direct access to buyers</strong>Reach commercial buyers and businesses without
+              depending on intermediaries.</div>
           </div>
           <div class="rl-benefit">
             <div class="rlb-icon">📊</div>
-            <div class="rlb-text"><strong>Demand insights</strong>See upcoming demand trends and plan your supply better.</div>
+            <div class="rlb-text"><strong>Demand insights</strong>See upcoming demand trends and plan your supply
+              better.</div>
           </div>
           <div class="rl-benefit">
             <div class="rlb-icon">🚛</div>
-            <div class="rlb-text"><strong>Logistics support</strong>Coordinated pickup and delivery from your farm.</div>
+            <div class="rlb-text"><strong>Logistics support</strong>Coordinated pickup and delivery from your farm.
+            </div>
           </div>
         </div>
       </div>
@@ -353,8 +519,6 @@
               <option value="">Select...</option>
               <option>Individual Farmer</option>
               <option>Farmer Producer Organisation (FPO)</option>
-              <option>Cooperative</option>
-              <option>Agri-entrepreneur</option>
             </select>
           </div>
         </div>
@@ -471,7 +635,8 @@
 
         <div class="review-summary">
           <div class="rs-title">Practice</div>
-          <div class="rs-row"><span class="rs-key">Farming Method</span><span class="rs-val" id="rv_practice">—</span></div>
+          <div class="rs-row"><span class="rs-key">Farming Method</span><span class="rs-val" id="rv_practice">—</span>
+          </div>
         </div>
 
         <div class="form-actions">
@@ -485,7 +650,8 @@
         <div class="success-state">
           <div class="success-icon">🎉</div>
           <h2>Registration Submitted!</h2>
-          <p>Thank you for joining HarvestLink. Our team will verify your details and get in touch within 2-3 working days.</p>
+          <p>Thank you for joining HarvestLink. Our team will verify your details and get in touch within 2-3 working
+            days.</p>
           <a href="index.html" class="btn-primary-lg">Back to Home →</a>
         </div>
       </div>
@@ -522,10 +688,10 @@
       const fname = document.getElementById('r_fname')?.value || '—';
       const lname = document.getElementById('r_lname')?.value || '';
       const phone = document.getElementById('r_phone')?.value || '—';
-      const type  = document.getElementById('r_type')?.value || '—';
+      const type = document.getElementById('r_type')?.value || '—';
       const village = document.getElementById('r_village')?.value || '';
       const state = document.getElementById('r_state')?.value || '';
-      const size  = document.getElementById('r_size')?.value;
+      const size = document.getElementById('r_size')?.value;
       const products = document.getElementById('r_products')?.value || '—';
 
       document.getElementById('rv_name').textContent = `${fname} ${lname}`.trim() || '—';
@@ -544,4 +710,5 @@
     }
   </script>
 </body>
+
 </html>
