@@ -116,7 +116,7 @@ function updateCartBadge() {
 function buildNavbarRight() {
   const user = getUser();
   const role = getRole();
-  const containers = document.querySelectorAll('.nav-actions, .nav-actions-inject');
+  const containers = document.querySelectorAll('#topHeader .top-header-actions, #topHeader .nav-actions-inject, .top-header-actions');
 
   if (!containers.length) return;
 
@@ -350,7 +350,13 @@ function initNavigationSystem() {
     // Remove any duplicate old standalone logo inside nav-container if header is present
     const oldLogos = navbar.querySelectorAll('.nav-container > a.nav-logo');
     oldLogos.forEach(l => l.remove());
+
+    // Remove all action buttons from inside the sidebar
+    navbar.querySelectorAll('.nav-actions, .nav-actions-inject, .mobile-actions, .mobile-menu, #hamburger').forEach(el => el.remove());
   }
+
+  // Also strip action elements from navbar if header already exists
+  navbar?.querySelectorAll('.nav-actions, .nav-actions-inject, .mobile-actions, .mobile-menu, #hamburger').forEach(el => el.remove());
 
   const closeBtn = document.getElementById('sidebarCloseBtn');
 
