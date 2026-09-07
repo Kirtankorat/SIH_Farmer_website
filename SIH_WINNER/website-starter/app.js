@@ -187,6 +187,9 @@ function buildNavbarRight() {
     containers.forEach(c => {
       c.innerHTML = `
         ${cartHtml}
+        <a href="login.html" class="nav-login">Login</a>
+        <a href="role-select.html" class="btn-outline-sm">Join Free</a>
+        <a href="marketplace.html" class="btn-primary-sm">Shop Produce</a>
       `;
     });
   }
@@ -312,6 +315,7 @@ function initNavigationSystem() {
       <div class="top-header-actions nav-actions nav-actions-inject"></div>
     `;
     document.body.prepend(topHeader);
+    buildNavbarRight();
   }
 
   // 2. Ensure Left Hover Trigger Zone exists
