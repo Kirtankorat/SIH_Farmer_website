@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,9 +8,7 @@
     content="Create your HarvestLink account as a farmer, FPO, logistics partner, cooperative, or bulk buyer.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link
-    href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Manrope:wght@300;400;500;600;700;800&display=swap"
-    rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="features.css">
   <style>
@@ -41,60 +38,22 @@
       font-size: 16px;
       color: var(--brown);
       margin-bottom: 28px;
-      display: flex;
-      align-items: center;
-      gap: 6px;
+      display: flex; align-items: center; gap: 6px;
     }
+    .signup-logo span { color: var(--green); }
 
-    .signup-logo span {
-      color: var(--green);
-    }
+    .signup-step { display: none; }
+    .signup-step.active { display: block; }
 
-    .signup-step {
-      display: none;
-    }
+    .step-heading { font-size: 24px; color: var(--brown); margin-bottom: 6px; }
+    .step-desc { font-size: 14px; color: var(--text-muted); margin-bottom: 24px; }
 
-    .signup-step.active {
-      display: block;
-    }
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .form-grid .full { grid-column: 1 / -1; }
 
-    .step-heading {
-      font-size: 24px;
-      color: var(--brown);
-      margin-bottom: 6px;
-    }
-
-    .step-desc {
-      font-size: 14px;
-      color: var(--text-muted);
-      margin-bottom: 24px;
-    }
-
-    .form-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 16px;
-    }
-
-    .form-grid .full {
-      grid-column: 1 / -1;
-    }
-
-    .sg-field {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
-
-    .sg-field label {
-      font-size: 13px;
-      font-weight: 600;
-      color: var(--text-secondary);
-    }
-
-    .sg-field input,
-    .sg-field select,
-    .sg-field textarea {
+    .sg-field { display: flex; flex-direction: column; gap: 6px; }
+    .sg-field label { font-size: 13px; font-weight: 600; color: var(--text-secondary); }
+    .sg-field input, .sg-field select, .sg-field textarea {
       padding: 11px 14px;
       border: 1.5px solid var(--border);
       border-radius: var(--radius-sm);
@@ -105,59 +64,25 @@
       transition: border-color var(--transition);
       appearance: none;
     }
-
-    .sg-field input:focus,
-    .sg-field select:focus,
-    .sg-field textarea:focus {
-      outline: none;
-      border-color: var(--green);
-      box-shadow: 0 0 0 3px rgba(49, 92, 58, 0.08);
+    .sg-field input:focus, .sg-field select:focus, .sg-field textarea:focus {
+      outline: none; border-color: var(--green);
+      box-shadow: 0 0 0 3px rgba(49,92,58,0.08);
     }
 
     /* Practice options grid */
-    .practice-opts {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-      margin-bottom: 20px;
-    }
-
+    .practice-opts { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
     .popt {
       padding: 14px;
       border: 1.5px solid var(--border);
       border-radius: var(--radius-md);
       cursor: pointer;
       transition: all var(--transition);
-      display: flex;
-      align-items: center;
-      gap: 10px;
+      display: flex; align-items: center; gap: 10px;
     }
-
-    .popt:hover,
-    .popt.selected {
-      border-color: var(--green);
-      background: var(--green-muted);
-    }
-
-    .popt-radio {
-      width: 16px;
-      height: 16px;
-      border-radius: 50%;
-      border: 2px solid var(--border);
-      flex-shrink: 0;
-      transition: all 0.2s;
-    }
-
-    .popt.selected .popt-radio {
-      border-color: var(--green);
-      background: var(--green);
-    }
-
-    .popt-label {
-      font-size: 13px;
-      font-weight: 700;
-      color: var(--brown);
-    }
+    .popt:hover, .popt.selected { border-color: var(--green); background: var(--green-muted); }
+    .popt-radio { width: 16px; height: 16px; border-radius: 50%; border: 2px solid var(--border); flex-shrink: 0; transition: all 0.2s; }
+    .popt.selected .popt-radio { border-color: var(--green); background: var(--green); }
+    .popt-label { font-size: 13px; font-weight: 700; color: var(--brown); }
 
     /* Navigation buttons */
     .step-actions {
@@ -168,7 +93,6 @@
       border-top: 1px solid var(--border);
       gap: 12px;
     }
-
     .btn-prev-step {
       padding: 11px 22px;
       border: 1.5px solid var(--border);
@@ -176,34 +100,19 @@
       background: transparent;
       color: var(--text-secondary);
       font-family: 'Manrope', sans-serif;
-      font-size: 14px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all var(--transition);
+      font-size: 14px; font-weight: 600;
+      cursor: pointer; transition: all var(--transition);
     }
-
-    .btn-prev-step:hover {
-      border-color: var(--brown);
-      color: var(--brown);
-    }
-
+    .btn-prev-step:hover { border-color: var(--brown); color: var(--brown); }
     .btn-next-step {
       padding: 11px 24px;
-      background: var(--green);
-      color: #fff;
-      border: none;
-      border-radius: var(--radius-sm);
+      background: var(--green); color: #fff;
+      border: none; border-radius: var(--radius-sm);
       font-family: 'Manrope', sans-serif;
-      font-size: 14px;
-      font-weight: 700;
-      cursor: pointer;
-      transition: all var(--transition);
-      flex: 1;
+      font-size: 14px; font-weight: 700;
+      cursor: pointer; transition: all var(--transition); flex: 1;
     }
-
-    .btn-next-step:hover {
-      background: var(--green-light);
-    }
+    .btn-next-step:hover { background: var(--green-light); }
 
     /* Progress bar */
     .signup-progress {
@@ -211,18 +120,13 @@
       gap: 4px;
       margin-bottom: 28px;
     }
-
     .sp-bar {
-      flex: 1;
-      height: 3px;
+      flex: 1; height: 3px;
       border-radius: 3px;
       background: var(--border);
       transition: background 0.3s;
     }
-
-    .sp-bar.active {
-      background: var(--green);
-    }
+    .sp-bar.active { background: var(--green); }
 
     /* Review boxes */
     .review-box {
@@ -232,78 +136,28 @@
       padding: 18px 20px;
       margin-bottom: 14px;
     }
-
-    .rb-title {
-      font-size: 11px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      color: var(--text-muted);
-      margin-bottom: 12px;
-    }
-
-    .rb-row {
-      display: flex;
-      justify-content: space-between;
-      font-size: 13px;
-      padding: 5px 0;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .rb-row:last-child {
-      border-bottom: none;
-    }
-
-    .rb-key {
-      color: var(--text-muted);
-      font-weight: 600;
-    }
-
-    .rb-val {
-      color: var(--brown);
-      font-weight: 700;
-    }
+    .rb-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted); margin-bottom: 12px; }
+    .rb-row { display: flex; justify-content: space-between; font-size: 13px; padding: 5px 0; border-bottom: 1px solid var(--border); }
+    .rb-row:last-child { border-bottom: none; }
+    .rb-key { color: var(--text-muted); font-weight: 600; }
+    .rb-val { color: var(--brown); font-weight: 700; }
 
     /* Success */
     .signup-success {
       text-align: center;
       padding: 40px 20px;
     }
-
-    .ss-icon {
-      font-size: 56px;
-      margin-bottom: 16px;
-    }
-
-    .ss-title {
-      font-size: 26px;
-      color: var(--brown);
-      margin-bottom: 10px;
-    }
-
-    .ss-desc {
-      font-size: 15px;
-      color: var(--text-secondary);
-      margin-bottom: 28px;
-      line-height: 1.65;
-    }
+    .ss-icon { font-size: 56px; margin-bottom: 16px; }
+    .ss-title { font-size: 26px; color: var(--brown); margin-bottom: 10px; }
+    .ss-desc { font-size: 15px; color: var(--text-secondary); margin-bottom: 28px; line-height: 1.65; }
 
     @media (max-width: 560px) {
-      .signup-card {
-        padding: 28px 20px;
-      }
-
-      .form-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .practice-opts {
-        grid-template-columns: 1fr;
-      }
+      .signup-card { padding: 28px 20px; }
+      .form-grid { grid-template-columns: 1fr; }
+      .practice-opts { grid-template-columns: 1fr; }
     }
   </style>
 </head>
-
 <body>
 
   <nav class="navbar" id="navbar">
@@ -323,9 +177,7 @@
         <div class="step-heading">Create your account.</div>
         <p class="step-desc">First, tell us who you are so we can personalise your experience.</p>
 
-        <div
-          style="font-size: 12px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 12px;">
-          I want to join as</div>
+        <div style="font-size: 12px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 12px;">I want to join as</div>
         <div class="signup-role-grid" id="rolePickGrid">
           <div class="signup-role-card" data-role="farmer">
             <div class="src-icon">🌾</div>
@@ -407,7 +259,7 @@
             desc: 'Where is your farm and what do you grow?',
             fields: [
               { id: 'loc', label: 'Village / Town', type: 'text', ph: 'Anand', half: true },
-              { id: 'state', label: 'State', type: 'select', opts: ['Gujarat', 'Maharashtra', 'Punjab', 'UP', 'MP', 'Rajasthan', 'Karnataka', 'Other'], half: true },
+              { id: 'state', label: 'State', type: 'select', opts: ['Gujarat','Maharashtra','Punjab','UP','MP','Rajasthan','Karnataka','Other'], half: true },
               { id: 'size', label: 'Farm Size (acres)', type: 'number', ph: '5', half: true },
               { id: 'produce', label: 'Products You Grow', type: 'text', ph: 'Tomatoes, Okra, Wheat...' }
             ]
@@ -437,7 +289,7 @@
               { id: 'contact', label: 'Contact Person', type: 'text', ph: 'Suresh Kumar', half: true },
               { id: 'phone', label: 'Phone', type: 'tel', ph: '+91 00000 00000', half: true },
               { id: 'email', label: 'Email', type: 'email', ph: 'fpo@email.com' },
-              { id: 'loc', label: 'Location (State)', type: 'select', opts: ['Gujarat', 'Maharashtra', 'Punjab', 'UP', 'MP', 'Rajasthan', 'Karnataka', 'Other'] },
+              { id: 'loc', label: 'Location (State)', type: 'select', opts: ['Gujarat','Maharashtra','Punjab','UP','MP','Rajasthan','Karnataka','Other'] },
               { id: 'products', label: 'Main Products', type: 'text', ph: 'Mangoes, Cashew, Vegetables...' }
             ]
           },
@@ -448,22 +300,57 @@
           }
         ]
       },
-      logistics: {
-        label: 'Logistics Partner',
+      cooperative: {
+        label: 'Cooperative',
         steps: [
           {
-            title: 'Fleet Details',
-            desc: 'Tell us about your logistics business.',
+            title: 'Cooperative Details',
+            desc: 'Register your cooperative on HarvestLink.',
             fields: [
-              { id: 'bizname', label: 'Company Name', type: 'text', ph: 'Express Transports' },
-              { id: 'owner', label: 'Contact Person', type: 'text', ph: 'Your name', half: true },
-              { id: 'fleet', label: 'Fleet Size', type: 'number', ph: '5', half: true },
-              { id: 'loc', label: 'Operating Hub', type: 'text', ph: 'City, State' },
+              { id: 'coopname', label: 'Cooperative Name', type: 'text', ph: 'Kisan Collective' },
+              { id: 'contact', label: 'Contact Person', type: 'text', ph: 'Ramesh Sharma', half: true },
+              { id: 'members', label: 'Member Count', type: 'number', ph: '200', half: true },
+              { id: 'loc', label: 'Location', type: 'text', ph: 'Mehsana, Gujarat' },
+              { id: 'products', label: 'Main Products', type: 'text', ph: 'Wheat, Bajra, Mustard...' },
               { id: 'phone', label: 'Phone', type: 'tel', ph: '+91 00000 00000', half: true },
-              { id: 'email', label: 'Email', type: 'email', ph: 'logistics@email.com', half: true }
+              { id: 'email', label: 'Email', type: 'email', ph: 'coop@email.com', half: true }
             ]
           },
-          { title: 'Review & Submit', desc: 'Confirm your logistics registration.', review: true }
+          { title: 'Review & Submit', desc: 'Confirm your cooperative details.', review: true }
+        ]
+      },
+      entrepreneur: {
+        label: 'Agri Entrepreneur',
+        steps: [
+          {
+            title: 'Business Details',
+            desc: 'Tell us about your agricultural business.',
+            fields: [
+              { id: 'bizname', label: 'Business Name', type: 'text', ph: 'Agri Ventures Pvt. Ltd.' },
+              { id: 'owner', label: 'Owner / Contact Person', type: 'text', ph: 'Your name', half: true },
+              { id: 'biztype', label: 'Business Type', type: 'select', opts: ['Trading','Processing','Distribution','Value-add','Other'], half: true },
+              { id: 'loc', label: 'Location', type: 'text', ph: 'City, State' },
+              { id: 'services', label: 'Products / Services', type: 'text', ph: 'Fresh produce trading, dried spices...' },
+              { id: 'phone', label: 'Phone', type: 'tel', ph: '+91 00000 00000', half: true },
+              { id: 'email', label: 'Email', type: 'email', ph: 'biz@email.com', half: true }
+            ]
+          },
+          { title: 'Review & Submit', desc: 'Confirm your business registration.', review: true }
+        ]
+      },
+      consumer: {
+        label: 'Consumer',
+        steps: [
+          {
+            title: 'Create your account.',
+            desc: 'Just a few quick details to get started.',
+            fields: [
+              { id: 'name', label: 'Your Name', type: 'text', ph: 'Ananya Sharma' },
+              { id: 'phone', label: 'Phone / Email', type: 'text', ph: '+91 00000 or your@email.com' },
+              { id: 'password', label: 'Choose a Password', type: 'password', ph: '••••••••' },
+              { id: 'dloc', label: 'Delivery Location', type: 'text', ph: 'Your city, state' }
+            ]
+          }
         ]
       },
       cooperative: {
@@ -513,7 +400,7 @@
             desc: 'Register to source produce in bulk from verified farmers and FPOs.',
             fields: [
               { id: 'bizname', label: 'Business Name', type: 'text', ph: 'Green Kitchen Pvt. Ltd.' },
-              { id: 'biztype', label: 'Business Type', type: 'select', opts: ['Restaurant', 'Hotel', 'Retailer', 'Wholesaler', 'Institution', 'Food Processor', 'Other'] },
+              { id: 'biztype', label: 'Business Type', type: 'select', opts: ['Restaurant','Hotel','Retailer','Wholesaler','Institution','Food Processor','Other'] },
               { id: 'contact', label: 'Contact Person', type: 'text', ph: 'Your name', half: true },
               { id: 'phone', label: 'Phone', type: 'tel', ph: '+91 00000 00000', half: true },
               { id: 'email', label: 'Email', type: 'email', ph: 'biz@email.com' },
@@ -557,7 +444,7 @@
 
     function renderProgressBars(total, current) {
       const pb = document.getElementById('progressBars');
-      pb.innerHTML = Array.from({ length: total }, (_, i) =>
+      pb.innerHTML = Array.from({length: total}, (_, i) =>
         `<div class="sp-bar ${i <= current ? 'active' : ''}"></div>`
       ).join('');
     }
@@ -583,7 +470,7 @@
       } else if (step.review) {
         // Review step
         html += `<div class="review-box"><div class="rb-title">Your Information</div>`;
-        Object.entries(formData).forEach(([k, v]) => {
+        Object.entries(formData).forEach(([k,v]) => {
           if (v) html += `<div class="rb-row"><span class="rb-key">${k}</span><span class="rb-val">${v}</span></div>`;
         });
         html += `</div>`;
@@ -595,10 +482,10 @@
           const cls = f.half ? '' : 'full';
           if (f.type === 'select') {
             html += `<div class="sg-field ${cls}"><label>${f.label}</label>
-              <select id="sg_${f.id}"><option value="">Select...</option>${f.opts.map(o => `<option>${o}</option>`).join('')}</select></div>`;
+              <select id="sg_${f.id}"><option value="">Select...</option>${f.opts.map(o=>`<option>${o}</option>`).join('')}</select></div>`;
           } else {
             html += `<div class="sg-field ${cls}"><label>${f.label}</label>
-              <input type="${f.type}" id="sg_${f.id}" placeholder="${f.ph}" value="${formData[f.label] || ''}"></div>`;
+              <input type="${f.type}" id="sg_${f.id}" placeholder="${f.ph}" value="${formData[f.label]||''}"></div>`;
           }
         });
         html += `</div>`;
@@ -654,5 +541,4 @@
     }
   </script>
 </body>
-
 </html>

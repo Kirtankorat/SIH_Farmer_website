@@ -284,7 +284,7 @@ function renderProductCard(p, showViewBtn = true) {
         <div class="product-rating">${stars} ${p.rating}</div>
         <span class="product-availability ${availClass}">${availLabel}</span>
         <div class="product-card-actions">
-          <button class="btn-add-cart" onclick='appAddToCart(${JSON.stringify(p).replace(/'/g, "&#39;")})'>+ Cart</button>
+          <button class="btn-add-cart" onclick='appAddToCart(${JSON.stringify(p).replace(/'/g,"&#39;")})'>+ Cart</button>
           ${showViewBtn ? `<a href="product.html?id=${p.id}" class="btn-view-product">View</a>` : ''}
         </div>
       </div>
@@ -331,7 +331,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Scroll fade sections
   const obs = new IntersectionObserver(entries => {
-    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); }});
   }, { threshold: 0.06, rootMargin: '0px 0px -30px 0px' });
 
   document.querySelectorAll('section').forEach(s => {
