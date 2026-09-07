@@ -4,7 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Create Account — HarvestLink</title>
-  <meta name="description" content="Create your HarvestLink account as a farmer, FPO, cooperative, consumer or bulk buyer.">
+  <meta name="description"
+    content="Create your HarvestLink account as a farmer, FPO, logistics partner, cooperative, or bulk buyer.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -205,12 +206,30 @@
 
         <div style="font-size: 12px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 12px;">I want to join as</div>
         <div class="signup-role-grid" id="rolePickGrid">
-          <div class="signup-role-card" data-role="farmer"><div class="src-icon">🌾</div><div class="src-name">Individual Farmer</div></div>
-          <div class="signup-role-card" data-role="fpo"><div class="src-icon">🏢</div><div class="src-name">FPO</div></div>
-          <div class="signup-role-card" data-role="cooperative"><div class="src-icon">🤝</div><div class="src-name">Cooperative</div></div>
-          <div class="signup-role-card" data-role="entrepreneur"><div class="src-icon">💼</div><div class="src-name">Agri Entrepreneur</div></div>
-          <div class="signup-role-card" data-role="consumer"><div class="src-icon">🛒</div><div class="src-name">Consumer</div></div>
-          <div class="signup-role-card" data-role="bulk"><div class="src-icon">📦</div><div class="src-name">Bulk Buyer</div></div>
+          <div class="signup-role-card" data-role="farmer">
+            <div class="src-icon">🌾</div>
+            <div class="src-name">Individual Farmer</div>
+          </div>
+          <div class="signup-role-card" data-role="fpo">
+            <div class="src-icon">🏢</div>
+            <div class="src-name">FPO</div>
+          </div>
+          <div class="signup-role-card" data-role="logistics">
+            <div class="src-icon">🚚</div>
+            <div class="src-name">Logistics Partner</div>
+          </div>
+          <div class="signup-role-card" data-role="cooperative">
+            <div class="src-icon">🤝</div>
+            <div class="src-name">Cooperative</div>
+          </div>
+          <div class="signup-role-card" data-role="entrepreneur">
+            <div class="src-icon">💼</div>
+            <div class="src-name">Agri Entrepreneur</div>
+          </div>
+          <div class="signup-role-card" data-role="bulk">
+            <div class="src-icon">📦</div>
+            <div class="src-name">Bulk Buyer</div>
+          </div>
         </div>
 
         <div class="step-actions" style="border-top:none; margin-top:0;">
@@ -359,6 +378,45 @@
               { id: 'dloc', label: 'Delivery Location', type: 'text', ph: 'Your city, state' }
             ]
           }
+        ]
+      },
+      cooperative: {
+        label: 'Cooperative',
+        steps: [
+          {
+            title: 'Cooperative Details',
+            desc: 'Tell us about your Cooperative.',
+            fields: [
+              { id: 'coopname', label: 'Cooperative Name', type: 'text', ph: 'Kisan Collective' },
+              { id: 'reg', label: 'Registration Number', type: 'text', ph: 'COOP/2021/001', half: true },
+              { id: 'members', label: 'Member Count', type: 'number', ph: '50', half: true },
+              { id: 'contact', label: 'Contact Person', type: 'text', ph: 'Your name', half: true },
+              { id: 'phone', label: 'Phone', type: 'tel', ph: '+91 00000 00000', half: true },
+              { id: 'email', label: 'Email', type: 'email', ph: 'coop@email.com' },
+              { id: 'loc', label: 'Location', type: 'text', ph: 'City, State' },
+              { id: 'products', label: 'Main Products', type: 'text', ph: 'Wheat, Pulses, Spices...' }
+            ]
+          },
+          { title: 'Review & Submit', desc: 'Confirm your cooperative details.', review: true }
+        ]
+      },
+      entrepreneur: {
+        label: 'Agri Entrepreneur',
+        steps: [
+          {
+            title: 'Business Details',
+            desc: 'Tell us about your agricultural business.',
+            fields: [
+              { id: 'bizname', label: 'Business Name', type: 'text', ph: 'Agri Ventures Pvt. Ltd.' },
+              { id: 'owner', label: 'Owner / Contact Person', type: 'text', ph: 'Your name', half: true },
+              { id: 'biztype', label: 'Business Type', type: 'select', opts: ['Trading', 'Processing', 'Distribution', 'Value-add', 'Other'], half: true },
+              { id: 'loc', label: 'Location', type: 'text', ph: 'City, State' },
+              { id: 'services', label: 'Products / Services', type: 'text', ph: 'Fresh produce trading, dried spices...' },
+              { id: 'phone', label: 'Phone', type: 'tel', ph: '+91 00000 00000', half: true },
+              { id: 'email', label: 'Email', type: 'email', ph: 'biz@email.com', half: true }
+            ]
+          },
+          { title: 'Review & Submit', desc: 'Confirm your business registration.', review: true }
         ]
       },
       bulk: {
