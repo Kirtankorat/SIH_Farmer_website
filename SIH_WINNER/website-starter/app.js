@@ -294,56 +294,89 @@ function appAddToCart(p) {
 }
 
 // ──────────────────────────────────────────────
-// NAVBAR SCROLL EFFECT
+// TOP HEADER BAR & VERTICAL HOVER SIDEBAR
 // ──────────────────────────────────────────────
-window.addEventListener('scroll', () => {
-  const nb = document.getElementById('navbar');
-  if (nb) nb.classList.toggle('scrolled', window.scrollY > 20);
-});
-
-// ──────────────────────────────────────────────
-// VERTICAL SIDEBAR & MOBILE NAVIGATION
-// ──────────────────────────────────────────────
-function initMobileNavigation() {
-  // Create mobile topbar if missing
-  if (!document.querySelector('.mobile-topbar')) {
-    const topbar = document.createElement('header');
-    topbar.className = 'mobile-topbar';
-    topbar.innerHTML = `
-      <a href="index.html" class="mobile-topbar-logo">
-        <span class="logo-leaf">⬟</span> HARVESTLINK
-      </a>
-      <button class="hamburger" id="mobileHamburger" aria-label="Open Navigation">
-        <span></span><span></span><span></span>
-      </button>
+function initNavigationSystem() {
+  // 1. Ensure Top Header Bar exists
+  let topHeader = document.getElementById('topHeader');
+  if (!topHeader) {
+    topHeader = document.createElement('header');
+    topHeader.className = 'top-header';
+    topHeader.id = 'topHeader';
+    topHeader.innerHTML = `
+      <div class="top-header-left">
+        <button class="sidebar-toggle-btn" id="sidebarToggleBtn" aria-label="Open Navigation">
+          <span class="st-icon">☰</span> Menu
+        </button>
+        <a href="index.html" class="top-header-logo">
+          <span class="logo-leaf">⬟</span> HARVESTLINK
+        </a>
+      </div>
+      <div class="top-header-actions nav-actions nav-actions-inject"></div>
     `;
-    document.body.prepend(topbar);
+    document.body.prepend(topHeader);
   }
 
-  // Create nav backdrop overlay if missing
-  let backdrop = document.querySelector('.nav-backdrop');
+  // 2. Ensure Left Hover Trigger Zone exists
+  let triggerStrip = document.getElementById('sidebarHoverTrigger');
+  if (!triggerStrip) {
+    triggerStrip = document.createElement('div');
+    triggerStrip.className = 'sidebar-hover-trigger';
+    triggerStrip.id = 'sidebarHoverTrigger';
+    document.body.appendChild(triggerStrip);
+  }
+
+  // 3. Ensure Nav Backdrop Overlay exists
+  let backdrop = document.getElementById('navBackdrop');
   if (!backdrop) {
     backdrop = document.createElement('div');
     backdrop.className = 'nav-backdrop';
+    backdrop.id = 'navBackdrop';
     document.body.appendChild(backdrop);
   }
 
   const navbar = document.getElementById('navbar');
-  const ham = document.getElementById('mobileHamburger') || document.getElementById('hamburger');
+  const toggleBtn = document.getElementById('sidebarToggleBtn');
+
+  // 4. Ensure Sidebar has a Header with Close Button
+  if (navbar && !navbar.querySelector('.sidebar-header')) {
+    const header = document.createElement('div');
+    header.className = 'sidebar-header';
+    header.innerHTML = `
+      <a href="index.html" class="nav-logo">
+        <span class="logo-leaf">⬟</span> HARVESTLINK
+      </a>
+      <button class="sidebar-close-btn" id="sidebarCloseBtn" aria-label="Close Navigation">✕</button>
+    `;
+    navbar.querySelector('.nav-container')?.prepend(header);
+
+    // Remove any duplicate old standalone logo inside nav-container if header is present
+    const oldLogos = navbar.querySelectorAll('.nav-container > a.nav-logo');
+    oldLogos.forEach(l => l.remove());
+  }
+
+  const closeBtn = document.getElementById('sidebarCloseBtn');
+
+  let closeTimer = null;
 
   function openSidebar() {
+    clearTimeout(closeTimer);
     navbar?.classList.add('open');
     backdrop?.classList.add('active');
-    document.body.style.overflow = 'hidden';
   }
 
   function closeSidebar() {
+    clearTimeout(closeTimer);
     navbar?.classList.remove('open');
     backdrop?.classList.remove('active');
-    document.body.style.overflow = '';
   }
 
-  ham?.addEventListener('click', (e) => {
+  // Auto-open when hovering left edge strip
+  triggerStrip?.addEventListener('mouseenter', openSidebar);
+
+  // Auto-open when hovering toggle button, and toggle on click
+  toggleBtn?.addEventListener('mouseenter', openSidebar);
+  toggleBtn?.addEventListener('click', (e) => {
     e.stopPropagation();
     if (navbar?.classList.contains('open')) {
       closeSidebar();
@@ -352,30 +385,58 @@ function initMobileNavigation() {
     }
   });
 
+  // Close on close button click
+  closeBtn?.addEventListener('click', (e) => {
+    e.stopPropagation();
+    closeSidebar();
+  });
+
+  // Keep open while mouse is inside sidebar
+  navbar?.addEventListener('mouseenter', () => {
+    clearTimeout(closeTimer);
+  });
+
+  // Auto-close when mouse leaves sidebar
+  navbar?.addEventListener('mouseleave', () => {
+    closeTimer = setTimeout(() => {
+      closeSidebar();
+    }, 180);
+  });
+
+  // Mouse proximity detection (near left edge <= 25px)
+  document.addEventListener('mousemove', (e) => {
+    if (e.clientX <= 25 && !navbar?.classList.contains('open')) {
+      openSidebar();
+    }
+  });
+
+  // Close when clicking backdrop
   backdrop?.addEventListener('click', closeSidebar);
 
-  navbar?.querySelectorAll('.nav-link, .nav-actions a').forEach(a => {
-    a.addEventListener('click', () => {
-      if (window.innerWidth <= 1024) {
-        closeSidebar();
-      }
-    });
+  // Close when clicking a nav link
+  navbar?.querySelectorAll('.nav-link').forEach(link => {
+    link.addEventListener('click', closeSidebar);
+  });
+
+  // Scroll effect on topbar
+  window.addEventListener('scroll', () => {
+    topHeader.classList.toggle('scrolled', window.scrollY > 15);
   });
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  // Initialize responsive sidebar
-  initMobileNavigation();
+  // Initialize topbar, hover proximity & sidebar
+  initNavigationSystem();
 
-  // Smooth scroll
+  // Smooth scroll for anchor links
   document.querySelectorAll('a[href^="#"]').forEach(link => {
     link.addEventListener('click', e => {
       const id = link.getAttribute('href');
-      if (id === '#') return;
+      if (!id || id === '#') return;
       const target = document.querySelector(id);
       if (target) {
         e.preventDefault();
-        const top = target.getBoundingClientRect().top + window.scrollY - 30;
+        const top = target.getBoundingClientRect().top + window.scrollY - 74;
         window.scrollTo({ top, behavior: 'smooth' });
       }
     });
@@ -384,7 +445,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // Highlight active navbar link
   highlightActiveNavLink();
 
-  // Build navbar right / bottom actions
+  // Build top right corner action buttons
   buildNavbarRight();
 
   // Scroll fade sections
