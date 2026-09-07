@@ -90,8 +90,7 @@ function getDashboardUrl(role) {
   const map = {
     farmer: 'dashboard.html',
     fpo: 'dashboard-fpo.html',
-    cooperative: 'dashboard-cooperative.html',
-    entrepreneur: 'dashboard-entrepreneur.html',
+    logistics: 'dashboard-logistics.html',
     bulk: 'dashboard-bulk.html'
   };
   return map[role] || 'index.html';
@@ -134,7 +133,8 @@ function buildNavbarRight() {
 
   if (user) {
     const roleLabels = {
-      farmer: 'Farmer', fpo: 'FPO', bulk: 'Bulk Buyer'
+      farmer: 'Farmer', fpo: 'FPO', logistics: 'Logistics Partner',
+      bulk: 'Bulk Buyer'
     };
     const dashUrl = getDashboardUrl(role);
     const isSeller = ['farmer', 'fpo'].includes(role);
@@ -251,6 +251,20 @@ const PRODUCTS = [
   { id: 17, emoji: '🫘', name: 'Chana Dal', priceNum: 88, price: '₹88', unit: 'kg', farmer: 'Vidarbha FPO', sellerType: 'fpo', location: 'Maharashtra', practice: 'conventional', category: 'pulses', rating: 4.3, availability: 'available', badge: 'Verified FPO' },
   { id: 18, emoji: '🌽', name: 'Sweet Corn', priceNum: 48, price: '₹48', unit: 'kg', farmer: 'Punjab Farms', sellerType: 'farmer', location: 'Punjab', practice: 'conventional', category: 'vegetables', rating: 4.2, availability: 'limited', badge: 'Individual Farmer' },
   { id: 19, emoji: '🧄', name: 'Garlic', priceNum: 72, price: '₹72', unit: 'kg', farmer: 'Malwa Organic Farms', sellerType: 'farmer', location: 'Madhya Pradesh', practice: 'conventional', category: 'vegetables', rating: 4.1, availability: 'available', badge: 'Individual Farmer' },
+=======
+  { id: 8, emoji: '🥛', name: 'Fresh Milk', priceNum: 56, price: '₹56', unit: 'litre', farmer: 'Amul Partner', sellerType: 'fpo', location: 'Gujarat', practice: 'natural', category: 'dairy', rating: 4.9, availability: 'limited', badge: 'Verified FPO' },
+  { id: 9, emoji: '🌶️', name: 'Red Chilli', priceNum: 120, price: '₹120', unit: 'kg', farmer: 'Spice Co-op', sellerType: 'fpo', location: 'Rajasthan', practice: 'conventional', category: 'spices', rating: 4.2, availability: 'available', badge: 'Verified FPO' },
+  { id: 10, emoji: '🍌', name: 'Banana (Robusta)', priceNum: 35, price: '₹35', unit: 'dozen', farmer: 'Agri Ventures', sellerType: 'farmer', location: 'Karnataka', practice: 'natural', category: 'fruits', rating: 4.5, availability: 'available', badge: 'Individual Farmer' },
+  { id: 11, emoji: '🌿', name: 'Okra (Bhindi)', priceNum: 58, price: '₹58', unit: 'kg', farmer: 'Ramesh Patel', sellerType: 'farmer', location: 'Gujarat', practice: 'organic', category: 'vegetables', rating: 4.6, availability: 'available', badge: 'Individual Farmer' },
+  { id: 12, emoji: '🍆', name: 'Brinjal', priceNum: 40, price: '₹40', unit: 'kg', farmer: 'Ramesh Patel', sellerType: 'farmer', location: 'Gujarat', practice: 'organic', category: 'vegetables', rating: 4.3, availability: 'limited', badge: 'Individual Farmer' },
+  { id: 13, emoji: '🌾', name: 'Bajra (Pearl Millet)', priceNum: 36, price: '₹36', unit: 'kg', farmer: 'Kisan Collective', sellerType: 'fpo', location: 'Rajasthan', practice: 'conventional', category: 'grains', rating: 4.0, availability: 'available', badge: 'Verified FPO' },
+  { id: 14, emoji: '🥬', name: 'Spinach', priceNum: 30, price: '₹30', unit: 'kg', farmer: 'Green Farms', sellerType: 'farmer', location: 'Punjab', practice: 'organic', category: 'vegetables', rating: 4.4, availability: 'available', badge: 'Individual Farmer' },
+  { id: 15, emoji: '🍈', name: 'Papaya', priceNum: 45, price: '₹45', unit: 'kg', farmer: 'Agri Ventures', sellerType: 'farmer', location: 'Karnataka', practice: 'natural', category: 'fruits', rating: 4.3, availability: 'available', badge: 'Individual Farmer' },
+  { id: 16, emoji: '🫚', name: 'Mustard Oil', priceNum: 165, price: '₹165', unit: 'litre', farmer: 'Rajasthan FPO', sellerType: 'fpo', location: 'Rajasthan', practice: 'conventional', category: 'spices', rating: 4.1, availability: 'available', badge: 'Verified FPO' },
+  { id: 17, emoji: '🫘', name: 'Chana Dal', priceNum: 88, price: '₹88', unit: 'kg', farmer: 'Vidarbha FPO', sellerType: 'fpo', location: 'Maharashtra', practice: 'conventional', category: 'pulses', rating: 4.3, availability: 'available', badge: 'Verified FPO' },
+  { id: 18, emoji: '🌽', name: 'Sweet Corn', priceNum: 48, price: '₹48', unit: 'kg', farmer: 'Punjab Farms', sellerType: 'farmer', location: 'Punjab', practice: 'conventional', category: 'vegetables', rating: 4.2, availability: 'limited', badge: 'Individual Farmer' },
+  { id: 19, emoji: '🧄', name: 'Garlic', priceNum: 72, price: '₹72', unit: 'kg', farmer: 'MP Collective', sellerType: 'fpo', location: 'Madhya Pradesh', practice: 'conventional', category: 'vegetables', rating: 4.1, availability: 'available', badge: 'Verified FPO' },
+>>>>>>> Stashed changes
   { id: 20, emoji: '🍋', name: 'Lemon', priceNum: 55, price: '₹55', unit: 'kg', farmer: 'Citrus FPO', sellerType: 'fpo', location: 'Maharashtra', practice: 'natural', category: 'fruits', rating: 4.6, availability: 'available', badge: 'Verified FPO' }
 ];
 
