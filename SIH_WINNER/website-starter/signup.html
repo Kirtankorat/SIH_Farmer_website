@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Create Account — HarvestLink</title>
   <meta name="description"
-    content="Create your HarvestLink account as a farmer, FPO, or bulk buyer.">
+    content="Create your HarvestLink account as a farmer, FPO, logistics partner, or bulk buyer.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
@@ -335,6 +335,10 @@
             <div class="src-icon">🏢</div>
             <div class="src-name">FPO</div>
           </div>
+          <div class="signup-role-card" data-role="logistics">
+            <div class="src-icon">🚚</div>
+            <div class="src-name">Logistics Partner</div>
+          </div>
           <div class="signup-role-card" data-role="bulk">
             <div class="src-icon">📦</div>
             <div class="src-name">Bulk Buyer</div>
@@ -434,6 +438,24 @@
             desc: 'Review your FPO registration.',
             review: true
           }
+        ]
+      },
+      logistics: {
+        label: 'Logistics Partner',
+        steps: [
+          {
+            title: 'Fleet Details',
+            desc: 'Tell us about your logistics business.',
+            fields: [
+              { id: 'bizname', label: 'Company Name', type: 'text', ph: 'Express Transports' },
+              { id: 'owner', label: 'Contact Person', type: 'text', ph: 'Your name', half: true },
+              { id: 'fleet', label: 'Fleet Size', type: 'number', ph: '5', half: true },
+              { id: 'loc', label: 'Operating Hub', type: 'text', ph: 'City, State' },
+              { id: 'phone', label: 'Phone', type: 'tel', ph: '+91 00000 00000', half: true },
+              { id: 'email', label: 'Email', type: 'email', ph: 'logistics@email.com', half: true }
+            ]
+          },
+          { title: 'Review & Submit', desc: 'Confirm your logistics registration.', review: true }
         ]
       },
       bulk: {
