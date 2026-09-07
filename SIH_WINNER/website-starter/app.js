@@ -302,22 +302,80 @@ window.addEventListener('scroll', () => {
 });
 
 // ──────────────────────────────────────────────
-// HAMBURGER MENU
+// VERTICAL SIDEBAR & MOBILE NAVIGATION
 // ──────────────────────────────────────────────
+function initMobileNavigation() {
+  // Create mobile topbar if missing
+  if (!document.querySelector('.mobile-topbar')) {
+    const topbar = document.createElement('header');
+    topbar.className = 'mobile-topbar';
+    topbar.innerHTML = `
+      <a href="index.html" class="mobile-topbar-logo">
+        <span class="logo-leaf">⬟</span> HARVESTLINK
+      </a>
+      <button class="hamburger" id="mobileHamburger" aria-label="Open Navigation">
+        <span></span><span></span><span></span>
+      </button>
+    `;
+    document.body.prepend(topbar);
+  }
+
+  // Create nav backdrop overlay if missing
+  let backdrop = document.querySelector('.nav-backdrop');
+  if (!backdrop) {
+    backdrop = document.createElement('div');
+    backdrop.className = 'nav-backdrop';
+    document.body.appendChild(backdrop);
+  }
+
+  const navbar = document.getElementById('navbar');
+  const ham = document.getElementById('mobileHamburger') || document.getElementById('hamburger');
+
+  function openSidebar() {
+    navbar?.classList.add('open');
+    backdrop?.classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeSidebar() {
+    navbar?.classList.remove('open');
+    backdrop?.classList.remove('active');
+    document.body.style.overflow = '';
+  }
+
+  ham?.addEventListener('click', (e) => {
+    e.stopPropagation();
+    if (navbar?.classList.contains('open')) {
+      closeSidebar();
+    } else {
+      openSidebar();
+    }
+  });
+
+  backdrop?.addEventListener('click', closeSidebar);
+
+  navbar?.querySelectorAll('.nav-link, .nav-actions a').forEach(a => {
+    a.addEventListener('click', () => {
+      if (window.innerWidth <= 1024) {
+        closeSidebar();
+      }
+    });
+  });
+}
+
 document.addEventListener('DOMContentLoaded', () => {
-  const ham = document.getElementById('hamburger');
-  const mob = document.getElementById('mobileMenu');
-  ham?.addEventListener('click', () => mob?.classList.toggle('open'));
-  mob?.querySelectorAll('a').forEach(a => a.addEventListener('click', () => mob.classList.remove('open')));
+  // Initialize responsive sidebar
+  initMobileNavigation();
 
   // Smooth scroll
   document.querySelectorAll('a[href^="#"]').forEach(link => {
     link.addEventListener('click', e => {
       const id = link.getAttribute('href');
+      if (id === '#') return;
       const target = document.querySelector(id);
       if (target) {
         e.preventDefault();
-        const top = target.getBoundingClientRect().top + window.scrollY - 72;
+        const top = target.getBoundingClientRect().top + window.scrollY - 30;
         window.scrollTo({ top, behavior: 'smooth' });
       }
     });
@@ -326,7 +384,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // Highlight active navbar link
   highlightActiveNavLink();
 
-  // Build navbar right section
+  // Build navbar right / bottom actions
   buildNavbarRight();
 
   // Scroll fade sections
@@ -350,7 +408,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 function highlightActiveNavLink() {
   const currentPath = window.location.pathname.split('/').pop() || 'index.html';
-  document.querySelectorAll('.nav-links .nav-link, .mobile-menu a').forEach(link => {
+  document.querySelectorAll('.nav-links .nav-link, .navbar a.nav-link').forEach(link => {
     const href = link.getAttribute('href');
     if (!href) return;
     const linkPath = href.split('#')[0];
