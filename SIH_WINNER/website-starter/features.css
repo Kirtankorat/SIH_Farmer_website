@@ -896,7 +896,7 @@
 }
 
 /* Core Dashboard Shell & Sidebar */
-.dashboard-shell, .bulk-shell, .coop-shell, .fpo-shell, .entre-shell, .consumer-shell {
+.dashboard-shell, .bulk-shell, .fpo-shell {
   margin-top: 64px;
   display: flex;
   min-height: calc(100vh - 64px);
@@ -1082,7 +1082,7 @@
   .dash-grid-4 { grid-template-columns: 1fr 1fr; }
   .modal-form-row { grid-template-columns: 1fr; }
   
-  .dashboard-shell, .bulk-shell, .coop-shell, .fpo-shell, .entre-shell, .consumer-shell { flex-direction: column; }
+  .dashboard-shell, .bulk-shell, .fpo-shell { flex-direction: column; }
   .dash-sidebar { width: 100%; height: auto; position: static; }
   .dash-profile { padding: 16px 20px; display: flex; align-items: center; gap: 12px; }
   .dp-avatar { margin-bottom: 0; }

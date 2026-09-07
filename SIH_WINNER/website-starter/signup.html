@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Create Account — HarvestLink</title>
-  <meta name="description" content="Create your HarvestLink account as a farmer, FPO, cooperative, consumer or bulk buyer.">
+  <meta name="description" content="Create your HarvestLink account as a farmer, FPO, logistics partner, or bulk buyer.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -205,12 +205,22 @@
 
         <div style="font-size: 12px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 12px;">I want to join as</div>
         <div class="signup-role-grid" id="rolePickGrid">
-          <div class="signup-role-card" data-role="farmer"><div class="src-icon">🌾</div><div class="src-name">Individual Farmer</div></div>
-          <div class="signup-role-card" data-role="fpo"><div class="src-icon">🏢</div><div class="src-name">FPO</div></div>
-          <div class="signup-role-card" data-role="cooperative"><div class="src-icon">🤝</div><div class="src-name">Cooperative</div></div>
-          <div class="signup-role-card" data-role="entrepreneur"><div class="src-icon">💼</div><div class="src-name">Agri Entrepreneur</div></div>
-          <div class="signup-role-card" data-role="consumer"><div class="src-icon">🛒</div><div class="src-name">Consumer</div></div>
-          <div class="signup-role-card" data-role="bulk"><div class="src-icon">📦</div><div class="src-name">Bulk Buyer</div></div>
+          <div class="signup-role-card" data-role="farmer">
+            <div class="src-icon">🌾</div>
+            <div class="src-name">Individual Farmer</div>
+          </div>
+          <div class="signup-role-card" data-role="fpo">
+            <div class="src-icon">🏢</div>
+            <div class="src-name">FPO</div>
+          </div>
+          <div class="signup-role-card" data-role="logistics">
+            <div class="src-icon">🚚</div>
+            <div class="src-name">Logistics Partner</div>
+          </div>
+          <div class="signup-role-card" data-role="bulk">
+            <div class="src-icon">📦</div>
+            <div class="src-name">Bulk Buyer</div>
+          </div>
         </div>
 
         <div class="step-actions" style="border-top:none; margin-top:0;">
@@ -298,66 +308,25 @@
               { id: 'phone', label: 'Phone', type: 'tel', ph: '+91 00000 00000', half: true },
               { id: 'email', label: 'Email', type: 'email', ph: 'fpo@email.com' },
               { id: 'loc', label: 'Location (State)', type: 'select', opts: ['Gujarat','Maharashtra','Punjab','UP','MP','Rajasthan','Karnataka','Other'] },
-              { id: 'products', label: 'Main Products', type: 'text', ph: 'Mangoes, Cashew, Vegetables...' }
+      logistics: {
+        label: 'Logistics Partner',
+        steps: [
+          {
+            title: 'Vehicle & Service Details',
+            desc: 'Tell us about your fleet and transport coverage.',
+            fields: [
+              { id: 'fleet', label: 'Fleet Type / Vehicle', type: 'text', ph: 'e.g. 2x Mahindra Bolero Maxi Truck' },
+              { id: 'capacity', label: 'Total Capacity (tons)', type: 'number', ph: '3.5', half: true },
+              { id: 'coverage', label: 'Primary Coverage Area', type: 'text', ph: 'Gujarat - Maharashtra route', half: true },
+              { id: 'cold_storage', label: 'Cold Storage / Reefer Available?', type: 'select', opts: ['No','Yes - Active refrigeration','Insulated container'] },
+              { id: 'driver_count', label: 'Number of Drivers', type: 'number', ph: '2', half: true },
+              { id: 'contact', label: 'Contact Person', type: 'text', ph: 'Your name', half: true }
             ]
           },
           {
             title: 'Review & Submit',
-            desc: 'Review your FPO registration.',
+            desc: 'Confirm your logistics details.',
             review: true
-          }
-        ]
-      },
-      cooperative: {
-        label: 'Cooperative',
-        steps: [
-          {
-            title: 'Cooperative Details',
-            desc: 'Register your cooperative on HarvestLink.',
-            fields: [
-              { id: 'coopname', label: 'Cooperative Name', type: 'text', ph: 'Kisan Collective' },
-              { id: 'contact', label: 'Contact Person', type: 'text', ph: 'Ramesh Sharma', half: true },
-              { id: 'members', label: 'Member Count', type: 'number', ph: '200', half: true },
-              { id: 'loc', label: 'Location', type: 'text', ph: 'Mehsana, Gujarat' },
-              { id: 'products', label: 'Main Products', type: 'text', ph: 'Wheat, Bajra, Mustard...' },
-              { id: 'phone', label: 'Phone', type: 'tel', ph: '+91 00000 00000', half: true },
-              { id: 'email', label: 'Email', type: 'email', ph: 'coop@email.com', half: true }
-            ]
-          },
-          { title: 'Review & Submit', desc: 'Confirm your cooperative details.', review: true }
-        ]
-      },
-      entrepreneur: {
-        label: 'Agri Entrepreneur',
-        steps: [
-          {
-            title: 'Business Details',
-            desc: 'Tell us about your agricultural business.',
-            fields: [
-              { id: 'bizname', label: 'Business Name', type: 'text', ph: 'Agri Ventures Pvt. Ltd.' },
-              { id: 'owner', label: 'Owner / Contact Person', type: 'text', ph: 'Your name', half: true },
-              { id: 'biztype', label: 'Business Type', type: 'select', opts: ['Trading','Processing','Distribution','Value-add','Other'], half: true },
-              { id: 'loc', label: 'Location', type: 'text', ph: 'City, State' },
-              { id: 'services', label: 'Products / Services', type: 'text', ph: 'Fresh produce trading, dried spices...' },
-              { id: 'phone', label: 'Phone', type: 'tel', ph: '+91 00000 00000', half: true },
-              { id: 'email', label: 'Email', type: 'email', ph: 'biz@email.com', half: true }
-            ]
-          },
-          { title: 'Review & Submit', desc: 'Confirm your business registration.', review: true }
-        ]
-      },
-      consumer: {
-        label: 'Consumer',
-        steps: [
-          {
-            title: 'Create your account.',
-            desc: 'Just a few quick details to get started.',
-            fields: [
-              { id: 'name', label: 'Your Name', type: 'text', ph: 'Ananya Sharma' },
-              { id: 'phone', label: 'Phone / Email', type: 'text', ph: '+91 00000 or your@email.com' },
-              { id: 'password', label: 'Choose a Password', type: 'password', ph: '••••••••' },
-              { id: 'dloc', label: 'Delivery Location', type: 'text', ph: 'Your city, state' }
-            ]
           }
         ]
       },

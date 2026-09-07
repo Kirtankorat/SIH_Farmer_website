@@ -91,8 +91,6 @@ function getDashboardUrl(role) {
     farmer: 'dashboard.html',
     fpo: 'dashboard-fpo.html',
     logistics: 'dashboard-logistics.html',
-    cooperative: 'dashboard-cooperative.html',
-    entrepreneur: 'dashboard-entrepreneur.html',
     bulk: 'dashboard-bulk.html'
   };
   return map[role] || 'index.html';
@@ -136,10 +134,10 @@ function buildNavbarRight() {
   if (user) {
     const roleLabels = {
       farmer: 'Farmer', fpo: 'FPO', logistics: 'Logistics Partner',
-      cooperative: 'Cooperative', entrepreneur: 'Agri Entrepreneur', bulk: 'Bulk Buyer'
+      bulk: 'Bulk Buyer'
     };
     const dashUrl = getDashboardUrl(role);
-    const isSeller = ['farmer', 'fpo', 'cooperative', 'entrepreneur'].includes(role);
+    const isSeller = ['farmer', 'fpo'].includes(role);
     const sellerMenu = isSeller ? `
       <a href="${dashUrl}">Dashboard</a>
       <a href="${dashUrl}#products">Products</a>
@@ -236,23 +234,23 @@ function showToast(msg, type = 'success') {
 const PRODUCTS = [
   { id: 1, emoji: '🍅', name: 'Fresh Tomatoes', priceNum: 32, price: '₹32', unit: 'kg', farmer: 'Shree Farms', sellerType: 'farmer', location: 'Gujarat', practice: 'organic', category: 'vegetables', rating: 4.3, availability: 'available', badge: 'Individual Farmer' },
   { id: 2, emoji: '🥭', name: 'Alphonso Mango', priceNum: 180, price: '₹180', unit: 'kg', farmer: 'Konkan FPO', sellerType: 'fpo', location: 'Maharashtra', practice: 'natural', category: 'fruits', rating: 4.8, availability: 'limited', badge: 'Verified FPO' },
-  { id: 3, emoji: '🌾', name: 'Wheat (Lokwan)', priceNum: 42, price: '₹42', unit: 'kg', farmer: 'Kisan Collective', sellerType: 'cooperative', location: 'Gujarat', practice: 'conventional', category: 'grains', rating: 4.1, availability: 'available', badge: 'Cooperative' },
+  { id: 3, emoji: '🌾', name: 'Wheat (Lokwan)', priceNum: 42, price: '₹42', unit: 'kg', farmer: 'Gujarat Agri FPO', sellerType: 'fpo', location: 'Gujarat', practice: 'conventional', category: 'grains', rating: 4.1, availability: 'available', badge: 'Verified FPO' },
   { id: 4, emoji: '🟡', name: 'Turmeric Powder', priceNum: 145, price: '₹145', unit: 'kg', farmer: 'Sahyog FPO', sellerType: 'fpo', location: 'Gujarat', practice: 'organic', category: 'spices', rating: 4.7, availability: 'available', badge: 'Verified FPO' },
   { id: 5, emoji: '🧅', name: 'Onion', priceNum: 28, price: '₹28', unit: 'kg', farmer: 'Nashik Farms', sellerType: 'farmer', location: 'Maharashtra', practice: 'conventional', category: 'vegetables', rating: 4.0, availability: 'available', badge: 'Individual Farmer' },
   { id: 6, emoji: '🥔', name: 'Potato', priceNum: 22, price: '₹22', unit: 'kg', farmer: 'Agro FPO', sellerType: 'fpo', location: 'Gujarat', practice: 'conventional', category: 'vegetables', rating: 4.2, availability: 'available', badge: 'Verified FPO' },
   { id: 7, emoji: '🫘', name: 'Toor Dal', priceNum: 95, price: '₹95', unit: 'kg', farmer: 'Vidarbha FPO', sellerType: 'fpo', location: 'Maharashtra', practice: 'natural', category: 'pulses', rating: 4.4, availability: 'available', badge: 'Verified FPO' },
-  { id: 8, emoji: '🥛', name: 'Fresh Milk', priceNum: 56, price: '₹56', unit: 'litre', farmer: 'Amul Partner', sellerType: 'cooperative', location: 'Gujarat', practice: 'natural', category: 'dairy', rating: 4.9, availability: 'limited', badge: 'Cooperative' },
-  { id: 9, emoji: '🌶️', name: 'Red Chilli', priceNum: 120, price: '₹120', unit: 'kg', farmer: 'Spice Co-op', sellerType: 'cooperative', location: 'Rajasthan', practice: 'conventional', category: 'spices', rating: 4.2, availability: 'available', badge: 'Cooperative' },
-  { id: 10, emoji: '🍌', name: 'Banana (Robusta)', priceNum: 35, price: '₹35', unit: 'dozen', farmer: 'Agri Ventures', sellerType: 'entrepreneur', location: 'Karnataka', practice: 'natural', category: 'fruits', rating: 4.5, availability: 'available', badge: 'Agri Entrepreneur' },
+  { id: 8, emoji: '🥛', name: 'Fresh Milk', priceNum: 56, price: '₹56', unit: 'litre', farmer: 'Anand Dairy FPO', sellerType: 'fpo', location: 'Gujarat', practice: 'natural', category: 'dairy', rating: 4.9, availability: 'limited', badge: 'Verified FPO' },
+  { id: 9, emoji: '🌶️', name: 'Red Chilli', priceNum: 120, price: '₹120', unit: 'kg', farmer: 'Marwar Farms', sellerType: 'farmer', location: 'Rajasthan', practice: 'conventional', category: 'spices', rating: 4.2, availability: 'available', badge: 'Individual Farmer' },
+  { id: 10, emoji: '🍌', name: 'Banana (Robusta)', priceNum: 35, price: '₹35', unit: 'dozen', farmer: 'Mysore Plantation', sellerType: 'farmer', location: 'Karnataka', practice: 'natural', category: 'fruits', rating: 4.5, availability: 'available', badge: 'Individual Farmer' },
   { id: 11, emoji: '🌿', name: 'Okra (Bhindi)', priceNum: 58, price: '₹58', unit: 'kg', farmer: 'Ramesh Patel', sellerType: 'farmer', location: 'Gujarat', practice: 'organic', category: 'vegetables', rating: 4.6, availability: 'available', badge: 'Individual Farmer' },
   { id: 12, emoji: '🍆', name: 'Brinjal', priceNum: 40, price: '₹40', unit: 'kg', farmer: 'Ramesh Patel', sellerType: 'farmer', location: 'Gujarat', practice: 'organic', category: 'vegetables', rating: 4.3, availability: 'limited', badge: 'Individual Farmer' },
-  { id: 13, emoji: '🌾', name: 'Bajra (Pearl Millet)', priceNum: 36, price: '₹36', unit: 'kg', farmer: 'Kisan Collective', sellerType: 'cooperative', location: 'Rajasthan', practice: 'conventional', category: 'grains', rating: 4.0, availability: 'available', badge: 'Cooperative' },
+  { id: 13, emoji: '🌾', name: 'Bajra (Pearl Millet)', priceNum: 36, price: '₹36', unit: 'kg', farmer: 'Rajasthan FPO', sellerType: 'fpo', location: 'Rajasthan', practice: 'conventional', category: 'grains', rating: 4.0, availability: 'available', badge: 'Verified FPO' },
   { id: 14, emoji: '🥬', name: 'Spinach', priceNum: 30, price: '₹30', unit: 'kg', farmer: 'Green Farms', sellerType: 'farmer', location: 'Punjab', practice: 'organic', category: 'vegetables', rating: 4.4, availability: 'available', badge: 'Individual Farmer' },
-  { id: 15, emoji: '🍈', name: 'Papaya', priceNum: 45, price: '₹45', unit: 'kg', farmer: 'Agri Ventures', sellerType: 'entrepreneur', location: 'Karnataka', practice: 'natural', category: 'fruits', rating: 4.3, availability: 'available', badge: 'Agri Entrepreneur' },
+  { id: 15, emoji: '🍈', name: 'Papaya', priceNum: 45, price: '₹45', unit: 'kg', farmer: 'Karnataka Orchards', sellerType: 'farmer', location: 'Karnataka', practice: 'natural', category: 'fruits', rating: 4.3, availability: 'available', badge: 'Individual Farmer' },
   { id: 16, emoji: '🫚', name: 'Mustard Oil', priceNum: 165, price: '₹165', unit: 'litre', farmer: 'Rajasthan FPO', sellerType: 'fpo', location: 'Rajasthan', practice: 'conventional', category: 'spices', rating: 4.1, availability: 'available', badge: 'Verified FPO' },
   { id: 17, emoji: '🫘', name: 'Chana Dal', priceNum: 88, price: '₹88', unit: 'kg', farmer: 'Vidarbha FPO', sellerType: 'fpo', location: 'Maharashtra', practice: 'conventional', category: 'pulses', rating: 4.3, availability: 'available', badge: 'Verified FPO' },
   { id: 18, emoji: '🌽', name: 'Sweet Corn', priceNum: 48, price: '₹48', unit: 'kg', farmer: 'Punjab Farms', sellerType: 'farmer', location: 'Punjab', practice: 'conventional', category: 'vegetables', rating: 4.2, availability: 'limited', badge: 'Individual Farmer' },
-  { id: 19, emoji: '🧄', name: 'Garlic', priceNum: 72, price: '₹72', unit: 'kg', farmer: 'MP Collective', sellerType: 'cooperative', location: 'Madhya Pradesh', practice: 'conventional', category: 'vegetables', rating: 4.1, availability: 'available', badge: 'Cooperative' },
+  { id: 19, emoji: '🧄', name: 'Garlic', priceNum: 72, price: '₹72', unit: 'kg', farmer: 'Malwa FPO', sellerType: 'fpo', location: 'Madhya Pradesh', practice: 'conventional', category: 'vegetables', rating: 4.1, availability: 'available', badge: 'Verified FPO' },
   { id: 20, emoji: '🍋', name: 'Lemon', priceNum: 55, price: '₹55', unit: 'kg', farmer: 'Citrus FPO', sellerType: 'fpo', location: 'Maharashtra', practice: 'natural', category: 'fruits', rating: 4.6, availability: 'available', badge: 'Verified FPO' }
 ];
 
@@ -265,8 +263,7 @@ function renderProductCard(p, showViewBtn = true) {
   const availLabel = p.availability === 'available' ? 'In Stock' : 'Limited Stock';
   const stars = '★'.repeat(Math.floor(p.rating)) + '☆'.repeat(5 - Math.floor(p.rating));
   const sellerBadgeClass = {
-    farmer: 'badge-farmer', fpo: 'badge-fpo',
-    cooperative: 'badge-coop', entrepreneur: 'badge-entre'
+    farmer: 'badge-farmer', fpo: 'badge-fpo'
   }[p.sellerType] || 'badge-farmer';
 
   return `

@@ -117,7 +117,7 @@
 
     function renderProduct() {
       const practiceMap = { organic: '🌿 Organic', natural: '☀️ Natural Farming', conventional: '🏡 Conventional' };
-      const sellerBadgeMap = { farmer: 'badge-farmer', fpo: 'badge-fpo', cooperative: 'badge-coop', entrepreneur: 'badge-entre' };
+      const sellerBadgeMap = { farmer: 'badge-farmer', fpo: 'badge-fpo' };
       const stars = '★'.repeat(Math.floor(product.rating)) + '☆'.repeat(5 - Math.floor(product.rating));
       const availLabel = product.availability === 'available' ? '✅ In Stock' : '⚠️ Limited Stock';
       const availColor = product.availability === 'available' ? 'var(--green)' : 'var(--terracotta)';
