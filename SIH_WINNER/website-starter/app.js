@@ -187,9 +187,6 @@ function buildNavbarRight() {
     containers.forEach(c => {
       c.innerHTML = `
         ${cartHtml}
-        <a href="login.html" class="nav-login">Login</a>
-        <a href="role-select.html" class="btn-outline-sm">Join Free</a>
-        <a href="marketplace.html" class="btn-primary-sm">Shop Produce</a>
       `;
     });
   }
