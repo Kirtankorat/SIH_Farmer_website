@@ -90,9 +90,8 @@ function getDashboardUrl(role) {
   const map = {
     farmer: 'dashboard.html',
     fpo: 'dashboard-fpo.html',
-    cooperative: 'dashboard-cooperative.html',
-    entrepreneur: 'dashboard-entrepreneur.html',
-    bulk: 'dashboard-bulk.html'
+    bulk: 'dashboard-bulk.html',
+    logistics: 'dashboard-logistics.html'
   };
   return map[role] || 'index.html';
 }
@@ -134,7 +133,7 @@ function buildNavbarRight() {
 
   if (user) {
     const roleLabels = {
-      farmer: 'Farmer', fpo: 'FPO', bulk: 'Bulk Buyer'
+      farmer: 'Farmer', fpo: 'FPO', bulk: 'Bulk Buyer', logistics: 'Logistics Partner'
     };
     const dashUrl = getDashboardUrl(role);
     const isSeller = ['farmer', 'fpo'].includes(role);

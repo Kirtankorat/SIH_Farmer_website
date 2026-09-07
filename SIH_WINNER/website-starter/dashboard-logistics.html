@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Logistics Dashboard — HarvestLink</title>
+  <meta name="description" content="Logistics Partner Dashboard — Manage farm pickups, fleet routes, and deliveries on HarvestLink.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="features.css">
+  <style>
+    body { background: var(--cream); }
+    .logistics-dash-shell { margin-top: 64px; display: flex; min-height: calc(100vh - 64px); }
+    .dash-sidebar { width: 220px; background: var(--brown); flex-shrink: 0; padding: 32px 0; position: sticky; top: 64px; height: calc(100vh - 64px); overflow-y: auto; }
+    .dp-avatar { width: 48px; height: 48px; border-radius: 50%; background: #0288d1; display: flex; align-items: center; justify-content: center; font-size: 24px; margin-bottom: 10px; }
+    .route-card { background: var(--cream); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 18px; margin-bottom: 14px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
+    .rc-title { font-size: 15px; font-weight: 700; color: var(--brown); margin-bottom: 4px; }
+    .rc-detail { font-size: 13px; color: var(--text-muted); }
+    .badge-transit { background: #e0f2fe; color: #0284c7; padding: 4px 10px; border-radius: 100px; font-size: 11px; font-weight: 700; }
+    .badge-scheduled { background: #fef3c7; color: #b45309; padding: 4px 10px; border-radius: 100px; font-size: 11px; font-weight: 700; }
+    .badge-delivered { background: #dcfce7; color: #15803d; padding: 4px 10px; border-radius: 100px; font-size: 11px; font-weight: 700; }
+  </style>
+</head>
+<body>
+
+  <nav class="navbar" id="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="nav-logo"><span class="logo-leaf">⬟</span> HARVESTLINK</a>
+      <div class="nav-actions" style="margin-left:auto">
+        <span style="font-size:13px;color:var(--text-muted)" id="logisticsNameLabel">🚚 Logistics Partner</span>
+        <a href="index.html" class="btn-outline-sm">Back to Site</a>
+        <a href="#" onclick="logout()" class="btn-outline-sm">Logout</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="logistics-dash-shell">
+    <!-- Sidebar -->
+    <aside class="dash-sidebar">
+      <div class="dash-profile">
+        <div class="dp-avatar">🚚</div>
+        <div class="dp-name" id="logisticsSidebarName">Kisan Express Logistics</div>
+        <div class="dp-badge" style="background:#0288d1;color:#fff">✓ Verified Partner</div>
+      </div>
+      <div class="dash-nav-item active" data-panel="overview"><span class="dni-icon">📊</span> Overview</div>
+      <div class="dash-nav-item" data-panel="pickups"><span class="dni-icon">🌾</span> Farm Pickups</div>
+      <div class="dash-nav-item" data-panel="routes"><span class="dni-icon">🗺️</span> Active Routes</div>
+      <div class="dash-nav-item" data-panel="fleet"><span class="dni-icon">🚛</span> Fleet & Drivers</div>
+      <div class="dash-nav-item" data-panel="tracking"><span class="dni-icon">📡</span> Live GPS</div>
+    </aside>
+
+    <main class="dash-main">
+
+      <!-- OVERVIEW -->
+      <div class="dash-panel active" id="panel-overview">
+        <div class="dash-greeting">
+          <div class="dg-text"><h2 id="logisticsHeading">Kisan Express Logistics</h2><p style="color:var(--text-muted);font-size:14px">Logistics Hub Dashboard · Real-time Fleet Management</p></div>
+          <button class="btn-primary-sm" onclick="switchPanel('routes')">+ Optimize New Route</button>
+        </div>
+        <div class="dash-stats">
+          <div class="stat-card"><div class="sc-label">Active Vehicles</div><div class="sc-value">14</div><div class="sc-trend up">↑ 2 on dispatch</div></div>
+          <div class="stat-card"><div class="sc-label">Pickups Today</div><div class="sc-value">8</div><div class="sc-sub">4 completed · 4 pending</div></div>
+          <div class="stat-card"><div class="sc-label">Shipments in Transit</div><div class="sc-value">19</div><div class="sc-trend up">↑ 3,240 kg produce</div></div>
+          <div class="stat-card"><div class="sc-label">On-Time Rate</div><div class="sc-value">98.4%</div><div class="sc-trend up">★ Top Rated</div></div>
+        </div>
+
+        <div class="dash-widgets">
+          <!-- Live Pickups -->
+          <div class="widget">
+            <div class="widget-header"><div class="wh-title">Upcoming Farm Pickups</div><div class="wh-link" onclick="switchPanel('pickups')">View all →</div></div>
+            <div class="widget-body">
+              <div class="order-row">
+                <div>
+                  <div class="or-prod">Ramesh Patel Farm · Anand, Gujarat</div>
+                  <div class="or-meta">Tomatoes 150 kg, Okra 50 kg · Vehicle: GJ-01-AX-4412</div>
+                </div>
+                <span class="or-status status-prep">Pickup 10:30 AM</span>
+              </div>
+              <div class="order-row">
+                <div>
+                  <div class="or-prod">Konkan FPO Hub · Ratnagiri, Maharashtra</div>
+                  <div class="or-meta">Alphonso Mangoes 500 kg · Cold Van: MH-08-C-9821</div>
+                </div>
+                <span class="or-status status-new">Pickup 1:00 PM</span>
+              </div>
+              <div class="order-row">
+                <div>
+                  <div class="or-prod">Vidarbha Dal Collective · Nagpur</div>
+                  <div class="or-meta">Toor Dal 800 kg · Vehicle: MH-31-TR-5501</div>
+                </div>
+                <span class="or-status status-done">Picked Up ✓</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Active Dispatches -->
+          <div class="widget">
+            <div class="widget-header"><div class="wh-title">Active Dispatches & Deliveries</div><div class="wh-link" onclick="switchPanel('routes')">Full view →</div></div>
+            <div class="widget-body">
+              <div class="pickup-card">
+                <div class="pc-title-w">🚛 Route #GJ-MUM-104</div>
+                <div class="pc-time">ETA: 2 Hours · In Transit</div>
+                <div class="pc-detail">Anand → Vashi APMC Hub · 450 kg Fresh Vegetables</div>
+              </div>
+              <div class="pickup-card">
+                <div class="pc-title-w">🚚 Route #MH-PUN-088</div>
+                <div class="pc-time">ETA: 45 Mins · Out for Delivery</div>
+                <div class="pc-detail">Ratnagiri Hub → Green Kitchen Restaurant, Pune</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- FARM PICKUPS -->
+      <div class="dash-panel" id="panel-pickups">
+        <div class="dash-greeting">
+          <div class="dg-text"><h2>Farm Pickups Schedule</h2><p>Coordinated multi-farm batch pickups for maximum route efficiency.</p></div>
+          <button class="btn-primary-sm" onclick="showToast('Dispatch schedule refreshed')">🔄 Refresh Schedule</button>
+        </div>
+
+        <div class="route-card">
+          <div>
+            <div class="rc-title">🌾 Ramesh Patel Farm</div>
+            <div class="rc-detail">📍 Anand, Gujarat · 📦 200 kg Produce (Organic Tomatoes & Okra) · Contact: +91 98251 00000</div>
+          </div>
+          <div>
+            <span class="badge-scheduled">Scheduled (10:30 AM)</span>
+            <button class="btn-primary-sm" style="margin-left:8px;padding:6px 12px;font-size:12px" onclick="showToast('Pickup marked as in progress for Ramesh Patel Farm')">Start Pickup</button>
+          </div>
+        </div>
+
+        <div class="route-card">
+          <div>
+            <div class="rc-title">🏢 Konkan FPO Regional Hub</div>
+            <div class="rc-detail">📍 Ratnagiri, Maharashtra · 📦 500 kg Alphonso Mangoes · Cold Chain Required</div>
+          </div>
+          <div>
+            <span class="badge-scheduled">Scheduled (1:00 PM)</span>
+            <button class="btn-primary-sm" style="margin-left:8px;padding:6px 12px;font-size:12px" onclick="showToast('Refrigerated truck assigned to Konkan FPO')">Assign Vehicle</button>
+          </div>
+        </div>
+
+        <div class="route-card">
+          <div>
+            <div class="rc-title">🌾 Suresh Farms</div>
+            <div class="rc-detail">📍 Ludhiana, Punjab · 📦 400 kg Sweet Corn & Spinach · Contact: +91 98765 11111</div>
+          </div>
+          <div>
+            <span class="badge-transit">In Transit to Hub</span>
+            <button class="btn-outline-sm" style="margin-left:8px;padding:6px 12px;font-size:12px" onclick="showToast('Ludhiana shipment status: In Transit')">Track GPS</button>
+          </div>
+        </div>
+
+        <div class="route-card">
+          <div>
+            <div class="rc-title">🏢 Vidarbha Pulse Producers</div>
+            <div class="rc-detail">📍 Nagpur, Maharashtra · 📦 800 kg Toor Dal & Chana Dal</div>
+          </div>
+          <div>
+            <span class="badge-delivered">Loaded & Dispatched ✓</span>
+            <a href="order-tracking.html" class="btn-outline-sm" style="margin-left:8px;padding:6px 12px;font-size:12px">View Order Tracking</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- ACTIVE ROUTES -->
+      <div class="dash-panel" id="panel-routes">
+        <div class="dash-greeting">
+          <div class="dg-text"><h2>Active Delivery Routes</h2><p>AI-optimized multi-stop routes minimizing transit time and fuel consumption.</p></div>
+        </div>
+
+        <div class="widget" style="margin-bottom:20px;">
+          <div class="widget-header"><div class="wh-title">Route #HL-R902: Gujarat ➔ Mumbai Express</div><span class="badge-transit">Live Route</span></div>
+          <div class="widget-body">
+            <div style="font-size:14px;color:var(--brown);margin-bottom:12px;font-weight:700">Driver: Rajesh Varma (GJ-01-AX-4412) · Total Load: 1,200 kg</div>
+            <div class="order-row">
+              <div><div class="or-prod">Stop 1: Shree Farms (Anand)</div><div class="or-meta">Picked up 350 kg Tomatoes · 08:30 AM</div></div>
+              <span class="or-status status-done">Completed ✓</span>
+            </div>
+            <div class="order-row">
+              <div><div class="or-prod">Stop 2: Ramesh Patel Farm (Anand)</div><div class="or-meta">Picked up 200 kg Vegetables · 09:15 AM</div></div>
+              <span class="or-status status-done">Completed ✓</span>
+            </div>
+            <div class="order-row">
+              <div><div class="or-prod">Stop 3: Green Kitchen Warehouse (Mumbai)</div><div class="or-meta">Bulk Drop #HL1024 · ETA: 02:30 PM</div></div>
+              <span class="or-status status-prep">Next Stop</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- FLEET -->
+      <div class="dash-panel" id="panel-fleet">
+        <div class="dash-greeting">
+          <div class="dg-text"><h2>Fleet & Drivers</h2><p>Manage your transport vehicles and on-duty drivers.</p></div>
+          <button class="btn-primary-sm" onclick="showToast('Add Vehicle form opened')">+ Add Vehicle</button>
+        </div>
+
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;">
+          <div class="widget" style="padding:18px;">
+            <div style="font-size:28px;margin-bottom:8px">🚚</div>
+            <div style="font-size:16px;font-weight:700;color:var(--brown)">Tata 407 (Medium Duty)</div>
+            <div style="font-size:13px;color:var(--text-muted);margin:4px 0 12px">Reg: GJ-01-AX-4412 · Cap: 2.5 Ton</div>
+            <div style="font-size:12px;color:var(--green);font-weight:700;margin-bottom:8px">● On Route: Anand → Mumbai</div>
+            <div style="font-size:13px;color:var(--text-secondary)">Driver: Rajesh Varma (+91 98221 44556)</div>
+          </div>
+          <div class="widget" style="padding:18px;">
+            <div style="font-size:28px;margin-bottom:8px">❄️🚚</div>
+            <div style="font-size:16px;font-weight:700;color:var(--brown)">Refrigerated Cold Van</div>
+            <div style="font-size:13px;color:var(--text-muted);margin:4px 0 12px">Reg: MH-08-C-9821 · Cap: 1.8 Ton (Temp: 4°C)</div>
+            <div style="font-size:12px;color:var(--green);font-weight:700;margin-bottom:8px">● Active: Ratnagiri Mango Line</div>
+            <div style="font-size:13px;color:var(--text-secondary)">Driver: Dilip Shinde (+91 98211 99887)</div>
+          </div>
+          <div class="widget" style="padding:18px;">
+            <div style="font-size:28px;margin-bottom:8px">🚛</div>
+            <div style="font-size:16px;font-weight:700;color:var(--brown)">Eicher Pro 2049 (Heavy Duty)</div>
+            <div style="font-size:13px;color:var(--text-muted);margin:4px 0 12px">Reg: MH-31-TR-5501 · Cap: 4.5 Ton</div>
+            <div style="font-size:12px;color:#0284c7;font-weight:700;margin-bottom:8px">● Available at Nagpur Hub</div>
+            <div style="font-size:13px;color:var(--text-secondary)">Driver: Manoj Tiwari (+91 97654 33221)</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- LIVE GPS -->
+      <div class="dash-panel" id="panel-tracking">
+        <div class="dash-greeting">
+          <div class="dg-text"><h2>Live GPS & Telematics</h2><p>Real-time vehicle location and temperature telemetry for perishable produce.</p></div>
+        </div>
+
+        <div class="widget" style="padding:24px;text-align:center;">
+          <div style="font-size:48px;margin-bottom:12px">🗺️📡</div>
+          <h3 style="font-size:18px;color:var(--brown);margin-bottom:8px">Live Tracking Simulation</h3>
+          <p style="font-size:14px;color:var(--text-muted);max-width:500px;margin:0 auto 20px">All 14 active vehicles are reporting healthy telematics with average cold chain variance under ±0.5°C.</p>
+          <a href="order-tracking.html" class="btn-primary-sm">Open Customer Tracking View →</a>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <script src="app.js"></script>
+  <script>
+    // Tab switcher
+    document.querySelectorAll('.dash-nav-item').forEach(item => {
+      item.addEventListener('click', () => {
+        document.querySelectorAll('.dash-nav-item').forEach(i => i.classList.remove('active'));
+        document.querySelectorAll('.dash-panel').forEach(p => p.classList.remove('active'));
+        item.classList.add('active');
+        const panel = document.getElementById('panel-' + item.dataset.panel);
+        if (panel) panel.classList.add('active');
+      });
+    });
+
+    function switchPanel(panelId) {
+      const item = document.querySelector(`[data-panel="${panelId}"]`);
+      if (item) item.click();
+    }
+
+    // Set user info
+    const user = getUser();
+    if (user) {
+      if (document.getElementById('logisticsSidebarName')) document.getElementById('logisticsSidebarName').textContent = user.name;
+      if (document.getElementById('logisticsHeading')) document.getElementById('logisticsHeading').textContent = user.name;
+    }
+  </script>
+</body>
+</html>
