@@ -295,7 +295,15 @@ const HL_TRANSLATIONS = {
 };
 
 function getCurrentLanguage() {
-  return localStorage.getItem(HL_LANG) || 'en';
+  const stored = localStorage.getItem(HL_LANG);
+  if (stored) return stored;
+  const match = document.cookie.match(/googtrans=\/[^/]+\/([^;]+)/);
+  if (match && match[1]) {
+    const code = match[1].toLowerCase();
+    localStorage.setItem(HL_LANG, code);
+    return code;
+  }
+  return 'en';
 }
 
 function getTranslation(text, code) {
@@ -387,18 +395,17 @@ function applyNativeTranslation(code) {
 
 function triggerGoogleTranslateCombo(code) {
   try {
-    const host = window.location.hostname;
-    document.cookie = `googtrans=/en/${code}; path=/;`;
-    if (host) {
-      document.cookie = `googtrans=/en/${code}; domain=${host}; path=/;`;
-      document.cookie = `googtrans=/en/${code}; domain=.${host}; path=/;`;
-    }
     const select = document.querySelector('.goog-te-combo');
     if (select) {
-      select.value = code;
-      select.dispatchEvent(new Event('change'));
+      const val = code === 'en' ? '' : code;
+      if (select.value !== val) {
+        select.value = val;
+        select.dispatchEvent(new Event('change', { bubbles: true }));
+      }
+      return true;
     }
   } catch(e) {}
+  return false;
 }
 
 function initGoogleTranslate() {
@@ -409,7 +416,7 @@ function initGoogleTranslate() {
   if (!gtDiv) {
     gtDiv = document.createElement('div');
     gtDiv.id = 'google_translate_element';
-    gtDiv.style.display = 'none';
+    gtDiv.style.cssText = 'display:none!important;visibility:hidden!important;height:0!important;width:0!important;position:absolute!important;top:-9999px!important;left:-9999px!important;pointer-events:none!important;';
     document.body.appendChild(gtDiv);
   }
 
@@ -422,14 +429,29 @@ function initGoogleTranslate() {
       }, 'google_translate_element');
 
       const current = getCurrentLanguage();
-      if (current !== 'en') {
-        setTimeout(() => triggerGoogleTranslateCombo(current), 600);
+      if (current && current !== 'en') {
+        setTimeout(() => triggerGoogleTranslateCombo(current), 400);
       }
-    } catch (e) {}
+    } catch (e) {
+      console.warn('Google Translate initialization:', e);
+    }
   };
+
+  // Prevent Google Translate from altering body top or position
+  const resetBodyPosition = () => {
+    if (document.body.style.top && document.body.style.top !== '0px') {
+      document.body.style.top = '0px';
+    }
+    if (document.body.style.position && document.body.style.position !== 'static') {
+      document.body.style.position = 'static';
+    }
+  };
+  const bodyObserver = new MutationObserver(resetBodyPosition);
+  bodyObserver.observe(document.body, { attributes: true, attributeFilter: ['style', 'class'] });
 
   if (location.protocol === 'http:' || location.protocol === 'https:') {
     const s = document.createElement('script');
+    s.id = 'google-translate-script';
     s.src = 'https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';
     s.async = true;
     document.head.appendChild(s);
@@ -443,7 +465,7 @@ function getLanguageSwitcherHtml() {
   const optionsHtml = SUPPORTED_LANGUAGES.map(l => {
     const isActive = l.code === currentLangCode ? 'active' : '';
     return `
-      <button type="button" class="lang-option ${isActive}" data-lang="${l.code}" onclick="setAppLanguage('${l.code}')">
+      <button type="button" class="lang-option ${isActive}" data-lang="${l.code}" onclick="changeLanguage('${l.code}')">
         <span class="lang-opt-flag">${l.flag}</span>
         <span class="lang-opt-text">
           <span class="lang-opt-native">${l.native}</span>
@@ -494,28 +516,78 @@ function attachLanguageSwitcherListeners() {
   });
 }
 
-function setAppLanguage(code) {
-  localStorage.setItem(HL_LANG, code);
-  buildNavbarRight();
-  applyNativeTranslation(code);
-  triggerGoogleTranslateCombo(code);
+function changeLanguage(langCode, showFeedback = true) {
+  if (!langCode) return;
+  const target = langCode.trim();
 
-  const langObj = SUPPORTED_LANGUAGES.find(l => l.code === code) || { native: code };
-  const toastMap = {
-    en: 'Language set to English',
-    hi: 'भाषा बदलकर हिन्दी कर दी गई',
-    gu: 'ભાષા બદલીને ગુજરાતી કરવામાં આવી',
-    mr: 'भाषा मराठी मध्ये बदलली',
-    pa: 'ਭਾਸ਼ਾ ਪੰਜਾਬੀ ਵਿੱਚ ਬਦਲੀ ਗਈ',
-    bn: 'ভাষা বাংলায় পরিবর্তিত হয়েছে',
-    ta: 'மொழி தமிழுக்கு மாற்றப்பட்டது',
-    te: 'భాష తెలుగులోకి మార్చబడింది'
-  };
-  showToast(toastMap[code] || `Language set to ${langObj.native}`, 'success');
+  // 1. Store in localStorage for application state
+  localStorage.setItem(HL_LANG, target);
+
+  // 2. Set googtrans cookie across root path, hostname and root domain
+  const host = window.location.hostname;
+  if (target === 'en') {
+    document.cookie = 'googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+    document.cookie = 'googtrans=/en/en; path=/;';
+    if (host) {
+      document.cookie = `googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; domain=${host}; path=/;`;
+      document.cookie = `googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; domain=.${host}; path=/;`;
+      document.cookie = `googtrans=/en/en; domain=${host}; path=/;`;
+      document.cookie = `googtrans=/en/en; domain=.${host}; path=/;`;
+      if (host.includes('.')) {
+        const rootDomain = host.split('.').slice(-2).join('.');
+        document.cookie = `googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; domain=.${rootDomain}; path=/;`;
+        document.cookie = `googtrans=/en/en; domain=.${rootDomain}; path=/;`;
+      }
+    }
+  } else {
+    document.cookie = `googtrans=/en/${target}; path=/;`;
+    if (host) {
+      document.cookie = `googtrans=/en/${target}; domain=${host}; path=/;`;
+      document.cookie = `googtrans=/en/${target}; domain=.${host}; path=/;`;
+      if (host.includes('.')) {
+        const rootDomain = host.split('.').slice(-2).join('.');
+        document.cookie = `googtrans=/en/${target}; domain=.${rootDomain}; path=/;`;
+      }
+    }
+  }
+
+  // 3. Trigger .goog-te-combo if present in DOM, retry if initializing
+  if (!triggerGoogleTranslateCombo(target)) {
+    let attempts = 0;
+    const interval = setInterval(() => {
+      attempts++;
+      if (triggerGoogleTranslateCombo(target) || attempts >= 25) {
+        clearInterval(interval);
+      }
+    }, 150);
+  }
+
+  // 4. Instant UI dictionary translation for headings & components
+  applyNativeTranslation(target);
+
+  // 5. Update top header navbar language indicator
+  buildNavbarRight();
+
+  // 6. User feedback toast
+  if (showFeedback) {
+    const langObj = SUPPORTED_LANGUAGES.find(l => l.code === target) || { native: target };
+    const toastMap = {
+      en: 'Language set to English',
+      hi: 'भाषा बदलकर हिन्दी कर दी गई',
+      gu: 'ભાષા બદલીને ગુજરાતી કરવામાં આવી',
+      mr: 'भाषा मराठी मध्ये बदलली',
+      pa: 'ਭਾਸ਼ਾ ਪੰਜਾਬੀ ਵਿੱਚ ਬਦਲੀ ਗਈ',
+      bn: 'ভাষা বাংলায় পরিবর্তিত হয়েছে',
+      ta: 'மொழி தமிழுக்கு மாற்றப்பட்டது',
+      te: 'భాష తెలుగులోకి మార్చబడింది'
+    };
+    showToast(toastMap[target] || `Language set to ${langObj.native}`, 'success');
+  }
 }
 
-window.setAppLanguage = setAppLanguage;
-window.changeLanguage = setAppLanguage;
+const setAppLanguage = changeLanguage;
+window.changeLanguage = changeLanguage;
+window.setAppLanguage = changeLanguage;
 window.getCurrentLanguage = getCurrentLanguage;
 
 // Global dropdown dismiss listeners
@@ -808,7 +880,7 @@ function initNavigationSystem() {
       <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: var(--text-secondary); margin-bottom: 8px;">🌐 Language / भाषा</div>
       <div style="display: flex; flex-wrap: wrap; gap: 6px;">
         ${SUPPORTED_LANGUAGES.map(l => `
-          <button type="button" class="btn-outline-sm" style="padding: 4px 8px; font-size: 11.5px; border-radius: 4px; ${l.code === cur ? 'background: var(--green); color: #fff; border-color: var(--green);' : ''}" onclick="setAppLanguage('${l.code}')">
+          <button type="button" class="btn-outline-sm" style="padding: 4px 8px; font-size: 11.5px; border-radius: 4px; ${l.code === cur ? 'background: var(--green); color: #fff; border-color: var(--green);' : ''}" onclick="changeLanguage('${l.code}')">
             ${l.flag} ${l.native}
           </button>
         `).join('')}
