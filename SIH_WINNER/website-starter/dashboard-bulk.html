@@ -23,11 +23,11 @@
 
   <nav class="navbar" id="navbar">
     <div class="nav-container">
-      <a href="index.html" class="nav-logo"><span class="logo-leaf">⬟</span> <span data-i18n="nav.brand">HARVESTLINK</span></a>
+      <a href="index.html" class="nav-logo"><span class="logo-leaf">⬟</span> HARVESTLINK</a>
       <div class="nav-actions" style="margin-left:auto">
         <span style="font-size:13px;color:var(--text-muted)" id="bulkNameLabel">📦 Bulk Buyer</span>
-        <a href="index.html" class="btn-outline-sm" data-i18n="nav.home">Back to Site</a>
-        <a href="#" onclick="logout()" class="btn-outline-sm" data-i18n="nav.logout">Logout</a>
+        <a href="index.html" class="btn-outline-sm">Back to Site</a>
+        <a href="#" onclick="logout()" class="btn-outline-sm">Logout</a>
       </div>
     </div>
   </nav>
@@ -37,14 +37,14 @@
       <div class="dash-profile">
         <div class="dp-avatar">📦</div>
         <div class="dp-name" id="bulkSidebarName">Green Kitchen</div>
-        <div class="dp-badge" style="color:var(--wheat)" data-i18n="auth.role_buyer_title">Bulk Buyer</div>
+        <div class="dp-badge" style="color:var(--wheat)">Bulk Buyer</div>
       </div>
-      <div class="dash-nav-item active" data-panel="overview"><span class="dni-icon">📊</span> <span data-i18n="dash.overview">Overview</span></div>
-      <div class="dash-nav-item" data-panel="suppliers"><span class="dni-icon">🌾</span> <span data-i18n="farmers.badge">Find Suppliers</span></div>
-      <div class="dash-nav-item" data-panel="requests"><span class="dni-icon">📋</span> <span data-i18n="business.form_title">Bulk Requests</span></div>
-      <div class="dash-nav-item" data-panel="orders"><span class="dni-icon">🛒</span> <span data-i18n="dash.orders">Orders</span></div>
-      <div class="dash-nav-item" data-panel="saved"><span class="dni-icon">❤️</span> <span data-i18n="farmers.title">Saved Suppliers</span></div>
-      <div class="dash-nav-item" data-panel="delivery"><span class="dni-icon">🚛</span> <span data-i18n="dash.logistics">Delivery</span></div>
+      <div class="dash-nav-item active" data-panel="overview"><span class="dni-icon">📊</span> Overview</div>
+      <div class="dash-nav-item" data-panel="suppliers"><span class="dni-icon">🌾</span> Find Suppliers</div>
+      <div class="dash-nav-item" data-panel="requests"><span class="dni-icon">📋</span> Bulk Requests</div>
+      <div class="dash-nav-item" data-panel="orders"><span class="dni-icon">🛒</span> Orders</div>
+      <div class="dash-nav-item" data-panel="saved"><span class="dni-icon">❤️</span> Saved Suppliers</div>
+      <div class="dash-nav-item" data-panel="delivery"><span class="dni-icon">🚛</span> Delivery</div>
     </aside>
 
     <main class="dash-main">
@@ -180,13 +180,19 @@
     </main>
   </div>
 
-  <script src="translations/en.js"></script>
-  <script src="translations/hi.js"></script>
-  <script src="translations/gu.js"></script>
-  <script src="translations/i18n.js"></script>
-  <script src="api.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabase.js"></script>
+  <script src="js/i18n.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/products.js"></script>
+  <script src="js/cart.js"></script>
+  <script src="js/orders.js"></script>
   <script src="app.js"></script>
   <script>
+    if (window.HarvestLinkAuth) {
+      window.HarvestLinkAuth.requireAuth(['bulk_buyer', 'admin', 'farmer', 'fpo']);
+    }
+
     async function loadBulkDashboard() {
       const user = getUser();
       if (user) {
@@ -194,21 +200,6 @@
         if (lbl) lbl.textContent = '📦 ' + user.name;
         document.getElementById('bulkSidebarName').textContent = user.name;
         document.getElementById('bulkHeading').textContent = user.name;
-      }
-
-      try {
-        const data = await api.getBulkDashboard();
-        if (data && data.stats) {
-          const statVals = document.querySelectorAll('.dash-stats .sc-value');
-          if (statVals.length >= 4) {
-            statVals[0].textContent = data.stats.active_requests;
-            statVals[1].textContent = data.stats.pending_orders;
-            statVals[2].textContent = data.stats.saved_suppliers;
-            statVals[3].textContent = data.stats.upcoming_deliveries;
-          }
-        }
-      } catch (e) {
-        console.warn('Backend bulk dashboard note:', e.message);
       }
     }
 

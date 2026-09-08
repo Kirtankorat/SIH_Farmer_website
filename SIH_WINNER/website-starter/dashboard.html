@@ -477,11 +477,11 @@
   <!-- NAVBAR -->
   <nav class="navbar" id="navbar">
     <div class="nav-container">
-      <a href="index.html" class="nav-logo"><span class="logo-leaf">⬟</span> <span data-i18n="nav.brand">HARVESTLINK</span></a>
+      <a href="index.html" class="nav-logo"><span class="logo-leaf">⬟</span> HARVESTLINK</a>
       <div class="nav-actions" style="margin-left: auto;">
         <span style="font-size:13px; color: var(--text-muted);" id="farmerNameLabel">🌾 Farmer</span>
-        <a href="index.html" class="btn-outline-sm" data-i18n="nav.home">Back to Site</a>
-        <a href="#" onclick="logout()" class="btn-outline-sm" data-i18n="nav.logout">Logout</a>
+        <a href="index.html" class="btn-outline-sm">Back to Site</a>
+        <a href="#" onclick="logout()" class="btn-outline-sm">Logout</a>
       </div>
     </div>
   </nav>
@@ -492,26 +492,26 @@
       <div class="dash-profile">
         <div class="dp-avatar">👨‍🌾</div>
         <div class="dp-name">Ramesh Patel</div>
-        <div class="dp-badge" data-i18n="farmers.verified">✓ Verified Farmer</div>
+        <div class="dp-badge">✓ Verified Farmer</div>
       </div>
 
       <div class="dash-nav-item active" data-panel="overview">
-        <span class="dni-icon">📊</span> <span data-i18n="dash.overview">Overview</span>
+        <span class="dni-icon">📊</span> Overview
       </div>
       <div class="dash-nav-item" data-panel="products">
-        <span class="dni-icon">🌾</span> <span data-i18n="dash.my_products">Products</span>
+        <span class="dni-icon">🌾</span> Products
       </div>
       <div class="dash-nav-item" data-panel="orders">
-        <span class="dni-icon">📋</span> <span data-i18n="dash.orders">Orders</span>
+        <span class="dni-icon">📋</span> Orders
       </div>
       <div class="dash-nav-item" data-panel="sales">
-        <span class="dni-icon">💰</span> <span data-i18n="dash.revenue">Sales</span>
+        <span class="dni-icon">💰</span> Sales
       </div>
       <div class="dash-nav-item" data-panel="demand">
-        <span class="dni-icon">📈</span> <span data-i18n="dash.demand_insights">Demand Insights</span>
+        <span class="dni-icon">📈</span> Demand Insights
       </div>
       <div class="dash-nav-item" data-panel="logistics">
-        <span class="dni-icon">🚛</span> <span data-i18n="dash.logistics">Logistics</span>
+        <span class="dni-icon">🚛</span> Logistics
       </div>
     </aside>
 
@@ -975,85 +975,33 @@
     </main>
   </div>
 
-  <script src="translations/en.js"></script>
-  <script src="translations/hi.js"></script>
-  <script src="translations/gu.js"></script>
-  <script src="translations/i18n.js"></script>
-  <script src="api.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabase.js"></script>
+  <script src="js/i18n.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/products.js"></script>
+  <script src="js/cart.js"></script>
+  <script src="js/orders.js"></script>
+  <script src="js/dashboard.js"></script>
   <script src="app.js"></script>
   <script src="script.js"></script>
   <script>
-    async function loadFarmerDashboard() {
-      const user = getUser();
-      if (user) {
-        const lbl = document.getElementById('farmerNameLabel');
-        if (lbl) lbl.textContent = '🌾 ' + user.name;
-        const dpName = document.querySelector('.dp-name');
-        if (dpName) dpName.textContent = user.name;
-        const dgHead = document.querySelector('.dg-text h2');
-        if (dgHead) dgHead.textContent = `Good morning, ${user.name.split(' ')[0]}. 🌤`;
-      }
-
-      try {
-        const data = await api.getFarmerDashboard();
-        if (data) {
-          // Update stats
-          const statVals = document.querySelectorAll('.dash-stats .sc-value');
-          if (statVals.length >= 4 && data.stats) {
-            statVals[0].textContent = data.stats.today_orders;
-            statVals[1].textContent = data.stats.sales_this_month;
-            statVals[2].textContent = data.stats.available_stock;
-            statVals[3].textContent = data.stats.demand_alerts;
-          }
-
-          // Populate products list in panel-products
-          if (data.products && data.products.length > 0) {
-            const prodList = document.querySelector('#panel-products .widget-body');
-            if (prodList) {
-              prodList.innerHTML = data.products.map(p => `
-                <div class="product-row">
-                  <div><div class="pr-name">${p.name}</div><div class="pr-meta">${p.meta}</div></div>
-                  <div style="display:flex; gap:16px; align-items:center">
-                    <span class="pr-price">${p.price}</span>
-                    <span style="font-size:13px; color: var(--text-muted);">${p.stock}</span>
-                    <span class="pr-stock avail-yes" style="background: var(--green-muted); color: var(--green); padding:3px 8px; border-radius:100px; font-size:11px; font-weight:700;">Active</span>
-                    <button class="btn-sm-outline" style="margin-top:0;" onclick="showToast('Edit listing — available in portal')">Edit</button>
-                  </div>
-                </div>
-              `).join('');
-            }
-          }
-        }
-      } catch (err) {
-        console.warn('Backend dashboard note:', err.message);
-      }
+    // Page guard: Farmer, FPO, Agri-entrepreneur, Admin
+    if (window.HarvestLinkAuth) {
+      window.HarvestLinkAuth.requireAuth(['farmer', 'fpo', 'cooperative', 'agri_entrepreneur', 'admin']);
     }
 
-    async function promptAddProduct() {
-      const name = prompt("Enter product name (e.g. Organic Cucumber):");
-      if (!name) return;
-      const price = parseFloat(prompt("Enter price per kg (₹):", "35")) || 35;
-      const category = prompt("Enter category (vegetables, fruits, grains, pulses, spices, dairy):", "vegetables") || "vegetables";
-      const practice = prompt("Enter practice (organic, natural, conventional):", "organic") || "organic";
-
-      try {
-        await api.createProduct({
-          name: name,
-          price: price,
-          category: category,
-          farming_practice: practice,
-          stock_quantity: 200,
-          location: "Gujarat"
-        });
-        showToast(`Product "${name}" created successfully!`);
-        setTimeout(() => loadFarmerDashboard(), 500);
-      } catch (e) {
-        showToast(`Created listing: ${name}`);
+    async function loadFarmerDashboard() {
+      if (window.HarvestLinkDashboard) {
+        await window.HarvestLinkDashboard.initFarmerDashboard();
       }
     }
 
     // Attach Add Product button handler
-    document.querySelector('#panel-products button.btn-primary-sm')?.addEventListener('click', promptAddProduct);
+    document.querySelector('#panel-products button.btn-primary-sm')?.addEventListener('click', () => {
+      if (window.HarvestLinkDashboard) window.HarvestLinkDashboard.promptAddProduct();
+      else promptAddProduct();
+    });
 
     function switchPanel(panelId) {
       document.querySelectorAll('.dash-panel').forEach(p => p.classList.remove('active'));
@@ -1066,6 +1014,7 @@
       item.addEventListener('click', () => switchPanel(item.dataset.panel));
     });
 
+    window.addEventListener('hl-language-changed', loadFarmerDashboard);
     document.addEventListener('DOMContentLoaded', loadFarmerDashboard);
   </script>
 </body>

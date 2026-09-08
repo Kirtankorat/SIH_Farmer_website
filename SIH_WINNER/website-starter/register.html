@@ -256,35 +256,35 @@
   <!-- NAVBAR -->
   <nav class="navbar" id="navbar">
     <div class="nav-container">
-      <a href="index.html" class="nav-logo"><span class="logo-leaf">⬟</span> <span data-i18n="nav.brand">HARVESTLINK</span></a>
+      <a href="index.html" class="nav-logo"><span class="logo-leaf">⬟</span> HARVESTLINK</a>
       <ul class="nav-links" id="navLinks">
-        <li><a href="index.html" class="nav-link" data-i18n="nav.home">Home</a></li>
-        <li><a href="marketplace.html" class="nav-link" data-i18n="nav.marketplace">Marketplace</a></li>
-        <li><a href="farmers.html" class="nav-link" data-i18n="nav.farmers">Farmers</a></li>
-        <li><a href="businesses.html" class="nav-link" data-i18n="nav.businesses">Businesses</a></li>
-        <li><a href="index.html#how-it-works" class="nav-link" data-i18n="nav.how_it_works">How It Works</a></li>
-        <li><a href="index.html#ai-logistics" class="nav-link" data-i18n="nav.ai_logistics">AI & Logistics</a></li>
-        <li><a href="about.html" class="nav-link" data-i18n="nav.about">About</a></li>
-        <li><a href="faq.html" class="nav-link" data-i18n="nav.faq">FAQ</a></li>
+        <li><a href="index.html" class="nav-link">Home</a></li>
+        <li><a href="marketplace.html" class="nav-link">Marketplace</a></li>
+        <li><a href="farmers.html" class="nav-link">Farmers</a></li>
+        <li><a href="businesses.html" class="nav-link">Businesses</a></li>
+        <li><a href="index.html#how-it-works" class="nav-link">How It Works</a></li>
+        <li><a href="index.html#ai-logistics" class="nav-link">AI & Logistics</a></li>
+        <li><a href="about.html" class="nav-link">About</a></li>
+        <li><a href="faq.html" class="nav-link">FAQ</a></li>
       </ul>
       <div class="nav-actions nav-actions-inject"></div>
       <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
     </div>
     <div class="mobile-menu" id="mobileMenu">
       <ul>
-        <li><a href="index.html" data-i18n="nav.home">Home</a></li>
-        <li><a href="marketplace.html" data-i18n="nav.marketplace">Marketplace</a></li>
-        <li><a href="farmers.html" data-i18n="nav.farmers">Farmers</a></li>
-        <li><a href="businesses.html" data-i18n="nav.businesses">Businesses</a></li>
-        <li><a href="index.html#how-it-works" data-i18n="nav.how_it_works">How It Works</a></li>
-        <li><a href="index.html#ai-logistics" data-i18n="nav.ai_logistics">AI & Logistics</a></li>
-        <li><a href="about.html" data-i18n="nav.about">About</a></li>
-        <li><a href="faq.html" data-i18n="nav.faq">FAQ</a></li>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="marketplace.html">Marketplace</a></li>
+        <li><a href="farmers.html">Farmers</a></li>
+        <li><a href="businesses.html">Businesses</a></li>
+        <li><a href="index.html#how-it-works">How It Works</a></li>
+        <li><a href="index.html#ai-logistics">AI & Logistics</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="faq.html">FAQ</a></li>
       </ul>
       <div class="mobile-actions">
-        <a href="login.html" class="btn-outline-full" data-i18n="nav.login">Login</a>
-        <a href="role-select.html" class="btn-primary-full" data-i18n="nav.join_free">Join Free</a>
-        <a href="marketplace.html" class="btn-green-full" data-i18n="nav.shop_produce">Shop Produce</a>
+        <a href="login.html" class="btn-outline-full">Login</a>
+        <a href="role-select.html" class="btn-primary-full">Join Free</a>
+        <a href="marketplace.html" class="btn-green-full">Shop Produce</a>
       </div>
     </div>
   </nav>
@@ -567,29 +567,23 @@
       try {
         const payload = {
           email,
-          password: 'password123',
+          password: 'Farmer@123',
           full_name: name,
           phone,
           role,
           farm_name: `${name}'s Farm`,
           village,
-          district,
           state,
           farm_size_acres: size,
           farming_practice: selectedPractice || 'organic',
-          primary_crops: products,
-          monthly_produce_kg: monthly,
-          fpo_name: type.includes('FPO') ? name : undefined
+          primary_crops: products
         };
 
-        const res = await api.register(payload);
-        const userObj = res.user || { name, email, role };
-        setUser({ name: userObj.name || name, email: userObj.email || email, role: userObj.role || role });
-        setRole(userObj.role || role);
+        if (window.HarvestLinkAuth) {
+          await window.HarvestLinkAuth.signUp(payload);
+        }
       } catch (err) {
         console.warn('Registration note:', err.message);
-        setUser({ name, email, role });
-        setRole(role);
       }
 
       document.querySelectorAll('.step-form').forEach(f => f.classList.remove('active'));
@@ -597,11 +591,11 @@
       document.getElementById('formProgress').style.opacity = '0.4';
     }
   </script>
-  <script src="translations/en.js"></script>
-  <script src="translations/hi.js"></script>
-  <script src="translations/gu.js"></script>
-  <script src="translations/i18n.js"></script>
-  <script src="api.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabase.js"></script>
+  <script src="js/i18n.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/cart.js"></script>
   <script src="app.js"></script>
 </body>
 

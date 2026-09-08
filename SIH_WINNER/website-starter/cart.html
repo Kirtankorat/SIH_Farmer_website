@@ -15,35 +15,35 @@
 
   <nav class="navbar" id="navbar">
     <div class="nav-container">
-      <a href="index.html" class="nav-logo"><span class="logo-leaf">⬟</span> <span data-i18n="nav.brand">HARVESTLINK</span></a>
+      <a href="index.html" class="nav-logo"><span class="logo-leaf">⬟</span> HARVESTLINK</a>
       <ul class="nav-links" id="navLinks">
-        <li><a href="index.html" class="nav-link" data-i18n="nav.home">Home</a></li>
-        <li><a href="marketplace.html" class="nav-link" data-i18n="nav.marketplace">Marketplace</a></li>
-        <li><a href="farmers.html" class="nav-link" data-i18n="nav.farmers">Farmers</a></li>
-        <li><a href="businesses.html" class="nav-link" data-i18n="nav.businesses">Businesses</a></li>
-        <li><a href="index.html#how-it-works" class="nav-link" data-i18n="nav.how_it_works">How It Works</a></li>
-        <li><a href="index.html#ai-logistics" class="nav-link" data-i18n="nav.ai_logistics">AI & Logistics</a></li>
-        <li><a href="about.html" class="nav-link" data-i18n="nav.about">About</a></li>
-        <li><a href="faq.html" class="nav-link" data-i18n="nav.faq">FAQ</a></li>
+        <li><a href="index.html" class="nav-link">Home</a></li>
+        <li><a href="marketplace.html" class="nav-link">Marketplace</a></li>
+        <li><a href="farmers.html" class="nav-link">Farmers</a></li>
+        <li><a href="businesses.html" class="nav-link">Businesses</a></li>
+        <li><a href="index.html#how-it-works" class="nav-link">How It Works</a></li>
+        <li><a href="index.html#ai-logistics" class="nav-link">AI & Logistics</a></li>
+        <li><a href="about.html" class="nav-link">About</a></li>
+        <li><a href="faq.html" class="nav-link">FAQ</a></li>
       </ul>
       <div class="nav-actions nav-actions-inject"></div>
-      <button class="hamburger" id="hamburger" aria-label="Toggle menu" data-i18n-title="nav.menu"><span></span><span></span><span></span></button>
+      <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
     </div>
     <div class="mobile-menu" id="mobileMenu">
       <ul>
-        <li><a href="index.html" data-i18n="nav.home">Home</a></li>
-        <li><a href="marketplace.html" data-i18n="nav.marketplace">Marketplace</a></li>
-        <li><a href="farmers.html" data-i18n="nav.farmers">Farmers</a></li>
-        <li><a href="businesses.html" data-i18n="nav.businesses">Businesses</a></li>
-        <li><a href="index.html#how-it-works" data-i18n="nav.how_it_works">How It Works</a></li>
-        <li><a href="index.html#ai-logistics" data-i18n="nav.ai_logistics">AI & Logistics</a></li>
-        <li><a href="about.html" data-i18n="nav.about">About</a></li>
-        <li><a href="faq.html" data-i18n="nav.faq">FAQ</a></li>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="marketplace.html">Marketplace</a></li>
+        <li><a href="farmers.html">Farmers</a></li>
+        <li><a href="businesses.html">Businesses</a></li>
+        <li><a href="index.html#how-it-works">How It Works</a></li>
+        <li><a href="index.html#ai-logistics">AI & Logistics</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="faq.html">FAQ</a></li>
       </ul>
       <div class="mobile-actions">
-        <a href="login.html" class="btn-outline-full" data-i18n="nav.login">Login</a>
-        <a href="role-select.html" class="btn-primary-full" data-i18n="nav.join_free">Join Free</a>
-        <a href="marketplace.html" class="btn-green-full" data-i18n="nav.shop_produce">Shop Produce</a>
+        <a href="login.html" class="btn-outline-full">Login</a>
+        <a href="role-select.html" class="btn-primary-full">Join Free</a>
+        <a href="marketplace.html" class="btn-green-full">Shop Produce</a>
       </div>
     </div>
   </nav>
@@ -52,7 +52,7 @@
     <div class="container">
 
       <div class="cart-header">
-        <h1 data-i18n="cart.title">Your Cart</h1>
+        <h1>Your Cart</h1>
         <span class="cart-item-count" id="cartItemCount"></span>
       </div>
 
@@ -63,58 +63,66 @@
     </div>
   </div>
 
-  <script src="translations/en.js"></script>
-  <script src="translations/hi.js"></script>
-  <script src="translations/gu.js"></script>
-  <script src="translations/i18n.js"></script>
-  <script src="api.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabase.js"></script>
+  <script src="js/i18n.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/products.js"></script>
+  <script src="js/cart.js"></script>
+  <script src="js/orders.js"></script>
   <script src="app.js"></script>
   <script>
-    function renderCart() {
-      const cart = getCart();
+    async function renderCart() {
+      let cart = [];
+      if (window.HarvestLinkCart) {
+        cart = await window.HarvestLinkCart.fetchCart();
+      } else {
+        cart = getCart();
+      }
+
       const content = document.getElementById('cartContent');
       const countEl = document.getElementById('cartItemCount');
 
-      countEl.textContent = cart.length > 0 ? `${cart.reduce((s,i) => s+i.qty, 0)} items` : '';
-
-      const tr = (k, def) => (typeof window.t === 'function') ? window.t(k, def) : def;
+      countEl.textContent = cart.length > 0 ? `${cart.reduce((s,i) => s + (i.qty || 1), 0)} items` : '';
 
       if (cart.length === 0) {
         content.innerHTML = `
           <div class="cart-empty">
             <div class="ce-icon">🛒</div>
-            <div class="ce-title" data-i18n="cart.empty_title">${tr('cart.empty_title', 'Your cart is empty.')}</div>
-            <div class="ce-desc" data-i18n="cart.empty_sub">${tr('cart.empty_sub', 'Discover fresh produce directly from farmers. Add items to get started.')}</div>
-            <a href="marketplace.html" class="btn-primary-lg" data-i18n="cart.shop_btn">${tr('cart.shop_btn', 'Shop Produce →')}</a>
+            <div class="ce-title">Your cart is empty.</div>
+            <div class="ce-desc">Discover fresh produce directly from farmers.<br>Add your first item to get started.</div>
+            <a href="marketplace.html" class="btn-primary-lg">Shop Produce →</a>
           </div>
         `;
+        if (window.HarvestLinkI18n) window.HarvestLinkI18n.translateDOM(content);
         return;
       }
 
-      const DELIVERY = 40;
-      const subtotal = getCartTotal();
+      const subtotal = cart.reduce((sum, i) => sum + (parseFloat(i.priceNum || 0) * (i.qty || 1)), 0);
+      const DELIVERY = subtotal > 800 ? 0 : 40;
       const discount = subtotal > 500 ? 50 : 0;
-      const total = subtotal + DELIVERY - discount;
+      const total = Math.max(0, subtotal + DELIVERY - discount);
 
       const itemsHtml = cart.map(item => {
-        const lineTotal = (item.priceNum * item.qty).toFixed(0);
+        const lineTotal = ((item.priceNum || 0) * item.qty).toFixed(0);
         return `
           <div class="cart-item" id="cartRow_${item.id}">
             <div class="cart-item-img">${item.emoji || '🌾'}</div>
             <div>
               <div class="ci-name">${item.name}</div>
-              <div class="ci-farmer">${item.farmer || item.farmer_name || 'Farm Partner'}</div>
+              <div class="ci-farmer">${item.farmer || 'Farm Partner'}</div>
               <div class="ci-location">📍 ${item.location || 'Gujarat'}</div>
-              <div class="ci-price">${item.price} <span class="ci-unit">/ ${item.unit}</span></div>
+              <div class="ci-price">${item.price || '₹' + item.priceNum} <span class="ci-unit">/ ${item.unit || 'kg'}</span></div>
               <div class="ci-actions">
-                <button class="ci-remove" onclick="cartRemove(${item.id})" data-i18n="cart.item_remove">${tr('cart.item_remove', 'Remove')}</button>
+                <button class="ci-remove" onclick="cartRemove('${item.id}')">Remove</button>
+                <button class="ci-save" onclick="showToast('Saved for later', 'info')">Save for Later</button>
               </div>
             </div>
             <div class="cart-item-right">
               <div class="qty-control">
-                <button class="qty-btn" onclick="cartQty(${item.id}, -1)">−</button>
+                <button class="qty-btn" onclick="cartQty('${item.id}', -1)">−</button>
                 <span class="qty-display" id="qty_${item.id}">${item.qty}</span>
-                <button class="qty-btn" onclick="cartQty(${item.id}, 1)">+</button>
+                <button class="qty-btn" onclick="cartQty('${item.id}', 1)">+</button>
               </div>
               <div class="ci-subtotal" id="sub_${item.id}">₹${lineTotal}</div>
             </div>
@@ -127,57 +135,73 @@
           <div>
             <div class="cart-items" id="cartItemsList">${itemsHtml}</div>
             <div style="margin-top:20px;">
-              <a href="marketplace.html" style="font-size:14px;font-weight:700;color:var(--green);" data-i18n="cart.continue_shopping">${tr('cart.continue_shopping', '← Continue Shopping')}</a>
+              <a href="marketplace.html" style="font-size:14px;font-weight:700;color:var(--green);">← Continue Shopping</a>
             </div>
           </div>
 
           <div class="cart-summary">
-            <div class="cs-title" data-i18n="cart.order_summary">${tr('cart.order_summary', 'Order Summary')}</div>
-            <div class="cs-row"><span class="cs-label" data-i18n="cart.subtotal">${tr('cart.subtotal', 'Subtotal')}</span><span class="cs-value" id="sumSubtotal">₹${subtotal}</span></div>
-            <div class="cs-row"><span class="cs-label" data-i18n="cart.delivery_fee">${tr('cart.delivery_fee', 'Delivery')}</span><span class="cs-value">₹${DELIVERY}</span></div>
-            ${discount > 0 ? `<div class="cs-row"><span class="cs-label" style="color:var(--green)" data-i18n="cart.discount">${tr('cart.discount', 'Discount')}</span><span class="cs-value" style="color:var(--green)">−₹${discount}</span></div>` : ''}
+            <div class="cs-title">Order Summary</div>
+            <div class="cs-row"><span class="cs-label">Subtotal</span><span class="cs-value" id="sumSubtotal">₹${subtotal}</span></div>
+            <div class="cs-row"><span class="cs-label">Delivery</span><span class="cs-value">${DELIVERY === 0 ? 'FREE' : '₹' + DELIVERY}</span></div>
+            ${discount > 0 ? `<div class="cs-row"><span class="cs-label" style="color:var(--green)">Discount</span><span class="cs-value" style="color:var(--green)">−₹${discount}</span></div>` : ''}
             <div class="cs-total">
-              <span class="cs-total-label" data-i18n="cart.total">${tr('cart.total', 'Total')}</span>
+              <span class="cs-total-label">Total</span>
               <span class="cs-total-value" id="sumTotal">₹${total}</span>
             </div>
-            <button class="auth-btn-primary" id="btnCheckout" style="width:100%;font-size:15px" onclick="doCheckout()" data-i18n="cart.checkout_btn">${tr('cart.checkout_btn', 'Proceed to Checkout →')}</button>
-            <div style="text-align:center;margin-top:12px;font-size:12px;color:var(--text-muted)" data-i18n="cart.delivery_notice">${tr('cart.delivery_notice', 'Free delivery on orders above ₹800')}</div>
+            <button class="auth-btn-primary" id="btnCheckout" style="width:100%;font-size:15px" onclick="doCheckout()">Proceed to Checkout →</button>
+            <div style="text-align:center;margin-top:12px;font-size:12px;color:var(--text-muted)">Free delivery on orders above ₹800</div>
 
             <div style="margin-top:20px;padding-top:20px;border-top:1px solid var(--border)">
-              <div style="font-size:12px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px" data-i18n="cart.farmer_impact">${tr('cart.farmer_impact', 'Direct Farmer Benefit')}</div>
-              <p style="font-size:12px;color:var(--text-muted);line-height:1.5;margin-bottom:12px" data-i18n="cart.farmer_impact_desc">${tr('cart.farmer_impact_desc', '88% of your order value goes directly to the farmers who harvested your food.')}</p>
-              ${[...new Set(cart.map(i => i.farmer || i.farmer_name || 'Farm Partner'))].map(f => `<div style="font-size:13px;color:var(--text-secondary);padding:4px 0">✓ ${f}</div>`).join('')}
+              <div style="font-size:12px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px">Your Farmers</div>
+              ${[...new Set(cart.map(i => i.farmer || 'Farm Partner'))].map(f => `<div style="font-size:13px;color:var(--text-secondary);padding:4px 0">✓ ${f}</div>`).join('')}
             </div>
           </div>
         </div>
       `;
+      if (window.HarvestLinkI18n) window.HarvestLinkI18n.translateDOM(content);
     }
 
-    function cartRemove(id) {
-      removeFromCart(id);
-      renderCart();
+    async function cartRemove(id) {
+      if (window.HarvestLinkCart) {
+        await window.HarvestLinkCart.removeFromCart(id);
+      } else {
+        removeFromCart(id);
+      }
+      await renderCart();
     }
 
-    function cartQty(id, delta) {
-      updateCartQty(id, delta);
-      const cart = getCart();
-      const item = cart.find(i => i.id === id);
-      if (!item) { renderCart(); return; }
-      document.getElementById('qty_' + id).textContent = item.qty;
-      document.getElementById('sub_' + id).textContent = '₹' + (item.priceNum * item.qty);
-      const DELIVERY = 40;
-      const subtotal = getCartTotal();
-      const discount = subtotal > 500 ? 50 : 0;
-      const total = subtotal + DELIVERY - discount;
-      document.getElementById('sumSubtotal').textContent = '₹' + subtotal;
-      document.getElementById('sumTotal').textContent = '₹' + total;
+    async function cartQty(id, delta) {
+      if (window.HarvestLinkCart) {
+        await window.HarvestLinkCart.updateCartQty(id, delta);
+      } else {
+        updateCartQty(id, delta);
+      }
+      await renderCart();
     }
 
     async function doCheckout() {
-      const user = getUser();
-      const cart = getCart();
-      if (!cart.length) {
-        showToast((typeof window.t === 'function') ? window.t('cart.empty_title', 'Your cart is empty') : 'Your cart is empty');
+      const sb = window.getSupabase ? window.getSupabase() : null;
+      let session = null;
+      if (sb) {
+        try {
+          const res = await sb.auth.getSession();
+          session = res?.data?.session;
+        } catch (_) {}
+      }
+
+      if (!session || !session.user) {
+        if (typeof showToast === 'function') {
+          showToast('Please login to place your order.', 'info');
+        }
+        setTimeout(() => {
+          window.location.href = 'login.html?redirect=cart.html';
+        }, 1000);
+        return;
+      }
+
+      const cart = window.HarvestLinkCart ? window.HarvestLinkCart.getCart() : [];
+      if (!cart || !cart.length) {
+        if (typeof showToast === 'function') showToast('Your cart is empty', 'error');
         return;
       }
 
@@ -188,39 +212,34 @@
       }
 
       try {
-        const orderData = {
-          buyer_name: user?.name || 'Priya Sharma',
-          buyer_email: user?.email || 'priya@demo.in',
-          buyer_phone: user?.phone || '+91 98765 43210',
-          delivery_address: 'Flat 402, Green Meadows, Anand, Gujarat',
-          delivery_city: 'Anand',
-          delivery_state: 'Gujarat',
-          delivery_fee: 40.0,
-          discount: getCartTotal() > 500 ? 50.0 : 0.0,
-          items: cart.map(i => ({
-            product_id: i.id,
-            product_name: i.name,
-            emoji: i.emoji || '🌾',
-            price: i.priceNum || 30.0,
-            quantity: i.qty || 1,
-            unit: i.unit || 'kg',
-            seller_name: i.farmer || i.farmer_name || 'Shree Farms'
-          }))
-        };
+        const order = await window.HarvestLinkOrders.createOrder({
+          name: session.user.user_metadata?.full_name || 'Priya Sharma',
+          phone: session.user.user_metadata?.phone || '+91 98250 88990',
+          address: 'Flat 402, Green Meadows, Station Road',
+          city: 'Anand',
+          state: 'Gujarat'
+        });
 
-        const res = await api.createOrder(orderData);
-        clearCart();
-        const orderNum = res.order_number || 'HL1024';
-        window.location.href = `order-tracking.html?order=${orderNum}&new=1`;
+        if (typeof showToast === 'function') {
+          showToast('Order placed successfully!', 'success');
+        }
+
+        setTimeout(() => {
+          window.location.href = `order-tracking.html?order=${order.order_number}&new=1`;
+        }, 600);
       } catch (err) {
-        console.warn('Backend checkout note:', err.message);
-        clearCart();
-        window.location.href = 'order-tracking.html?new=1';
+        if (btn) {
+          btn.textContent = 'Proceed to Checkout →';
+          btn.disabled = false;
+        }
+        if (typeof showToast === 'function') {
+          showToast(err.message || 'Checkout failed. Please try again.', 'error');
+        }
       }
     }
 
-    document.addEventListener('languageChanged', renderCart);
-    renderCart();
+    window.addEventListener('hl-language-changed', renderCart);
+    document.addEventListener('DOMContentLoaded', renderCart);
   </script>
 </body>
 </html>

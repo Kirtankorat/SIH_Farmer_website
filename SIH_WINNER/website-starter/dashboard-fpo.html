@@ -25,11 +25,11 @@
 
   <nav class="navbar" id="navbar">
     <div class="nav-container">
-      <a href="index.html" class="nav-logo"><span class="logo-leaf">⬟</span> <span data-i18n="nav.brand">HARVESTLINK</span></a>
+      <a href="index.html" class="nav-logo"><span class="logo-leaf">⬟</span> HARVESTLINK</a>
       <div class="nav-actions" style="margin-left:auto">
         <span style="font-size:13px;color:var(--text-muted)" id="fpoNameLabel">🏢 FPO</span>
-        <a href="index.html" class="btn-outline-sm" data-i18n="nav.home">Back to Site</a>
-        <a href="#" onclick="logout()" class="btn-outline-sm" data-i18n="nav.logout">Logout</a>
+        <a href="index.html" class="btn-outline-sm">Back to Site</a>
+        <a href="#" onclick="logout()" class="btn-outline-sm">Logout</a>
       </div>
     </div>
   </nav>
@@ -40,16 +40,16 @@
       <div class="dash-profile">
         <div class="dp-avatar">🏢</div>
         <div class="dp-name" id="fpoSidebarName">Konkan FPO</div>
-        <div class="dp-badge" data-i18n="farmers.fpo_tag">✓ Verified FPO</div>
+        <div class="dp-badge">✓ Verified FPO</div>
       </div>
-      <div class="dash-nav-item active" data-panel="overview"><span class="dni-icon">📊</span> <span data-i18n="dash.overview">Overview</span></div>
-      <div class="dash-nav-item" data-panel="members"><span class="dni-icon">🌾</span> <span data-i18n="farmers.members">Member Farmers</span></div>
-      <div class="dash-nav-item" data-panel="products"><span class="dni-icon">📦</span> <span data-i18n="dash.my_products">Products</span></div>
-      <div class="dash-nav-item" data-panel="inventory"><span class="dni-icon">📋</span> <span data-i18n="dash.crops_listed">Inventory</span></div>
-      <div class="dash-nav-item" data-panel="orders"><span class="dni-icon">🛒</span> <span data-i18n="dash.orders">Orders</span></div>
-      <div class="dash-nav-item" data-panel="bulk"><span class="dni-icon">📦</span> <span data-i18n="business.title">Bulk Buyers</span></div>
-      <div class="dash-nav-item" data-panel="demand"><span class="dni-icon">📈</span> <span data-i18n="dash.demand_insights">Demand Insights</span></div>
-      <div class="dash-nav-item" data-panel="logistics"><span class="dni-icon">🚛</span> <span data-i18n="dash.logistics">Logistics</span></div>
+      <div class="dash-nav-item active" data-panel="overview"><span class="dni-icon">📊</span> Overview</div>
+      <div class="dash-nav-item" data-panel="members"><span class="dni-icon">🌾</span> Member Farmers</div>
+      <div class="dash-nav-item" data-panel="products"><span class="dni-icon">📦</span> Products</div>
+      <div class="dash-nav-item" data-panel="inventory"><span class="dni-icon">📋</span> Inventory</div>
+      <div class="dash-nav-item" data-panel="orders"><span class="dni-icon">🛒</span> Orders</div>
+      <div class="dash-nav-item" data-panel="bulk"><span class="dni-icon">📦</span> Bulk Buyers</div>
+      <div class="dash-nav-item" data-panel="demand"><span class="dni-icon">📈</span> Demand Insights</div>
+      <div class="dash-nav-item" data-panel="logistics"><span class="dni-icon">🚛</span> Logistics</div>
     </aside>
 
     <main class="dash-main">
@@ -176,13 +176,19 @@
     </main>
   </div>
 
-  <script src="translations/en.js"></script>
-  <script src="translations/hi.js"></script>
-  <script src="translations/gu.js"></script>
-  <script src="translations/i18n.js"></script>
-  <script src="api.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabase.js"></script>
+  <script src="js/i18n.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/products.js"></script>
+  <script src="js/cart.js"></script>
+  <script src="js/orders.js"></script>
   <script src="app.js"></script>
   <script>
+    if (window.HarvestLinkAuth) {
+      window.HarvestLinkAuth.requireAuth(['fpo', 'cooperative', 'admin']);
+    }
+
     async function loadFPODashboard() {
       const user = getUser();
       if (user) {
@@ -190,21 +196,6 @@
         if (lbl) lbl.textContent = '🏢 ' + user.name;
         document.getElementById('fpoSidebarName').textContent = user.name;
         document.getElementById('fpoHeading').textContent = user.name;
-      }
-
-      try {
-        const data = await api.getFPODashboard();
-        if (data && data.stats) {
-          const statVals = document.querySelectorAll('.dash-stats .sc-value');
-          if (statVals.length >= 4) {
-            statVals[0].textContent = data.stats.member_farmers;
-            statVals[1].textContent = data.stats.available_produce;
-            statVals[2].textContent = data.stats.active_orders;
-            statVals[3].textContent = data.stats.bulk_orders;
-          }
-        }
-      } catch (err) {
-        console.warn('Backend FPO dashboard note:', err.message);
       }
     }
 
@@ -219,6 +210,7 @@
       item.addEventListener('click', () => switchPanel(item.dataset.panel));
     });
 
+    window.addEventListener('hl-language-changed', loadFPODashboard);
     document.addEventListener('DOMContentLoaded', loadFPODashboard);
   </script>
 </body>
