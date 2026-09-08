@@ -1,5 +1,6 @@
 import logging
 import os
+import urllib.parse
 from typing import AsyncGenerator
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession, async_sessionmaker, AsyncEngine
 from sqlalchemy.orm import declarative_base
@@ -12,19 +13,41 @@ Base = declarative_base()
 _engine: AsyncEngine = None
 _session_factory = None
 
+def normalize_db_url(raw_url: str):
+    """Normalize standard PostgreSQL connection strings to SQLAlchemy asyncpg format and handle SSL."""
+    if not raw_url:
+        return raw_url, {}
+    cleaned = raw_url.strip()
+    connect_args = {}
+
+    if cleaned.startswith("postgres://"):
+        cleaned = "postgresql+asyncpg://" + cleaned[len("postgres://"):]
+    elif cleaned.startswith("postgresql://"):
+        cleaned = "postgresql+asyncpg://" + cleaned[len("postgresql://"):]
+
+    if "sslmode=require" in cleaned or "ssl=require" in cleaned:
+        parsed = urllib.parse.urlsplit(cleaned)
+        params = urllib.parse.parse_qs(parsed.query)
+        params.pop("sslmode", None)
+        params.pop("ssl", None)
+        new_query = urllib.parse.urlencode(params, doseq=True)
+        cleaned = urllib.parse.urlunsplit(parsed._replace(query=new_query))
+        connect_args["ssl"] = True
+
+    return cleaned, connect_args
+
 def get_engine() -> AsyncEngine:
     global _engine, _session_factory
     if _engine is not None:
         return _engine
 
-    primary_url = settings.DATABASE_URL
+    primary_url, connect_args = normalize_db_url(settings.DATABASE_URL)
     fallback_url = settings.SQLITE_FALLBACK_URL
 
-    # Check if DATABASE_URL is explicitly set to sqlite or postgres
-    # We will test connecting or fallback
     try:
         _engine = create_async_engine(
             primary_url,
+            connect_args=connect_args,
             echo=False,
             future=True,
             pool_pre_ping=True
@@ -55,7 +78,7 @@ AsyncSessionLocal = get_session_factory()
 async def init_engine_with_fallback() -> AsyncEngine:
     """Tests primary database connection, falls back to SQLite if PostgreSQL server is not running."""
     global _engine, _session_factory
-    primary_url = settings.DATABASE_URL
+    primary_url, connect_args = normalize_db_url(settings.DATABASE_URL)
     fallback_url = settings.SQLITE_FALLBACK_URL
 
     # If already sqlite, no check needed
@@ -64,7 +87,12 @@ async def init_engine_with_fallback() -> AsyncEngine:
 
     try:
         # Test connection
-        test_engine = create_async_engine(primary_url, echo=False, pool_pre_ping=True)
+        test_engine = create_async_engine(
+            primary_url,
+            connect_args=connect_args,
+            echo=False,
+            pool_pre_ping=True
+        )
         async with test_engine.connect() as conn:
             pass
         logger.info(f"Connected to primary PostgreSQL database at {primary_url.split('@')[-1]}")
