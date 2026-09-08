@@ -549,12 +549,56 @@
       document.getElementById('rv_practice').textContent = selectedPractice || '—';
     }
 
-    function submitForm() {
+    async function submitForm() {
+      const fname = document.getElementById('r_fname')?.value || '';
+      const lname = document.getElementById('r_lname')?.value || '';
+      const name = `${fname} ${lname}`.trim() || 'Farmer Partner';
+      const phone = document.getElementById('r_phone')?.value || '';
+      const email = document.getElementById('r_email')?.value || `${fname.toLowerCase().replace(/\s/g,'') || 'farmer'}@harvestlink.in`;
+      const type = document.getElementById('r_type')?.value || 'Individual Farmer';
+      const role = type.includes('FPO') ? 'fpo' : 'farmer';
+      const village = document.getElementById('r_village')?.value || '';
+      const district = document.getElementById('r_district')?.value || '';
+      const state = document.getElementById('r_state')?.value || 'Gujarat';
+      const size = parseFloat(document.getElementById('r_size')?.value) || 5.0;
+      const products = document.getElementById('r_products')?.value || 'Tomatoes, Wheat';
+      const monthly = parseFloat(document.getElementById('r_monthly')?.value) || 500.0;
+
+      try {
+        const payload = {
+          email,
+          password: 'password123',
+          full_name: name,
+          phone,
+          role,
+          farm_name: `${name}'s Farm`,
+          village,
+          district,
+          state,
+          farm_size_acres: size,
+          farming_practice: selectedPractice || 'organic',
+          primary_crops: products,
+          monthly_produce_kg: monthly,
+          fpo_name: type.includes('FPO') ? name : undefined
+        };
+
+        const res = await api.register(payload);
+        const userObj = res.user || { name, email, role };
+        setUser({ name: userObj.name || name, email: userObj.email || email, role: userObj.role || role });
+        setRole(userObj.role || role);
+      } catch (err) {
+        console.warn('Registration note:', err.message);
+        setUser({ name, email, role });
+        setRole(role);
+      }
+
       document.querySelectorAll('.step-form').forEach(f => f.classList.remove('active'));
       document.getElementById('stepSuccess')?.classList.add('active');
       document.getElementById('formProgress').style.opacity = '0.4';
     }
   </script>
+  <script src="api.js"></script>
   <script src="app.js"></script>
 </body>
+
 </html>

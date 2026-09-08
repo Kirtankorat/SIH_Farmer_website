@@ -137,12 +137,14 @@
         selectedRole = btn.dataset.role;
         selectedName = btn.dataset.name;
         document.getElementById('loginId').value = selectedName.toLowerCase().replace(/\s/g,'') + '@demo.in';
+        document.getElementById('loginPass').value = 'demo123';
       });
     });
 
     // Pre-select farmer
     document.querySelector('[data-role="farmer"]')?.classList.add('active');
     document.getElementById('loginId').value = 'rameshpatel@demo.in';
+    document.getElementById('loginPass').value = 'demo123';
 
     async function doLogin(role, name) {
       const btn = document.querySelector('#loginForm button[type="submit"]');
@@ -157,33 +159,37 @@
 
       try {
         let authRes;
-        // If credentials typed in manually
-        if (inputVal && inputVal.length > 0) {
+        if (inputVal) {
           try {
             authRes = await api.login(inputVal, passwordVal);
-          } catch (_) {
-            // If direct login fails, fallback to demo login for this role
-            authRes = await api.demoLogin(role);
+          } catch (err) {
+            // If user clicked demo button or demo email was used
+            if (inputVal.endsWith('@demo.in')) {
+              authRes = await api.demoLogin(role || selectedRole);
+            } else {
+              throw err;
+            }
           }
         } else {
-          authRes = await api.demoLogin(role);
+          authRes = await api.demoLogin(role || selectedRole);
         }
 
         const userObj = authRes.user || { name: name, email: `${name.toLowerCase().replace(/\s/g,'')}@demo.in`, role };
-        setUser({ name: userObj.name || name, email: userObj.email });
-        setRole(userObj.role || role);
+        const userRole = userObj.role || role || selectedRole;
+        setUser({ name: userObj.name || name, email: userObj.email, role: userRole });
+        setRole(userRole);
 
-        showToast('Login successful! Redirecting...');
+        showToast('Login successful! Redirecting...', 'success');
         setTimeout(() => {
-          window.location.href = getDashboardUrl(userObj.role || role);
-        }, 500);
+          window.location.href = getDashboardUrl(userRole);
+        }, 600);
       } catch (err) {
         if (btn) {
           btn.textContent = 'Sign In →';
           btn.disabled = false;
           btn.style.opacity = '1';
         }
-        showToast(err.message || 'Login failed. Please check credentials.');
+        showToast(err.message || 'Login failed. Please check your credentials.', 'error');
       }
     }
 

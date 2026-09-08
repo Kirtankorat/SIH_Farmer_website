@@ -1,10 +1,14 @@
 import json
 import os
+from pathlib import Path
 from typing import List, Union
 from pydantic_settings import BaseSettings
 from dotenv import load_dotenv
 
 load_dotenv()
+
+BASE_DIR = Path(__file__).resolve().parent.parent
+DEFAULT_SQLITE_PATH = (BASE_DIR / "harvestlink.db").as_posix()
 
 class Settings(BaseSettings):
     PROJECT_NAME: str = "HarvestLink API"
@@ -21,7 +25,7 @@ class Settings(BaseSettings):
     )
     SQLITE_FALLBACK_URL: str = os.getenv(
         "SQLITE_FALLBACK_URL",
-        "sqlite+aiosqlite:///./harvestlink.db"
+        f"sqlite+aiosqlite:///{DEFAULT_SQLITE_PATH}"
     )
 
     # JWT Security
@@ -34,10 +38,14 @@ class Settings(BaseSettings):
 
     # CORS
     CORS_ORIGINS: Union[List[str], str] = [
+        "http://localhost:8080",
+        "http://127.0.0.1:8080",
         "http://localhost:5500",
         "http://127.0.0.1:5500",
         "http://localhost:3000",
         "http://127.0.0.1:3000",
+        "http://localhost:5173",
+        "http://127.0.0.1:5173",
         "http://localhost:8000",
         "http://127.0.0.1:8000",
         "*"
@@ -59,3 +67,4 @@ class Settings(BaseSettings):
         extra = "allow"
 
 settings = Settings()
+
