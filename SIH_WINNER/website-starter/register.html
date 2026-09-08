@@ -567,29 +567,23 @@
       try {
         const payload = {
           email,
-          password: 'password123',
+          password: 'Farmer@123',
           full_name: name,
           phone,
           role,
           farm_name: `${name}'s Farm`,
           village,
-          district,
           state,
           farm_size_acres: size,
           farming_practice: selectedPractice || 'organic',
-          primary_crops: products,
-          monthly_produce_kg: monthly,
-          fpo_name: type.includes('FPO') ? name : undefined
+          primary_crops: products
         };
 
-        const res = await api.register(payload);
-        const userObj = res.user || { name, email, role };
-        setUser({ name: userObj.name || name, email: userObj.email || email, role: userObj.role || role });
-        setRole(userObj.role || role);
+        if (window.HarvestLinkAuth) {
+          await window.HarvestLinkAuth.signUp(payload);
+        }
       } catch (err) {
         console.warn('Registration note:', err.message);
-        setUser({ name, email, role });
-        setRole(role);
       }
 
       document.querySelectorAll('.step-form').forEach(f => f.classList.remove('active'));
@@ -597,7 +591,11 @@
       document.getElementById('formProgress').style.opacity = '0.4';
     }
   </script>
-  <script src="api.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabase.js"></script>
+  <script src="js/i18n.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/cart.js"></script>
   <script src="app.js"></script>
 </body>
 

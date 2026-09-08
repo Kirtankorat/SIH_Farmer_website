@@ -124,11 +124,22 @@
     }
   </style>
 
-  <script src="api.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabase.js"></script>
+  <script src="js/i18n.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/cart.js"></script>
   <script src="app.js"></script>
   <script>
     let selectedRole = 'farmer';
     let selectedName = 'Ramesh Patel';
+
+    const DEMO_CREDENTIALS = {
+      farmer: { email: 'ramesh.patel@harvestlink.org', pass: 'Farmer@123', name: 'Ramesh Patel' },
+      fpo: { email: 'anand.fpo@harvestlink.org', pass: 'Farmer@123', name: 'Anand FPO' },
+      bulk: { email: 'priya.sharma@harvestlink.org', pass: 'Farmer@123', name: 'Priya Sharma' },
+      logistics: { email: 'ramesh.patel@harvestlink.org', pass: 'Farmer@123', name: 'Ramesh Patel' }
+    };
 
     document.querySelectorAll('.demo-role-btn').forEach(btn => {
       btn.addEventListener('click', () => {
@@ -136,15 +147,16 @@
         btn.classList.add('active');
         selectedRole = btn.dataset.role;
         selectedName = btn.dataset.name;
-        document.getElementById('loginId').value = selectedName.toLowerCase().replace(/\s/g,'') + '@demo.in';
-        document.getElementById('loginPass').value = 'demo123';
+        const cred = DEMO_CREDENTIALS[selectedRole] || DEMO_CREDENTIALS.farmer;
+        document.getElementById('loginId').value = cred.email;
+        document.getElementById('loginPass').value = cred.pass;
       });
     });
 
-    // Pre-select farmer
+    // Pre-select farmer credentials
     document.querySelector('[data-role="farmer"]')?.classList.add('active');
-    document.getElementById('loginId').value = 'rameshpatel@demo.in';
-    document.getElementById('loginPass').value = 'demo123';
+    document.getElementById('loginId').value = 'ramesh.patel@harvestlink.org';
+    document.getElementById('loginPass').value = 'Farmer@123';
 
     async function doLogin(role, name) {
       const btn = document.querySelector('#loginForm button[type="submit"]');
@@ -154,34 +166,37 @@
         btn.style.opacity = '0.85';
       }
 
-      const inputVal = document.getElementById('loginId')?.value?.trim();
-      const passwordVal = document.getElementById('loginPass')?.value || 'demo123';
+      let emailVal = document.getElementById('loginId')?.value?.trim();
+      let passwordVal = document.getElementById('loginPass')?.value || 'Farmer@123';
+
+      if (!emailVal) {
+        const cred = DEMO_CREDENTIALS[role || selectedRole] || DEMO_CREDENTIALS.farmer;
+        emailVal = cred.email;
+        passwordVal = cred.pass;
+      }
 
       try {
         let authRes;
-        if (inputVal) {
-          try {
-            authRes = await api.login(inputVal, passwordVal);
-          } catch (err) {
-            // If user clicked demo button or demo email was used
-            if (inputVal.endsWith('@demo.in')) {
-              authRes = await api.demoLogin(role || selectedRole);
-            } else {
-              throw err;
-            }
-          }
+        if (window.HarvestLinkAuth) {
+          authRes = await window.HarvestLinkAuth.signIn(emailVal, passwordVal);
         } else {
-          authRes = await api.demoLogin(role || selectedRole);
+          throw new Error('Authentication module loading. Please try again.');
         }
 
-        const userObj = authRes.user || { name: name, email: `${name.toLowerCase().replace(/\s/g,'')}@demo.in`, role };
-        const userRole = userObj.role || role || selectedRole;
-        setUser({ name: userObj.name || name, email: userObj.email, role: userRole });
-        setRole(userRole);
+        const userRole = authRes?.profile?.role || role || selectedRole || 'farmer';
+        if (typeof showToast === 'function') {
+          showToast('Login successful! Redirecting...', 'success');
+        }
 
-        showToast('Login successful! Redirecting...', 'success');
+        const params = new URLSearchParams(window.location.search);
+        const redirectUrl = params.get('redirect');
+
         setTimeout(() => {
-          window.location.href = getDashboardUrl(userRole);
+          if (redirectUrl) {
+            window.location.href = decodeURIComponent(redirectUrl);
+          } else {
+            window.location.href = window.HarvestLinkAuth.getDashboardUrl(userRole);
+          }
         }, 600);
       } catch (err) {
         if (btn) {
@@ -189,7 +204,9 @@
           btn.disabled = false;
           btn.style.opacity = '1';
         }
-        showToast(err.message || 'Login failed. Please check your credentials.', 'error');
+        if (typeof showToast === 'function') {
+          showToast(err.message || 'Login failed. Please check your credentials.', 'error');
+        }
       }
     }
 

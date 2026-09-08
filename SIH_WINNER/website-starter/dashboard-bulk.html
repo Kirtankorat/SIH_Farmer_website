@@ -180,9 +180,19 @@
     </main>
   </div>
 
-  <script src="api.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabase.js"></script>
+  <script src="js/i18n.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/products.js"></script>
+  <script src="js/cart.js"></script>
+  <script src="js/orders.js"></script>
   <script src="app.js"></script>
   <script>
+    if (window.HarvestLinkAuth) {
+      window.HarvestLinkAuth.requireAuth(['bulk_buyer', 'admin', 'farmer', 'fpo']);
+    }
+
     async function loadBulkDashboard() {
       const user = getUser();
       if (user) {
@@ -190,21 +200,6 @@
         if (lbl) lbl.textContent = '📦 ' + user.name;
         document.getElementById('bulkSidebarName').textContent = user.name;
         document.getElementById('bulkHeading').textContent = user.name;
-      }
-
-      try {
-        const data = await api.getBulkDashboard();
-        if (data && data.stats) {
-          const statVals = document.querySelectorAll('.dash-stats .sc-value');
-          if (statVals.length >= 4) {
-            statVals[0].textContent = data.stats.active_requests;
-            statVals[1].textContent = data.stats.pending_orders;
-            statVals[2].textContent = data.stats.saved_suppliers;
-            statVals[3].textContent = data.stats.upcoming_deliveries;
-          }
-        }
-      } catch (e) {
-        console.warn('Backend bulk dashboard note:', e.message);
       }
     }
 

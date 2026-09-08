@@ -250,7 +250,11 @@
     </div>
   </div>
 
-  <script src="api.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabase.js"></script>
+  <script src="js/i18n.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/cart.js"></script>
   <script src="app.js"></script>
   <script>
     // Role selection on step 0
@@ -475,43 +479,49 @@
     async function submitSignup() {
       const role = roleForms[chosenRole];
       const nameKey = Object.keys(formData).find(k => k.toLowerCase().includes('name')) || 'Name';
-      const name = formData[nameKey] || roleForms[chosenRole].label + ' User';
-      const email = formData['Email (optional)'] || formData['Email'] || `${name.toLowerCase().replace(/\s/g,'')}@harvestlink.in`;
+      const name = formData[nameKey] || (roleForms[chosenRole]?.label || 'Farmer') + ' User';
+      const email = formData['Email (optional)'] || formData['Email'] || `${name.toLowerCase().replace(/[^a-z0-9]/g,'')}@harvestlink.org`;
       const phone = formData['Phone Number'] || formData['Phone'] || null;
 
-      try {
-        const payload = {
-          email: email,
-          password: 'password123',
-          full_name: name,
-          phone: phone,
-          role: chosenRole,
-          farm_name: formData['Farm Details'] || `${name}'s Farm`,
-          village: formData['Village / Town'] || formData['Location (State)'],
-          state: formData['State'] || 'Gujarat',
-          farm_size_acres: parseFloat(formData['Farm Size (acres)']) || 5.0,
-          farming_practice: formData['Farming Practice'] || 'organic',
-          primary_crops: formData['Products You Grow'] || 'Produce',
-          business_name: formData['Business Name'] || name,
-          business_type: formData['Business Type'] || 'Restaurant',
-          fpo_name: formData['FPO Name'] || name,
-          company_name: formData['Fleet Type / Vehicle'] || name
-        };
+      // Role mapping for database constraint
+      const roleMap = {
+        farmer: 'farmer',
+        fpo: 'fpo',
+        bulk: 'bulk_buyer',
+        logistics: 'agri_entrepreneur'
+      };
+      const assignedRole = roleMap[chosenRole] || 'farmer';
 
-        const res = await api.register(payload);
-        const userObj = res.user || { name, email, role: chosenRole };
-        setUser({ name: userObj.name || name, email: userObj.email || email });
-        setRole(chosenRole);
+      const payload = {
+        email: email,
+        password: 'Farmer@123',
+        full_name: name,
+        phone: phone,
+        role: assignedRole,
+        farm_name: formData['Farm Details'] || `${name}'s Farm`,
+        village: formData['Village / Town'] || formData['Location (State)'] || 'Anand',
+        state: formData['State'] || 'Gujarat',
+        farm_size_acres: parseFloat(formData['Farm Size (acres)']) || 5.0,
+        farming_practice: formData['Farming Practice'] || 'organic',
+        primary_crops: formData['Products You Grow'] || 'Produce',
+        business_name: formData['Business Name'] || name
+      };
+
+      try {
+        if (window.HarvestLinkAuth) {
+          await window.HarvestLinkAuth.signUp(payload);
+        }
       } catch (err) {
-        console.warn('Backend registration note:', err.message);
-        // Fallback demo local user
-        setUser({ name, email });
-        setRole(chosenRole);
+        console.warn('Supabase registration note:', err.message);
+        if (typeof showToast === 'function') {
+          showToast(err.message, 'info');
+        }
       }
 
-      document.getElementById('dashLink').href = getDashboardUrl(chosenRole);
+      const dashTarget = window.HarvestLinkAuth ? window.HarvestLinkAuth.getDashboardUrl(assignedRole) : 'dashboard.html';
+      document.getElementById('dashLink').href = dashTarget;
       showStep('sg-success');
-      setTimeout(() => { window.location.href = getDashboardUrl(chosenRole); }, 2200);
+      setTimeout(() => { window.location.href = dashTarget; }, 2000);
     }
 
     // Auto-start if role in URL

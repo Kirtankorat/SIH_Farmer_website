@@ -107,21 +107,37 @@
     </div>
   </div>
 
-  <script src="api.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabase.js"></script>
+  <script src="js/i18n.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/products.js"></script>
+  <script src="js/cart.js"></script>
   <script src="app.js"></script>
   <script>
     const params = new URLSearchParams(window.location.search);
-    const productId = parseInt(params.get('id')) || 1;
-    let product = PRODUCTS.find(p => p.id === productId) || PRODUCTS[0];
-
+    const productId = params.get('id') || '1';
+    let product = null;
     let qty = 1;
 
+    async function loadProduct() {
+      if (window.HarvestLinkProducts) {
+        product = await window.HarvestLinkProducts.fetchProductById(productId);
+      }
+      if (!product && window.PRODUCTS) {
+        product = window.PRODUCTS.find(p => String(p.id) === String(productId)) || window.PRODUCTS[0];
+      }
+      renderProduct();
+    }
+
     function renderProduct() {
+      if (!product) return;
       const practiceMap = { organic: '🌿 Organic', natural: '☀️ Natural Farming', conventional: '🏡 Conventional' };
       const sellerBadgeMap = { farmer: 'badge-farmer', fpo: 'badge-fpo' };
       const stars = '★'.repeat(Math.floor(product.rating || 4.5)) + '☆'.repeat(5 - Math.floor(product.rating || 4.5));
-      const availLabel = product.availability === 'available' ? '✅ In Stock' : '⚠️ Limited Stock';
-      const availColor = product.availability === 'available' ? 'var(--green)' : 'var(--terracotta)';
+      const isAvail = product.availability === 'available' || (product.quantity_available && product.quantity_available > 0);
+      const availLabel = isAvail ? '✅ In Stock' : '⚠️ Limited Stock';
+      const availColor = isAvail ? 'var(--green)' : 'var(--terracotta)';
 
       document.getElementById('productDetailGrid').innerHTML = `
         <div class="pd-image-area" style="font-size:120px;">${product.emoji || '🌾'}</div>
@@ -130,13 +146,14 @@
           <h1 class="pd-name">${product.name}</h1>
           <div class="pd-rating-row">
             <span class="pd-rating">${stars}</span>
-            <span class="pd-reviews">${product.rating || 4.5} rating · ${Math.floor(Math.random()*40+15)} reviews</span>
+            <span class="pd-reviews">${product.rating || 4.5} rating · 28 reviews</span>
             <span style="font-size:12px;font-weight:700;color:${availColor}">${availLabel}</span>
           </div>
           <div class="pd-price-wrap">
             <span class="pd-price">₹${product.priceNum || product.price}</span>
             <span class="pd-unit"> / ${product.unit}</span>
           </div>
+          <p style="color:var(--text-muted);font-size:14px;line-height:1.6;margin:12px 0;">${product.description || 'Farm-fresh quality produce grown with sustainable agricultural practices and delivered directly to your doorstep.'}</p>
           <div class="pd-qty-row">
             <span class="pd-qty-label">Quantity</span>
             <div class="qty-control">
@@ -148,37 +165,47 @@
           </div>
           <div class="pd-buttons">
             <button class="pd-btn-cart" onclick="addPdToCart()">Add to Cart</button>
-            <button class="pd-btn-buy" onclick="addPdToCart(); window.location.href='cart.html'">Buy Now</button>
+            <button class="pd-btn-buy" onclick="buyPdNow()">Buy Now</button>
           </div>
           <button class="pd-bulk-btn" onclick="openBulk()">📦 Buy in Bulk</button>
 
           <div class="pd-seller-card">
             <div class="pd-seller-title">Grown by</div>
-            <div class="pd-seller-name">${product.farmer || product.farmer_name}</div>
-            <div class="pd-seller-loc">📍 ${product.location}</div>
+            <div class="pd-seller-name">${product.farmer || 'Verified Farmer'}</div>
+            <div class="pd-seller-loc">📍 ${product.location || 'Gujarat'}</div>
             <div class="pd-seller-meta">
               <span class="seller-badge ${sellerBadgeMap[product.sellerType || product.seller_type] || 'badge-farmer'}">${product.badge || 'Verified'}</span>
               <span style="font-size:12px;color:var(--green);font-weight:700">✓ Verified</span>
-              <span style="font-size:12px;color:var(--text-muted)">${practiceMap[product.practice || product.farming_practice] || 'Standard'}</span>
+              <span style="font-size:12px;color:var(--text-muted)">${practiceMap[product.practice] || 'Standard'}</span>
             </div>
             <a href="farmers.html" style="display:inline-block;margin-top:12px;font-size:13px;font-weight:700;color:var(--green)">View Seller Profile →</a>
           </div>
         </div>
       `;
+      if (window.HarvestLinkI18n) window.HarvestLinkI18n.translateDOM(document.getElementById('productDetailGrid'));
     }
 
     function changeQty(delta) {
       qty = Math.max(1, qty + delta);
-      document.getElementById('pdQty').textContent = qty;
+      const el = document.getElementById('pdQty');
+      if (el) el.textContent = qty;
     }
 
-    function addPdToCart() {
-      addToCart({ ...product, priceNum: product.priceNum || product.price, price: `₹${product.priceNum || product.price}`, qty: 0 });
-      const cart = getCart();
-      const item = cart.find(i => i.id === product.id);
-      if (item) { item.qty = qty; saveCart(cart); }
-      showCartToast(product.name);
+    async function addPdToCart() {
+      if (!product) return;
+      if (window.HarvestLinkCart) {
+        await window.HarvestLinkCart.addToCart(product, qty);
+      } else {
+        addToCart(product);
+      }
     }
+
+    async function buyPdNow() {
+      await addPdToCart();
+      window.location.href = 'cart.html';
+    }
+
+    document.addEventListener('DOMContentLoaded', loadProduct);
 
     function openBulk() {
       document.getElementById('bulkModalSub').textContent = `Requesting bulk supply of ${product.name} from ${product.farmer || product.farmer_name}.`;

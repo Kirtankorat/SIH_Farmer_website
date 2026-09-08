@@ -141,12 +141,17 @@
     </div>
   </div>
 
-  <script src="api.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabase.js"></script>
+  <script src="js/i18n.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/products.js"></script>
+  <script src="js/cart.js"></script>
   <script src="app.js"></script>
   <script src="script.js"></script>
   <script>
     // Marketplace logic
-    let currentProducts = [...PRODUCTS];
+    let currentProducts = [];
 
     function renderMarketplace() {
       const grid = document.getElementById('marketplaceGrid');
@@ -163,59 +168,40 @@
         noResults.style.display = 'none';
         grid.innerHTML = currentProducts.map(p => renderProductCard(p)).join('');
       }
+      if (window.HarvestLinkI18n) {
+        window.HarvestLinkI18n.translateDOM(grid);
+      }
     }
 
     async function applyFilters() {
-      const searchQ = document.getElementById('searchInput').value.toLowerCase();
-      
+      const searchQ = document.getElementById('searchInput')?.value?.toLowerCase() || '';
       const cats = Array.from(document.querySelectorAll('#filter-category input:checked')).map(el => el.value);
       const pracs = Array.from(document.querySelectorAll('#filter-practice input:checked')).map(el => el.value);
       const sellers = Array.from(document.querySelectorAll('#filter-sellerType input:checked')).map(el => el.value);
-      const maxPrice = parseInt(document.getElementById('priceRange').value);
-      const sort = document.getElementById('sortSelect').value;
+      const maxPrice = parseInt(document.getElementById('priceRange')?.value || '500');
+      const sort = document.getElementById('sortSelect')?.value || 'recommended';
 
       try {
-        const liveProducts = await api.getProducts({
-          search: searchQ || undefined,
-          category: cats.length === 1 ? cats[0] : undefined,
-          practice: pracs.length === 1 ? pracs[0] : undefined,
-          seller_type: sellers.length === 1 ? sellers[0] : undefined,
-          max_price: maxPrice < 500 ? maxPrice : undefined,
-          sort: sort
-        });
-        if (Array.isArray(liveProducts) && liveProducts.length > 0) {
-          currentProducts = liveProducts.filter(p => {
-            if (cats.length > 1 && !cats.includes(p.category)) return false;
-            if (pracs.length > 1 && !pracs.includes(p.practice)) return false;
-            if (sellers.length > 1 && !sellers.includes(p.seller_type || p.sellerType)) return false;
-            return true;
+        if (window.HarvestLinkProducts) {
+          currentProducts = await window.HarvestLinkProducts.fetchProducts({
+            search: searchQ,
+            categories: cats,
+            practices: pracs,
+            seller_types: sellers,
+            max_price: maxPrice < 500 ? maxPrice : undefined,
+            sort: sort
           });
-          renderMarketplace();
-          return;
         }
       } catch (err) {
-        console.warn('Using local dataset fallback:', err.message);
+        console.warn('Products fetch note:', err);
       }
-
-      currentProducts = PRODUCTS.filter(p => {
-        // Search
-        if (searchQ && !p.name.toLowerCase().includes(searchQ) && !p.farmer.toLowerCase().includes(searchQ) && !p.location.toLowerCase().includes(searchQ) && !p.category.toLowerCase().includes(searchQ)) return false;
-        // Checkboxes
-        if (cats.length > 0 && !cats.includes(p.category)) return false;
-        if (pracs.length > 0 && !pracs.includes(p.practice)) return false;
-        if (sellers.length > 0 && !sellers.includes(p.sellerType)) return false;
-        // Price
-        if (p.priceNum > maxPrice) return false;
-        return true;
-      });
-
-      // Sort
-      if (sort === 'price-low') currentProducts.sort((a,b) => a.priceNum - b.priceNum);
-      else if (sort === 'price-high') currentProducts.sort((a,b) => b.priceNum - a.priceNum);
-      else if (sort === 'rating') currentProducts.sort((a,b) => b.rating - a.rating);
 
       renderMarketplace();
     }
+
+    window.addEventListener('hl-language-changed', () => {
+      renderMarketplace();
+    });
 
     function clearFilters() {
       document.querySelectorAll('.filter-options input').forEach(el => el.checked = false);
@@ -238,11 +224,8 @@
     });
 
     // Init
-    document.addEventListener('DOMContentLoaded', () => {
-      setTimeout(() => {
-        applyFilters();
-      }, 50);
-    });
+    applyFilters();
+    document.addEventListener('DOMContentLoaded', applyFilters);
   </script>
 </body>
 </html>

@@ -63,15 +63,27 @@
     </div>
   </div>
 
-  <script src="api.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabase.js"></script>
+  <script src="js/i18n.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/products.js"></script>
+  <script src="js/cart.js"></script>
+  <script src="js/orders.js"></script>
   <script src="app.js"></script>
   <script>
-    function renderCart() {
-      const cart = getCart();
+    async function renderCart() {
+      let cart = [];
+      if (window.HarvestLinkCart) {
+        cart = await window.HarvestLinkCart.fetchCart();
+      } else {
+        cart = getCart();
+      }
+
       const content = document.getElementById('cartContent');
       const countEl = document.getElementById('cartItemCount');
 
-      countEl.textContent = cart.length > 0 ? `${cart.reduce((s,i) => s+i.qty, 0)} items` : '';
+      countEl.textContent = cart.length > 0 ? `${cart.reduce((s,i) => s + (i.qty || 1), 0)} items` : '';
 
       if (cart.length === 0) {
         content.innerHTML = `
@@ -82,34 +94,35 @@
             <a href="marketplace.html" class="btn-primary-lg">Shop Produce →</a>
           </div>
         `;
+        if (window.HarvestLinkI18n) window.HarvestLinkI18n.translateDOM(content);
         return;
       }
 
-      const DELIVERY = 40;
-      const subtotal = getCartTotal();
+      const subtotal = cart.reduce((sum, i) => sum + (parseFloat(i.priceNum || 0) * (i.qty || 1)), 0);
+      const DELIVERY = subtotal > 800 ? 0 : 40;
       const discount = subtotal > 500 ? 50 : 0;
-      const total = subtotal + DELIVERY - discount;
+      const total = Math.max(0, subtotal + DELIVERY - discount);
 
       const itemsHtml = cart.map(item => {
-        const lineTotal = (item.priceNum * item.qty).toFixed(0);
+        const lineTotal = ((item.priceNum || 0) * item.qty).toFixed(0);
         return `
           <div class="cart-item" id="cartRow_${item.id}">
             <div class="cart-item-img">${item.emoji || '🌾'}</div>
             <div>
               <div class="ci-name">${item.name}</div>
-              <div class="ci-farmer">${item.farmer || item.farmer_name || 'Farm Partner'}</div>
+              <div class="ci-farmer">${item.farmer || 'Farm Partner'}</div>
               <div class="ci-location">📍 ${item.location || 'Gujarat'}</div>
-              <div class="ci-price">${item.price} <span class="ci-unit">/ ${item.unit}</span></div>
+              <div class="ci-price">${item.price || '₹' + item.priceNum} <span class="ci-unit">/ ${item.unit || 'kg'}</span></div>
               <div class="ci-actions">
-                <button class="ci-remove" onclick="cartRemove(${item.id})">Remove</button>
-                <button class="ci-save" onclick="showToast('Saved for later')">Save for Later</button>
+                <button class="ci-remove" onclick="cartRemove('${item.id}')">Remove</button>
+                <button class="ci-save" onclick="showToast('Saved for later', 'info')">Save for Later</button>
               </div>
             </div>
             <div class="cart-item-right">
               <div class="qty-control">
-                <button class="qty-btn" onclick="cartQty(${item.id}, -1)">−</button>
+                <button class="qty-btn" onclick="cartQty('${item.id}', -1)">−</button>
                 <span class="qty-display" id="qty_${item.id}">${item.qty}</span>
-                <button class="qty-btn" onclick="cartQty(${item.id}, 1)">+</button>
+                <button class="qty-btn" onclick="cartQty('${item.id}', 1)">+</button>
               </div>
               <div class="ci-subtotal" id="sub_${item.id}">₹${lineTotal}</div>
             </div>
@@ -129,7 +142,7 @@
           <div class="cart-summary">
             <div class="cs-title">Order Summary</div>
             <div class="cs-row"><span class="cs-label">Subtotal</span><span class="cs-value" id="sumSubtotal">₹${subtotal}</span></div>
-            <div class="cs-row"><span class="cs-label">Delivery</span><span class="cs-value">₹${DELIVERY}</span></div>
+            <div class="cs-row"><span class="cs-label">Delivery</span><span class="cs-value">${DELIVERY === 0 ? 'FREE' : '₹' + DELIVERY}</span></div>
             ${discount > 0 ? `<div class="cs-row"><span class="cs-label" style="color:var(--green)">Discount</span><span class="cs-value" style="color:var(--green)">−₹${discount}</span></div>` : ''}
             <div class="cs-total">
               <span class="cs-total-label">Total</span>
@@ -140,38 +153,55 @@
 
             <div style="margin-top:20px;padding-top:20px;border-top:1px solid var(--border)">
               <div style="font-size:12px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px">Your Farmers</div>
-              ${[...new Set(cart.map(i => i.farmer || i.farmer_name || 'Farm Partner'))].map(f => `<div style="font-size:13px;color:var(--text-secondary);padding:4px 0">✓ ${f}</div>`).join('')}
+              ${[...new Set(cart.map(i => i.farmer || 'Farm Partner'))].map(f => `<div style="font-size:13px;color:var(--text-secondary);padding:4px 0">✓ ${f}</div>`).join('')}
             </div>
           </div>
         </div>
       `;
+      if (window.HarvestLinkI18n) window.HarvestLinkI18n.translateDOM(content);
     }
 
-    function cartRemove(id) {
-      removeFromCart(id);
-      renderCart();
+    async function cartRemove(id) {
+      if (window.HarvestLinkCart) {
+        await window.HarvestLinkCart.removeFromCart(id);
+      } else {
+        removeFromCart(id);
+      }
+      await renderCart();
     }
 
-    function cartQty(id, delta) {
-      updateCartQty(id, delta);
-      const cart = getCart();
-      const item = cart.find(i => i.id === id);
-      if (!item) { renderCart(); return; }
-      document.getElementById('qty_' + id).textContent = item.qty;
-      document.getElementById('sub_' + id).textContent = '₹' + (item.priceNum * item.qty);
-      const DELIVERY = 40;
-      const subtotal = getCartTotal();
-      const discount = subtotal > 500 ? 50 : 0;
-      const total = subtotal + DELIVERY - discount;
-      document.getElementById('sumSubtotal').textContent = '₹' + subtotal;
-      document.getElementById('sumTotal').textContent = '₹' + total;
+    async function cartQty(id, delta) {
+      if (window.HarvestLinkCart) {
+        await window.HarvestLinkCart.updateCartQty(id, delta);
+      } else {
+        updateCartQty(id, delta);
+      }
+      await renderCart();
     }
 
     async function doCheckout() {
-      const user = getUser();
-      const cart = getCart();
-      if (!cart.length) {
-        showToast('Your cart is empty');
+      const sb = window.getSupabase ? window.getSupabase() : null;
+      let session = null;
+      if (sb) {
+        try {
+          const res = await sb.auth.getSession();
+          session = res?.data?.session;
+        } catch (_) {}
+      }
+
+      if (!session || !session.user) {
+        if (typeof showToast === 'function') {
+          showToast('Please login to place your order.', 'info');
+        }
+        setTimeout(() => {
+          window.location.href = 'login.html?redirect=cart.html';
+        }, 1000);
+        return;
+      }
+
+      const cart = window.HarvestLinkCart ? window.HarvestLinkCart.getCart() : [];
+      if (!cart || !cart.length) {
+        if (typeof showToast === 'function') showToast('Your cart is empty', 'error');
         return;
       }
 
@@ -182,38 +212,34 @@
       }
 
       try {
-        const orderData = {
-          buyer_name: user?.name || 'Priya Sharma',
-          buyer_email: user?.email || 'priya@demo.in',
-          buyer_phone: user?.phone || '+91 98765 43210',
-          delivery_address: 'Flat 402, Green Meadows, Anand, Gujarat',
-          delivery_city: 'Anand',
-          delivery_state: 'Gujarat',
-          delivery_fee: 40.0,
-          discount: getCartTotal() > 500 ? 50.0 : 0.0,
-          items: cart.map(i => ({
-            product_id: i.id,
-            product_name: i.name,
-            emoji: i.emoji || '🌾',
-            price: i.priceNum || 30.0,
-            quantity: i.qty || 1,
-            unit: i.unit || 'kg',
-            seller_name: i.farmer || i.farmer_name || 'Shree Farms'
-          }))
-        };
+        const order = await window.HarvestLinkOrders.createOrder({
+          name: session.user.user_metadata?.full_name || 'Priya Sharma',
+          phone: session.user.user_metadata?.phone || '+91 98250 88990',
+          address: 'Flat 402, Green Meadows, Station Road',
+          city: 'Anand',
+          state: 'Gujarat'
+        });
 
-        const res = await api.createOrder(orderData);
-        clearCart();
-        const orderNum = res.order_number || 'HL1024';
-        window.location.href = `order-tracking.html?order=${orderNum}&new=1`;
+        if (typeof showToast === 'function') {
+          showToast('Order placed successfully!', 'success');
+        }
+
+        setTimeout(() => {
+          window.location.href = `order-tracking.html?order=${order.order_number}&new=1`;
+        }, 600);
       } catch (err) {
-        console.warn('Backend checkout note:', err.message);
-        clearCart();
-        window.location.href = 'order-tracking.html?new=1';
+        if (btn) {
+          btn.textContent = 'Proceed to Checkout →';
+          btn.disabled = false;
+        }
+        if (typeof showToast === 'function') {
+          showToast(err.message || 'Checkout failed. Please try again.', 'error');
+        }
       }
     }
 
-    renderCart();
+    window.addEventListener('hl-language-changed', renderCart);
+    document.addEventListener('DOMContentLoaded', renderCart);
   </script>
 </body>
 </html>

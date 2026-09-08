@@ -117,13 +117,8 @@ function updateCartBadge() {
 // ──────────────────────────────────────────────
 const SUPPORTED_LANGUAGES = [
   { code: 'en', name: 'English', native: 'English', flag: '🇬🇧' },
-  { code: 'hi', name: 'Hindi', native: 'हिन्दी', flag: '🇮🇳' },
   { code: 'gu', name: 'Gujarati', native: 'ગુજરાતી', flag: '🇮🇳' },
-  { code: 'mr', name: 'Marathi', native: 'मराठी', flag: '🇮🇳' },
-  { code: 'pa', name: 'Punjabi', native: 'ਪੰਜਾਬੀ', flag: '🇮🇳' },
-  { code: 'bn', name: 'Bengali', native: 'বাংলা', flag: '🇮🇳' },
-  { code: 'ta', name: 'Tamil', native: 'தமிழ்', flag: '🇮🇳' },
-  { code: 'te', name: 'Telugu', native: 'తెలుగు', flag: '🇮🇳' }
+  { code: 'hi', name: 'Hindi', native: 'हिन्दी', flag: '🇮🇳' }
 ];
 
 const HL_TRANSLATIONS = {
@@ -584,6 +579,9 @@ function changeLanguage(langCode, showFeedback = true) {
 
   // 4. Instant UI dictionary translation for headings & components
   applyNativeTranslation(target);
+  if (window.HarvestLinkI18n && typeof window.HarvestLinkI18n.changeLanguage === 'function') {
+    window.HarvestLinkI18n.changeLanguage(target);
+  }
 
   // 5. Update top header navbar language indicator
   buildNavbarRight();
@@ -773,6 +771,7 @@ const PRODUCTS = [
   { id: 19, emoji: '🧄', name: 'Garlic', priceNum: 72, price: '₹72', unit: 'kg', farmer: 'Malwa FPO', sellerType: 'fpo', location: 'Madhya Pradesh', practice: 'conventional', category: 'vegetables', rating: 4.1, availability: 'available', badge: 'Verified FPO' },
   { id: 20, emoji: '🍋', name: 'Lemon', priceNum: 55, price: '₹55', unit: 'kg', farmer: 'Citrus FPO', sellerType: 'fpo', location: 'Maharashtra', practice: 'natural', category: 'fruits', rating: 4.6, availability: 'available', badge: 'Verified FPO' }
 ];
+window.PRODUCTS = PRODUCTS;
 
 // ──────────────────────────────────────────────
 // RENDER PRODUCT CARD (shared across pages)
