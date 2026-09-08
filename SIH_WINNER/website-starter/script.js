@@ -517,3 +517,31 @@ if (heroImg) {
   };
   heroImg.src = heroImg.src; // trigger onerror if image not found
 }
+
+// =========================================
+// LANGUAGE SWITCHING & TRANSLATION HELPER
+// =========================================
+if (typeof window.changeLanguage !== 'function') {
+  window.changeLanguage = function(langCode) {
+    if (!langCode) return;
+    if (langCode === 'en') {
+      localStorage.setItem('hl_lang', 'en');
+      document.cookie = 'googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+      window.location.reload();
+      return;
+    }
+    localStorage.setItem('hl_lang', langCode);
+    const host = window.location.hostname;
+    document.cookie = `googtrans=/en/${langCode}; path=/;`;
+    if (host) {
+      document.cookie = `googtrans=/en/${langCode}; domain=${host}; path=/;`;
+      document.cookie = `googtrans=/en/${langCode}; domain=.${host}; path=/;`;
+    }
+    const select = document.querySelector('.goog-te-combo');
+    if (select) {
+      select.value = langCode;
+      select.dispatchEvent(new Event('change', { bubbles: true }));
+    }
+  };
+  window.setAppLanguage = window.changeLanguage;
+}
