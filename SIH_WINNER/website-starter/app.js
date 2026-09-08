@@ -397,9 +397,12 @@ function triggerGoogleTranslateCombo(code) {
   try {
     const select = document.querySelector('.goog-te-combo');
     if (select) {
-      const val = code === 'en' ? '' : code;
-      if (select.value !== val) {
-        select.value = val;
+      let opt = Array.from(select.options).find(o => o.value.toLowerCase() === code.toLowerCase());
+      if (!opt && code === 'en') {
+        opt = Array.from(select.options).find(o => o.value === 'en' || o.value === '' || o.text.toLowerCase().includes('english'));
+      }
+      if (opt && select.value !== opt.value) {
+        select.value = opt.value;
         select.dispatchEvent(new Event('change', { bubbles: true }));
       }
       return true;
@@ -520,34 +523,51 @@ function changeLanguage(langCode, showFeedback = true) {
   if (!langCode) return;
   const target = langCode.trim();
 
-  // 1. Store in localStorage for application state
-  localStorage.setItem(HL_LANG, target);
-
-  // 2. Set googtrans cookie across root path, hostname and root domain
-  const host = window.location.hostname;
+  // 1. If switching back to default English, clear all Google Translate cookies and cleanly reload
   if (target === 'en') {
-    document.cookie = 'googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
-    document.cookie = 'googtrans=/en/en; path=/;';
-    if (host) {
-      document.cookie = `googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; domain=${host}; path=/;`;
-      document.cookie = `googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; domain=.${host}; path=/;`;
-      document.cookie = `googtrans=/en/en; domain=${host}; path=/;`;
-      document.cookie = `googtrans=/en/en; domain=.${host}; path=/;`;
-      if (host.includes('.')) {
-        const rootDomain = host.split('.').slice(-2).join('.');
-        document.cookie = `googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; domain=.${rootDomain}; path=/;`;
-        document.cookie = `googtrans=/en/en; domain=.${rootDomain}; path=/;`;
-      }
+    localStorage.setItem(HL_LANG, 'en');
+
+    // Thoroughly remove googtrans cookies across all path/domain combinations
+    const host = window.location.hostname;
+    const domains = ['', host, `.${host}`];
+    if (host.includes('.')) {
+      domains.push(`.${host.split('.').slice(-2).join('.')}`);
     }
-  } else {
-    document.cookie = `googtrans=/en/${target}; path=/;`;
-    if (host) {
-      document.cookie = `googtrans=/en/${target}; domain=${host}; path=/;`;
-      document.cookie = `googtrans=/en/${target}; domain=.${host}; path=/;`;
-      if (host.includes('.')) {
-        const rootDomain = host.split('.').slice(-2).join('.');
-        document.cookie = `googtrans=/en/${target}; domain=.${rootDomain}; path=/;`;
+    const paths = ['/', window.location.pathname, ''];
+
+    domains.forEach(d => {
+      paths.forEach(p => {
+        const domPart = d ? `; domain=${d}` : '';
+        const pathPart = p ? `; path=${p}` : '';
+        document.cookie = `googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC${pathPart}${domPart}`;
+        document.cookie = `googtrans=; max-age=0${pathPart}${domPart}`;
+      });
+    });
+
+    try {
+      const select = document.querySelector('.goog-te-combo');
+      if (select) {
+        select.selectedIndex = 0;
+        select.value = '';
+        select.dispatchEvent(new Event('change', { bubbles: true }));
       }
+    } catch (e) {}
+
+    // Reload cleanly restores original DOM without Google Translate text mutations
+    window.location.reload();
+    return;
+  }
+
+  // 2. Non-English target language: save preference and set googtrans cookie
+  localStorage.setItem(HL_LANG, target);
+  const host = window.location.hostname;
+  document.cookie = `googtrans=/en/${target}; path=/;`;
+  if (host) {
+    document.cookie = `googtrans=/en/${target}; domain=${host}; path=/;`;
+    document.cookie = `googtrans=/en/${target}; domain=.${host}; path=/;`;
+    if (host.includes('.')) {
+      const rootDomain = host.split('.').slice(-2).join('.');
+      document.cookie = `googtrans=/en/${target}; domain=.${rootDomain}; path=/;`;
     }
   }
 

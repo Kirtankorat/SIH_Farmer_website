@@ -469,6 +469,12 @@ if (heroImg) {
 if (typeof window.changeLanguage !== 'function') {
   window.changeLanguage = function(langCode) {
     if (!langCode) return;
+    if (langCode === 'en') {
+      localStorage.setItem('hl_lang', 'en');
+      document.cookie = 'googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+      window.location.reload();
+      return;
+    }
     localStorage.setItem('hl_lang', langCode);
     const host = window.location.hostname;
     document.cookie = `googtrans=/en/${langCode}; path=/;`;
@@ -478,7 +484,7 @@ if (typeof window.changeLanguage !== 'function') {
     }
     const select = document.querySelector('.goog-te-combo');
     if (select) {
-      select.value = langCode === 'en' ? '' : langCode;
+      select.value = langCode;
       select.dispatchEvent(new Event('change', { bubbles: true }));
     }
   };
