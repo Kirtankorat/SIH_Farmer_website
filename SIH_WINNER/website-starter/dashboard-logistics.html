@@ -20,11 +20,11 @@
 
   <nav class="navbar" id="navbar">
     <div class="nav-container">
-      <a href="index.html" class="nav-logo"><span class="logo-leaf">⬟</span> HARVESTLINK</a>
+      <a href="index.html" class="nav-logo"><span class="logo-leaf">⬟</span> <span data-i18n="nav.brand">HARVESTLINK</span></a>
       <div class="nav-actions" style="margin-left:auto">
         <span style="font-size:13px;color:var(--text-muted)" id="logisticsNameLabel">🚚 Logistics Partner</span>
-        <a href="index.html" class="btn-outline-sm">Back to Site</a>
-        <a href="#" onclick="logout()" class="btn-outline-sm">Logout</a>
+        <a href="index.html" class="btn-outline-sm" data-i18n="nav.home">Back to Site</a>
+        <a href="#" onclick="logout()" class="btn-outline-sm" data-i18n="nav.logout">Logout</a>
       </div>
     </div>
   </nav>
@@ -34,12 +34,12 @@
       <div class="dash-profile">
         <div class="dp-avatar">🚚</div>
         <div class="dp-name" id="logisticsSidebarName">Express Transports</div>
-        <div class="dp-badge">✓ Verified Transport</div>
+        <div class="dp-badge" data-i18n="auth.role_logistics_title">✓ Verified Transport</div>
       </div>
-      <div class="dash-nav-item active" data-panel="overview"><span class="dni-icon">📊</span> Overview</div>
-      <div class="dash-nav-item" data-panel="deliveries"><span class="dni-icon">📦</span> Active Deliveries</div>
-      <div class="dash-nav-item" data-panel="routes"><span class="dni-icon">🗺️</span> Routes</div>
-      <div class="dash-nav-item" data-panel="history"><span class="dni-icon">🕒</span> History</div>
+      <div class="dash-nav-item active" data-panel="overview"><span class="dni-icon">📊</span> <span data-i18n="dash.overview">Overview</span></div>
+      <div class="dash-nav-item" data-panel="deliveries"><span class="dni-icon">📦</span> <span data-i18n="dash.active_orders">Active Deliveries</span></div>
+      <div class="dash-nav-item" data-panel="routes"><span class="dni-icon">🗺️</span> <span data-i18n="dash.logistics">Routes</span></div>
+      <div class="dash-nav-item" data-panel="history"><span class="dni-icon">🕒</span> <span data-i18n="dash.orders">History</span></div>
     </aside>
 
     <main class="dash-main">
@@ -47,17 +47,17 @@
       <!-- OVERVIEW -->
       <div class="dash-panel active" id="panel-overview">
         <div class="dash-greeting">
-          <div class="dg-text"><h2 id="logisticsHeading">Express Transports</h2><p style="color:var(--text-muted);font-size:14px">Logistics Partner Dashboard</p></div>
+          <div class="dg-text"><h2 id="logisticsHeading">Express Transports</h2><p style="color:var(--text-muted);font-size:14px" data-i18n="dash.logistics_title">Logistics Partner Dashboard</p></div>
         </div>
         <div class="dash-stats">
-          <div class="stat-card"><div class="sc-label">Active Deliveries</div><div class="sc-value">12</div></div>
-          <div class="stat-card"><div class="sc-label">Completed Today</div><div class="sc-value" style="font-size:24px">8</div></div>
-          <div class="stat-card"><div class="sc-label">Available Fleet</div><div class="sc-value">5 / 7</div></div>
+          <div class="stat-card"><div class="sc-label" data-i18n="dash.active_orders">Active Deliveries</div><div class="sc-value">12</div></div>
+          <div class="stat-card"><div class="sc-label" data-i18n="dash.status_delivered">Completed Today</div><div class="sc-value" style="font-size:24px">8</div></div>
+          <div class="stat-card"><div class="sc-label" data-i18n="dash.logistics">Available Fleet</div><div class="sc-value">5 / 7</div></div>
         </div>
 
         <div class="dash-widgets">
           <div class="widget">
-            <div class="widget-header"><div class="wh-title">Upcoming Pickups</div><div class="wh-link" onclick="switchPanel('deliveries')">View all →</div></div>
+            <div class="widget-header"><div class="wh-title" data-i18n="dash.logistics">Upcoming Pickups</div><div class="wh-link" onclick="switchPanel('deliveries')">View all →</div></div>
             <div class="widget-body">
               <div class="order-row"><div><div class="or-prod">Farm Collection — Mehsana</div><div class="or-meta">Pickup at 7:00 AM</div></div><span class="or-status status-new">Pending</span></div>
               <div class="order-row"><div><div class="or-prod">Hub Transfer — Anand</div><div class="or-meta">Pickup at 11:00 AM</div></div><span class="or-status status-new">Pending</span></div>
@@ -68,7 +68,7 @@
 
       <!-- DELIVERIES -->
       <div class="dash-panel" id="panel-deliveries">
-        <div class="dash-greeting"><div class="dg-text"><h2>Active Deliveries</h2><p>Currently ongoing transport jobs.</p></div></div>
+        <div class="dash-greeting"><div class="dg-text"><h2 data-i18n="dash.active_orders">Active Deliveries</h2><p>Currently ongoing transport jobs.</p></div></div>
         <div class="widget"><div class="widget-body">
           <div class="order-row"><div><div class="or-prod">Wheat · 200 kg · Metro Wholesale</div><div class="or-meta">From: Mehsana | To: Ahmedabad</div></div><span class="or-status status-prep">In Transit</span></div>
           <div class="order-row"><div><div class="or-prod">Tomatoes · 50 kg · Supermarket Chain</div><div class="or-meta">From: Anand | To: Baroda</div></div><span class="or-status status-prep">In Transit</span></div>
@@ -77,7 +77,7 @@
 
       <!-- ROUTES -->
       <div class="dash-panel" id="panel-routes">
-        <div class="dash-greeting"><div class="dg-text"><h2>Routes</h2><p>Optimised delivery paths for today.</p></div></div>
+        <div class="dash-greeting"><div class="dg-text"><h2 data-i18n="dash.logistics">Routes</h2><p>Optimised delivery paths for today.</p></div></div>
         <div class="widget"><div class="widget-body">
           <div class="order-row"><div class="or-prod">Route 1: Mehsana -> Ahmedabad (3 stops)</div><span class="or-status status-new">Assigned to Truck GJ-01-XX</span></div>
           <div class="order-row"><div class="or-prod">Route 2: Anand -> Baroda (2 stops)</div><span class="or-status status-new">Assigned to Mini-truck GJ-05-YY</span></div>
@@ -86,16 +86,20 @@
 
       <!-- HISTORY -->
       <div class="dash-panel" id="panel-history">
-        <div class="dash-greeting"><div class="dg-text"><h2>Delivery History</h2><p>Past completed deliveries.</p></div></div>
+        <div class="dash-greeting"><div class="dg-text"><h2 data-i18n="dash.orders">Delivery History</h2><p>Past completed deliveries.</p></div></div>
         <div class="widget"><div class="widget-body">
-          <div class="order-row"><div><div class="or-prod">Onion 100 kg · Hotel Chain</div><div class="or-meta">Delivered 2 days ago</div></div><div class="pr-price">Completed</div></div>
-          <div class="order-row"><div><div class="or-prod">Wheat 80 kg · Retail Shop</div><div class="or-meta">Delivered 3 days ago</div></div><div class="pr-price">Completed</div></div>
+          <div class="order-row"><div><div class="or-prod">Onion 100 kg · Hotel Chain</div><div class="or-meta">Delivered 2 days ago</div></div><div class="pr-price" data-i18n="dash.status_delivered">Completed</div></div>
+          <div class="order-row"><div><div class="or-prod">Wheat 80 kg · Retail Shop</div><div class="or-meta">Delivered 3 days ago</div></div><div class="pr-price" data-i18n="dash.status_delivered">Completed</div></div>
         </div></div>
       </div>
 
     </main>
   </div>
 
+  <script src="translations/en.js"></script>
+  <script src="translations/hi.js"></script>
+  <script src="translations/gu.js"></script>
+  <script src="translations/i18n.js"></script>
   <script src="api.js"></script>
   <script src="app.js"></script>
   <script>

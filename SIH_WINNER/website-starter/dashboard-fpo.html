@@ -25,11 +25,11 @@
 
   <nav class="navbar" id="navbar">
     <div class="nav-container">
-      <a href="index.html" class="nav-logo"><span class="logo-leaf">⬟</span> HARVESTLINK</a>
+      <a href="index.html" class="nav-logo"><span class="logo-leaf">⬟</span> <span data-i18n="nav.brand">HARVESTLINK</span></a>
       <div class="nav-actions" style="margin-left:auto">
         <span style="font-size:13px;color:var(--text-muted)" id="fpoNameLabel">🏢 FPO</span>
-        <a href="index.html" class="btn-outline-sm">Back to Site</a>
-        <a href="#" onclick="logout()" class="btn-outline-sm">Logout</a>
+        <a href="index.html" class="btn-outline-sm" data-i18n="nav.home">Back to Site</a>
+        <a href="#" onclick="logout()" class="btn-outline-sm" data-i18n="nav.logout">Logout</a>
       </div>
     </div>
   </nav>
@@ -40,16 +40,16 @@
       <div class="dash-profile">
         <div class="dp-avatar">🏢</div>
         <div class="dp-name" id="fpoSidebarName">Konkan FPO</div>
-        <div class="dp-badge">✓ Verified FPO</div>
+        <div class="dp-badge" data-i18n="farmers.fpo_tag">✓ Verified FPO</div>
       </div>
-      <div class="dash-nav-item active" data-panel="overview"><span class="dni-icon">📊</span> Overview</div>
-      <div class="dash-nav-item" data-panel="members"><span class="dni-icon">🌾</span> Member Farmers</div>
-      <div class="dash-nav-item" data-panel="products"><span class="dni-icon">📦</span> Products</div>
-      <div class="dash-nav-item" data-panel="inventory"><span class="dni-icon">📋</span> Inventory</div>
-      <div class="dash-nav-item" data-panel="orders"><span class="dni-icon">🛒</span> Orders</div>
-      <div class="dash-nav-item" data-panel="bulk"><span class="dni-icon">📦</span> Bulk Buyers</div>
-      <div class="dash-nav-item" data-panel="demand"><span class="dni-icon">📈</span> Demand Insights</div>
-      <div class="dash-nav-item" data-panel="logistics"><span class="dni-icon">🚛</span> Logistics</div>
+      <div class="dash-nav-item active" data-panel="overview"><span class="dni-icon">📊</span> <span data-i18n="dash.overview">Overview</span></div>
+      <div class="dash-nav-item" data-panel="members"><span class="dni-icon">🌾</span> <span data-i18n="farmers.members">Member Farmers</span></div>
+      <div class="dash-nav-item" data-panel="products"><span class="dni-icon">📦</span> <span data-i18n="dash.my_products">Products</span></div>
+      <div class="dash-nav-item" data-panel="inventory"><span class="dni-icon">📋</span> <span data-i18n="dash.crops_listed">Inventory</span></div>
+      <div class="dash-nav-item" data-panel="orders"><span class="dni-icon">🛒</span> <span data-i18n="dash.orders">Orders</span></div>
+      <div class="dash-nav-item" data-panel="bulk"><span class="dni-icon">📦</span> <span data-i18n="business.title">Bulk Buyers</span></div>
+      <div class="dash-nav-item" data-panel="demand"><span class="dni-icon">📈</span> <span data-i18n="dash.demand_insights">Demand Insights</span></div>
+      <div class="dash-nav-item" data-panel="logistics"><span class="dni-icon">🚛</span> <span data-i18n="dash.logistics">Logistics</span></div>
     </aside>
 
     <main class="dash-main">
@@ -176,6 +176,10 @@
     </main>
   </div>
 
+  <script src="translations/en.js"></script>
+  <script src="translations/hi.js"></script>
+  <script src="translations/gu.js"></script>
+  <script src="translations/i18n.js"></script>
   <script src="api.js"></script>
   <script src="app.js"></script>
   <script>

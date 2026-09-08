@@ -161,65 +161,65 @@
 
   <nav class="navbar" id="navbar">
     <div class="nav-container">
-      <a href="index.html" class="nav-logo"><span class="logo-leaf">⬟</span> HARVESTLINK</a>
+      <a href="index.html" class="nav-logo"><span class="logo-leaf">⬟</span> <span data-i18n="nav.brand">HARVESTLINK</span></a>
       <ul class="nav-links" id="navLinks">
-        <li><a href="index.html" class="nav-link">Home</a></li>
-        <li><a href="marketplace.html" class="nav-link">Marketplace</a></li>
-        <li><a href="farmers.html" class="nav-link">Farmers</a></li>
-        <li><a href="businesses.html" class="nav-link">Businesses</a></li>
-        <li><a href="index.html#how-it-works" class="nav-link">How It Works</a></li>
-        <li><a href="index.html#ai-logistics" class="nav-link">AI & Logistics</a></li>
-        <li><a href="about.html" class="nav-link">About</a></li>
-        <li><a href="faq.html" class="nav-link">FAQ</a></li>
+        <li><a href="index.html" class="nav-link" data-i18n="nav.home">Home</a></li>
+        <li><a href="marketplace.html" class="nav-link" data-i18n="nav.marketplace">Marketplace</a></li>
+        <li><a href="farmers.html" class="nav-link" data-i18n="nav.farmers">Farmers</a></li>
+        <li><a href="businesses.html" class="nav-link" data-i18n="nav.businesses">Businesses</a></li>
+        <li><a href="index.html#how-it-works" class="nav-link" data-i18n="nav.how_it_works">How It Works</a></li>
+        <li><a href="index.html#ai-logistics" class="nav-link" data-i18n="nav.ai_logistics">AI & Logistics</a></li>
+        <li><a href="about.html" class="nav-link" data-i18n="nav.about">About</a></li>
+        <li><a href="faq.html" class="nav-link" data-i18n="nav.faq">FAQ</a></li>
       </ul>
       <div class="nav-actions nav-actions-inject"></div>
       <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
     </div>
     <div class="mobile-menu" id="mobileMenu">
       <ul>
-        <li><a href="index.html">Home</a></li>
-        <li><a href="marketplace.html">Marketplace</a></li>
-        <li><a href="farmers.html">Farmers</a></li>
-        <li><a href="businesses.html">Businesses</a></li>
-        <li><a href="index.html#how-it-works">How It Works</a></li>
-        <li><a href="index.html#ai-logistics">AI & Logistics</a></li>
-        <li><a href="about.html">About</a></li>
-        <li><a href="faq.html">FAQ</a></li>
+        <li><a href="index.html" data-i18n="nav.home">Home</a></li>
+        <li><a href="marketplace.html" data-i18n="nav.marketplace">Marketplace</a></li>
+        <li><a href="farmers.html" data-i18n="nav.farmers">Farmers</a></li>
+        <li><a href="businesses.html" data-i18n="nav.businesses">Businesses</a></li>
+        <li><a href="index.html#how-it-works" data-i18n="nav.how_it_works">How It Works</a></li>
+        <li><a href="index.html#ai-logistics" data-i18n="nav.ai_logistics">AI & Logistics</a></li>
+        <li><a href="about.html" data-i18n="nav.about">About</a></li>
+        <li><a href="faq.html" data-i18n="nav.faq">FAQ</a></li>
       </ul>
       <div class="mobile-actions">
-        <a href="login.html" class="btn-outline-full">Login</a>
-        <a href="role-select.html" class="btn-primary-full">Join Free</a>
-        <a href="marketplace.html" class="btn-green-full">Shop Produce</a>
+        <a href="login.html" class="btn-outline-full" data-i18n="nav.login">Login</a>
+        <a href="role-select.html" class="btn-primary-full" data-i18n="nav.join_free">Join Free</a>
+        <a href="marketplace.html" class="btn-green-full" data-i18n="nav.shop_produce">Shop Produce</a>
       </div>
     </div>
   </nav>
 
   <div class="signup-container">
     <div class="signup-card">
-      <div class="signup-logo"><span>⬟</span> HARVESTLINK</div>
+      <div class="signup-logo"><span>⬟</span> <span data-i18n="nav.brand">HARVESTLINK</span></div>
 
       <!-- Step 0: Role select -->
       <div class="signup-step active" id="sg-step0">
-        <div class="step-heading">Create your account.</div>
-        <p class="step-desc">First, tell us who you are so we can personalise your experience.</p>
+        <div class="step-heading" data-i18n="auth.register_title">Create your account.</div>
+        <p class="step-desc" data-i18n="auth.register_sub">First, tell us who you are so we can personalise your experience.</p>
 
-        <div style="font-size: 12px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 12px;">I want to join as</div>
+        <div style="font-size: 12px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 12px;" data-i18n="auth.role_title">I want to join as</div>
         <div class="signup-role-grid" id="rolePickGrid">
           <div class="signup-role-card" data-role="farmer">
             <div class="src-icon">🌾</div>
-            <div class="src-name">Individual Farmer</div>
+            <div class="src-name" data-i18n="auth.role_farmer_title">Individual Farmer</div>
           </div>
           <div class="signup-role-card" data-role="fpo">
             <div class="src-icon">🏢</div>
-            <div class="src-name">FPO</div>
+            <div class="src-name" data-i18n="auth.role_fpo_title">FPO</div>
           </div>
           <div class="signup-role-card" data-role="logistics">
             <div class="src-icon">🚚</div>
-            <div class="src-name">Logistics Partner</div>
+            <div class="src-name" data-i18n="auth.role_logistics_title">Logistics Partner</div>
           </div>
           <div class="signup-role-card" data-role="bulk">
             <div class="src-icon">📦</div>
-            <div class="src-name">Bulk Buyer</div>
+            <div class="src-name" data-i18n="auth.role_buyer_title">Bulk Buyer</div>
           </div>
         </div>
 
@@ -228,7 +228,7 @@
           <button class="btn-next-step" onclick="startSignup()">Continue →</button>
         </div>
         <div style="text-align:center;margin-top:16px;font-size:14px;color:var(--text-muted)">
-          Already have an account? <a href="login.html" style="color:var(--green);font-weight:700">Login</a>
+          <span data-i18n="auth.have_account">Already have an account?</span> <a href="login.html" style="color:var(--green);font-weight:700" data-i18n="nav.login">Login</a>
         </div>
       </div>
 
@@ -250,6 +250,10 @@
     </div>
   </div>
 
+  <script src="translations/en.js"></script>
+  <script src="translations/hi.js"></script>
+  <script src="translations/gu.js"></script>
+  <script src="translations/i18n.js"></script>
   <script src="api.js"></script>
   <script src="app.js"></script>
   <script>

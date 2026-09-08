@@ -104,35 +104,35 @@
   <!-- NAVBAR -->
   <nav class="navbar" id="navbar">
     <div class="nav-container">
-      <a href="index.html" class="nav-logo"><span class="logo-leaf">⬟</span> HARVESTLINK</a>
+      <a href="index.html" class="nav-logo"><span class="logo-leaf">⬟</span> <span data-i18n="nav.brand">HARVESTLINK</span></a>
       <ul class="nav-links" id="navLinks">
-        <li><a href="index.html" class="nav-link">Home</a></li>
-        <li><a href="marketplace.html" class="nav-link">Marketplace</a></li>
-        <li><a href="farmers.html" class="nav-link">Farmers</a></li>
-        <li><a href="businesses.html" class="nav-link">Businesses</a></li>
-        <li><a href="index.html#how-it-works" class="nav-link">How It Works</a></li>
-        <li><a href="index.html#ai-logistics" class="nav-link">AI & Logistics</a></li>
-        <li><a href="about.html" class="nav-link">About</a></li>
-        <li><a href="faq.html" class="nav-link">FAQ</a></li>
+        <li><a href="index.html" class="nav-link" data-i18n="nav.home">Home</a></li>
+        <li><a href="marketplace.html" class="nav-link" data-i18n="nav.marketplace">Marketplace</a></li>
+        <li><a href="farmers.html" class="nav-link" data-i18n="nav.farmers">Farmers</a></li>
+        <li><a href="businesses.html" class="nav-link" data-i18n="nav.businesses">Businesses</a></li>
+        <li><a href="index.html#how-it-works" class="nav-link" data-i18n="nav.how_it_works">How It Works</a></li>
+        <li><a href="index.html#ai-logistics" class="nav-link" data-i18n="nav.ai_logistics">AI & Logistics</a></li>
+        <li><a href="about.html" class="nav-link active" data-i18n="nav.about">About</a></li>
+        <li><a href="faq.html" class="nav-link" data-i18n="nav.faq">FAQ</a></li>
       </ul>
       <div class="nav-actions nav-actions-inject"></div>
-      <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+      <button class="hamburger" id="hamburger" aria-label="Toggle menu" data-i18n-title="nav.menu"><span></span><span></span><span></span></button>
     </div>
     <div class="mobile-menu" id="mobileMenu">
       <ul>
-        <li><a href="index.html">Home</a></li>
-        <li><a href="marketplace.html">Marketplace</a></li>
-        <li><a href="farmers.html">Farmers</a></li>
-        <li><a href="businesses.html">Businesses</a></li>
-        <li><a href="index.html#how-it-works">How It Works</a></li>
-        <li><a href="index.html#ai-logistics">AI & Logistics</a></li>
-        <li><a href="about.html">About</a></li>
-        <li><a href="faq.html">FAQ</a></li>
+        <li><a href="index.html" data-i18n="nav.home">Home</a></li>
+        <li><a href="marketplace.html" data-i18n="nav.marketplace">Marketplace</a></li>
+        <li><a href="farmers.html" data-i18n="nav.farmers">Farmers</a></li>
+        <li><a href="businesses.html" data-i18n="nav.businesses">Businesses</a></li>
+        <li><a href="index.html#how-it-works" data-i18n="nav.how_it_works">How It Works</a></li>
+        <li><a href="index.html#ai-logistics" data-i18n="nav.ai_logistics">AI & Logistics</a></li>
+        <li><a href="about.html" data-i18n="nav.about">About</a></li>
+        <li><a href="faq.html" data-i18n="nav.faq">FAQ</a></li>
       </ul>
       <div class="mobile-actions">
-        <a href="login.html" class="btn-outline-full">Login</a>
-        <a href="role-select.html" class="btn-primary-full">Join Free</a>
-        <a href="marketplace.html" class="btn-green-full">Shop Produce</a>
+        <a href="login.html" class="btn-outline-full" data-i18n="nav.login">Login</a>
+        <a href="role-select.html" class="btn-primary-full" data-i18n="nav.join_free">Join Free</a>
+        <a href="marketplace.html" class="btn-green-full" data-i18n="nav.shop_produce">Shop Produce</a>
       </div>
     </div>
   </nav>
@@ -140,9 +140,9 @@
   <!-- HERO -->
   <section class="about-hero">
     <div class="container">
-      <div class="section-label">Our Mission</div>
-      <h1>Making agricultural markets<br>more direct and fair.</h1>
-      <p>HarvestLink is built to reduce unnecessary friction between farmers and buyers — so more value stays with the people who grow our food.</p>
+      <div class="section-label" data-i18n="about.badge">Our Mission</div>
+      <h1 data-i18n="about.title">Making agricultural markets<br>more direct and fair.</h1>
+      <p data-i18n="about.sub">HarvestLink is built to reduce unnecessary friction between farmers and buyers — so more value stays with the people who grow our food.</p>
     </div>
   </section>
 
@@ -285,15 +285,20 @@
       <div class="footer-grid">
         <div class="footer-brand">
           <div class="footer-logo"><span>⬟</span> HARVESTLINK</div>
-          <div class="footer-tagline">From Farm. Direct to Market.</div>
+          <div class="footer-tagline" data-i18n="footer.tagline">From Farm. Direct to Market.</div>
         </div>
-        <div class="footer-col"><div class="footer-col-title">Marketplace</div><ul><li><a href="marketplace.html">Products</a></li><li><a href="farmers.html">Farmers</a></li></ul></div>
-        <div class="footer-col"><div class="footer-col-title">Company</div><ul><li><a href="about.html">About</a></li><li><a href="faq.html">FAQ</a></li><li><a href="index.html#contact">Contact</a></li></ul></div>
+        <div class="footer-col"><div class="footer-col-title" data-i18n="nav.marketplace">Marketplace</div><ul><li><a href="marketplace.html" data-i18n="nav.marketplace">Products</a></li><li><a href="farmers.html" data-i18n="nav.farmers">Farmers</a></li></ul></div>
+        <div class="footer-col"><div class="footer-col-title" data-i18n="footer.quick_links">Company</div><ul><li><a href="about.html" data-i18n="nav.about">About</a></li><li><a href="faq.html" data-i18n="nav.faq">FAQ</a></li><li><a href="index.html#contact">Contact</a></li></ul></div>
       </div>
-      <div class="footer-bottom"><span>© 2024 HarvestLink. Demo prototype.</span></div>
+      <div class="footer-bottom"><span>© 2026 HarvestLink. Demo prototype.</span></div>
     </div>
   </footer>
 
+  <script src="translations/en.js"></script>
+  <script src="translations/hi.js"></script>
+  <script src="translations/gu.js"></script>
+  <script src="translations/i18n.js"></script>
+  <script src="api.js"></script>
   <script src="app.js"></script>
   <script src="script.js"></script>
 </body>

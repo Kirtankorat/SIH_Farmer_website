@@ -48,14 +48,18 @@ const products = [
     id: 1,
     emoji: '🍅',
     name: 'Fresh Tomatoes',
+    nameKey: 'prod.tomatoes',
     price: '₹32',
     unit: 'kg',
+    unitKey: 'market.per_kg',
     farmer: 'Shree Farms',
     location: 'Anand, Gujarat',
     practice: 'organic',
+    practiceKey: 'market.practice_organic',
     practiceLabel: 'Organic',
     rating: '★★★★☆ 4.3',
     availability: 'available',
+    availKey: 'market.in_stock',
     availLabel: 'In Stock',
     category: 'vegetables'
   },
@@ -63,14 +67,18 @@ const products = [
     id: 2,
     emoji: '🥭',
     name: 'Alphonso Mango',
+    nameKey: 'prod.mango',
     price: '₹180',
     unit: 'kg',
+    unitKey: 'market.per_kg',
     farmer: 'Konkan FPO',
     location: 'Maharashtra',
     practice: 'natural',
+    practiceKey: 'market.practice_natural',
     practiceLabel: 'Natural',
     rating: '★★★★★ 4.8',
     availability: 'limited',
+    availKey: 'market.limited_stock',
     availLabel: 'Limited Stock',
     category: 'fruits'
   },
@@ -78,14 +86,18 @@ const products = [
     id: 3,
     emoji: '🌾',
     name: 'Wheat (Lokwan)',
+    nameKey: 'prod.wheat',
     price: '₹42',
     unit: 'kg',
+    unitKey: 'market.per_kg',
     farmer: 'Kisan Collective',
     location: 'Mehsana, Gujarat',
     practice: 'conventional',
+    practiceKey: 'market.practice_conventional',
     practiceLabel: 'Conventional',
     rating: '★★★★☆ 4.1',
     availability: 'available',
+    availKey: 'market.in_stock',
     availLabel: 'In Stock',
     category: 'grains'
   },
@@ -93,14 +105,18 @@ const products = [
     id: 4,
     emoji: '🟡',
     name: 'Turmeric Powder',
+    nameKey: 'prod.turmeric',
     price: '₹145',
     unit: 'kg',
+    unitKey: 'market.per_kg',
     farmer: 'Sahyog FPO',
     location: 'Anand, Gujarat',
     practice: 'organic',
+    practiceKey: 'market.practice_organic',
     practiceLabel: 'Organic',
     rating: '★★★★★ 4.7',
     availability: 'available',
+    availKey: 'market.in_stock',
     availLabel: 'In Stock',
     category: 'spices'
   },
@@ -108,14 +124,18 @@ const products = [
     id: 5,
     emoji: '🧅',
     name: 'Onion',
+    nameKey: 'prod.onion',
     price: '₹28',
     unit: 'kg',
+    unitKey: 'market.per_kg',
     farmer: 'Nashik Farmers',
     location: 'Nashik, Maharashtra',
     practice: 'conventional',
+    practiceKey: 'market.practice_conventional',
     practiceLabel: 'Conventional',
     rating: '★★★★☆ 4.0',
     availability: 'available',
+    availKey: 'market.in_stock',
     availLabel: 'In Stock',
     category: 'vegetables'
   },
@@ -123,14 +143,18 @@ const products = [
     id: 6,
     emoji: '🥔',
     name: 'Potato',
+    nameKey: 'prod.potato',
     price: '₹22',
     unit: 'kg',
+    unitKey: 'market.per_kg',
     farmer: 'Agro FPO',
     location: 'Surat, Gujarat',
     practice: 'conventional',
+    practiceKey: 'market.practice_conventional',
     practiceLabel: 'Conventional',
     rating: '★★★★☆ 4.2',
     availability: 'available',
+    availKey: 'market.in_stock',
     availLabel: 'In Stock',
     category: 'vegetables'
   },
@@ -138,14 +162,18 @@ const products = [
     id: 7,
     emoji: '🫘',
     name: 'Toor Dal',
+    nameKey: 'prod.toor_dal',
     price: '₹95',
     unit: 'kg',
+    unitKey: 'market.per_kg',
     farmer: 'Vidarbha FPO',
     location: 'Nagpur, Maharashtra',
     practice: 'natural',
+    practiceKey: 'market.practice_natural',
     practiceLabel: 'Natural',
     rating: '★★★★☆ 4.4',
     availability: 'available',
+    availKey: 'market.in_stock',
     availLabel: 'In Stock',
     category: 'pulses'
   },
@@ -153,18 +181,24 @@ const products = [
     id: 8,
     emoji: '🥛',
     name: 'Fresh Milk',
+    nameKey: 'prod.milk',
     price: '₹56',
     unit: 'litre',
+    unitKey: 'market.per_litre',
     farmer: 'Amul Partner Dairy',
     location: 'Anand, Gujarat',
     practice: 'natural',
+    practiceKey: 'market.practice_natural',
     practiceLabel: 'Natural',
     rating: '★★★★★ 4.9',
     availability: 'limited',
+    availKey: 'market.limited_stock',
     availLabel: 'Limited Stock',
     category: 'dairy'
   }
 ];
+
+let currentProductList = products;
 
 // =========================================
 // RENDER PRODUCT CARDS
@@ -172,33 +206,54 @@ const products = [
 function renderProducts(list) {
   const grid = document.getElementById('productsGrid');
   if (!grid) return;
+  currentProductList = list || products;
 
-  if (list.length === 0) {
-    grid.innerHTML = '<div style="text-align:center;padding:40px;color:var(--text-muted);font-size:15px;">No products found.</div>';
+  if (currentProductList.length === 0) {
+    const noProdText = (typeof window.t === 'function') ? window.t('market.no_products', 'No products found.') : 'No products found.';
+    grid.innerHTML = `<div style="text-align:center;padding:40px;color:var(--text-muted);font-size:15px;" data-i18n="market.no_products">${noProdText}</div>`;
     return;
   }
 
-  grid.innerHTML = list.map(p => `
-    <div class="product-card" data-id="${p.id}">
-      <div class="product-img-wrap">
-        <span>${p.emoji}</span>
-        <span class="product-practice-tag tag-${p.practice}">${p.practiceLabel}</span>
+  const transHelper = (key, fallback) => (typeof window.t === 'function') ? window.t(key, fallback) : fallback;
+  const addCartLabel = transHelper('market.add_to_cart', 'Add to Cart');
+
+  grid.innerHTML = currentProductList.map(p => {
+    const prodName = p.nameKey ? transHelper(p.nameKey, p.name) : p.name;
+    const practiceName = p.practiceKey ? transHelper(p.practiceKey, p.practiceLabel) : p.practiceLabel;
+    const availName = p.availKey ? transHelper(p.availKey, p.availLabel) : p.availLabel;
+    const unitName = p.unitKey ? transHelper(p.unitKey, `/ ${p.unit}`) : `/ ${p.unit}`;
+
+    return `
+      <div class="product-card" data-id="${p.id}">
+        <div class="product-img-wrap">
+          <span>${p.emoji}</span>
+          <span class="product-practice-tag tag-${p.practice}" data-i18n="${p.practiceKey || ''}">${practiceName}</span>
+        </div>
+        <div class="product-body">
+          <div class="product-name" data-i18n="${p.nameKey || ''}">${prodName}</div>
+          <div class="product-price">${p.price} <span data-i18n="${p.unitKey || ''}">${unitName}</span></div>
+          <div class="product-farmer">${p.farmer}</div>
+          <div class="product-location">📍 ${p.location}</div>
+          <div class="product-rating">${p.rating}</div>
+          <span class="product-availability avail-${p.availability === 'available' ? 'yes' : 'limited'}" data-i18n="${p.availKey || ''}">${availName}</span>
+          <button class="btn-add-cart" data-id="${p.id}" data-i18n="market.add_to_cart" onclick="addToCart(this, '${p.name}')">${addCartLabel}</button>
+        </div>
       </div>
-      <div class="product-body">
-        <div class="product-name">${p.name}</div>
-        <div class="product-price">${p.price} <span>/ ${p.unit}</span></div>
-        <div class="product-farmer">${p.farmer}</div>
-        <div class="product-location">📍 ${p.location}</div>
-        <div class="product-rating">${p.rating}</div>
-        <span class="product-availability avail-${p.availability === 'available' ? 'yes' : 'limited'}">${p.availLabel}</span>
-        <button class="btn-add-cart" data-id="${p.id}" onclick="addToCart(this, '${p.name}')">Add to Cart</button>
-      </div>
-    </div>
-  `).join('');
+    `;
+  }).join('');
 }
 
 // Initial render
 renderProducts(products);
+
+// Listen to language changes to re-render dynamic content
+document.addEventListener('languageChanged', () => {
+  renderProducts(currentProductList);
+  if (typeof renderAIDashboard === 'function') {
+    const activeAi = document.querySelector('.ai-nav-item.active')?.dataset.crop || 'tomato';
+    renderAIDashboard(activeAi);
+  }
+});
 
 // =========================================
 // CATEGORY FILTER

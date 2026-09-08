@@ -113,327 +113,19 @@ function updateCartBadge() {
 }
 
 // ──────────────────────────────────────────────
-// MULTI-LANGUAGE SYSTEM (English, Hindi, Gujarati, etc.)
+// MULTI-LANGUAGE SYSTEM (English, Hindi, Gujarati)
 // ──────────────────────────────────────────────
-const SUPPORTED_LANGUAGES = [
+const SUPPORTED_LANGUAGES = window.SUPPORTED_LANGUAGES || [
   { code: 'en', name: 'English', native: 'English', flag: '🇬🇧' },
   { code: 'hi', name: 'Hindi', native: 'हिन्दी', flag: '🇮🇳' },
-  { code: 'gu', name: 'Gujarati', native: 'ગુજરાતી', flag: '🇮🇳' },
-  { code: 'mr', name: 'Marathi', native: 'मराठी', flag: '🇮🇳' },
-  { code: 'pa', name: 'Punjabi', native: 'ਪੰਜਾਬੀ', flag: '🇮🇳' },
-  { code: 'bn', name: 'Bengali', native: 'বাংলা', flag: '🇮🇳' },
-  { code: 'ta', name: 'Tamil', native: 'தமிழ்', flag: '🇮🇳' },
-  { code: 'te', name: 'Telugu', native: 'తెలుగు', flag: '🇮🇳' }
+  { code: 'gu', name: 'Gujarati', native: 'ગુજરાતી', flag: '🇮🇳' }
 ];
 
-const HL_TRANSLATIONS = {
-  // Navigation & Core Actions
-  "Home": { hi: "होम", gu: "હોમ", mr: "मुख्यपृष्ठ", pa: "ਮੁੱਖ ਪੰਨਾ", bn: "হোম", ta: "முகப்பு", te: "హోమ్" },
-  "Marketplace": { hi: "मार्केटप्लेस", gu: "માર્કેટપ્લેસ", mr: "बाजारपेठ", pa: "ਮਾਰਕੀਟਪਲੇਸ", bn: "মার্কেটপ্লেস", ta: "சந்தை", te: "మార్కెట్‌ప్લેస్" },
-  "Farmers": { hi: "किसान", gu: "ખેડૂતો", mr: "शेतकरी", pa: "ਕਿਸਾਨ", bn: "কৃষক", ta: "விவசாயிகள்", te: "రైతులు" },
-  "Businesses": { hi: "व्यापार", gu: "વેપાર", mr: "व्यवसाय", pa: "ਵਪਾਰ", bn: "ব্যবসা", ta: "வணிகங்கள்", te: "వ్యాపారాలు" },
-  "How It Works": { hi: "यह कैसे काम करता है", gu: "તે કેવી રીતે કાર્ય કરે છે", mr: "हे कसे कार्य करते", pa: "ਇਹ ਕਿਵੇਂ ਕੰਮ ਕਰਦਾ ਹੈ", bn: "এটি কীভাবে কাজ করে", ta: "இது எவ்வாறு செயல்படுகிறது", te: "ఇది ఎలా పనిచేస్తుంది" },
-  "AI & Logistics": { hi: "एआई और लॉजिस्टिक्स", gu: "એઆઈ અને લોજિસ્ટિક્સ", mr: "एआय आणि लॉजिस्टिक्स", pa: "AI ਅਤੇ ਲੌਜਿਸਟਿਕਸ", bn: "এআই এবং লজিস্টিকস", ta: "AI & தளவாடங்கள்", te: "AI & లాజిస్టిక్స్" },
-  "About": { hi: "हमारे बारे में", gu: "અમારા વિશે", mr: "आमच्याबद्दल", pa: "ਸਾਡੇ ਬਾਰੇ", bn: "আমাদের সম্পর্কে", ta: "எங்களைப் பற்றி", te: "మా గురించి" },
-  "FAQ": { hi: "सामान्य प्रश्न", gu: "વારંવાર પૂછાતા પ્રશ્નો", mr: "नेहमी विचारले जाणारे प्रश्न", pa: "ਅਕਸਰ ਪੁੱਛੇ ਜਾਂਦੇ ਸਵਾਲ", bn: "সাধারণ জিজ্ঞাসা", ta: "அடிக்கடி கேட்கப்படும் கேள்விகள்", te: "తరచుగా అడిగే ప్రశ్నలు" },
-  "Menu": { hi: "मेनू", gu: "મેનુ", mr: "मेनू", pa: "ਮੀਨੂ", bn: "মেনু", ta: "மெனு", te: "మెనూ" },
-  "Close": { hi: "बंद करें", gu: "બંધ કરો", mr: "बंद करा", pa: "ਬੰਦ ਕਰੋ", bn: "বন্ধ করুন", ta: "மூடு", te: "మూసివేయి" },
-  "Cart": { hi: "कार्ट", gu: "કાર્ટ", mr: "कार्ट", pa: "ਕਾਰਟ", bn: "কার্ট", ta: "கார்ட்", te: "కార్ట్" },
-  "Login": { hi: "लॉग इन", gu: "લોગિન", mr: "लॉगिन", pa: "ਲਾਗਇਨ", bn: "লগইন", ta: "உள்நுழைக", te: "లాగిన్" },
-  "Join Free": { hi: "निःशुल्क जुड़ें", gu: "મફત જોડાઓ", mr: "विनामूल्य सामील व्हा", pa: "ਮੁਫਤ ਸ਼ਾਮਲ ਹੋਵੋ", bn: "বিনামূল্যে যোগ দিন", ta: "இலவசமாக இணையுங்கள்", te: "ఉచితంగా చేరండి" },
-  "Shop Produce": { hi: "उपज खरीदें", gu: "તાજી ઉપજ ખરીદો", mr: "उत्पादने खरेदी करा", pa: "ਉਪਜ ਖਰੀਦੋ", bn: "পণ্য কিনুন", ta: "பொருட்களை வாங்கவும்", te: "ఉత్పత్తులను కొనండి" },
-  "Shop Fresh Produce": { hi: "ताज़ा उत्पाद खरीदें", gu: "તાજી પેદાશ ખરીદો", mr: "ताजी उत्पादने खरेदी करा" },
-  "Sell Your Produce": { hi: "अपनी उपज बेचें", gu: "તમારી ઉપજ વેચો", mr: "तुमची उत्पादने विका" },
-  "Logout": { hi: "लॉगआउट", gu: "લૉગઆઉટ", mr: "लॉगआउट", pa: "ਲਾਗਆਉਟ", bn: "লগআউট", ta: "வெளியேறு", te: "లాగౌట్" },
-  "Dashboard": { hi: "डैशबोर्ड", gu: "ડેશબોર્ડ", mr: "डॅशबोर्ड", pa: "ਡੈਸ਼ਬੋਰਡ", bn: "ড্যাশবোর্ড", ta: "டாஷ்போர்டு", te: "డ్యాష్‌బోర్డ్" },
-  "Products": { hi: "उत्पाद", gu: "ઉત્પાદનો", mr: "उत्पादने", pa: "ਉਤਪਾਦ", bn: "পণ্যসমূহ", ta: "தயாரிப்புகள்", te: "ఉత్పత్తులు" },
-  "Orders": { hi: "ऑर्डर", gu: "ઓર્ડર", mr: "ऑर्डर्स", pa: "ਆਰਡਰ", bn: "অর্ডার", ta: "ஆர்டர்கள்", te: "ఆర్డర్లు" },
-  "My Orders": { hi: "मेरे ऑर्डर", gu: "મારા ઓર્ડર", mr: "माझे ऑर्डर्स", pa: "ਮੇਰੇ ਆਰਡਰ", bn: "আমার অর্ডার", ta: "எனது ஆர்டர்கள்", te: "నా ఆర్డర్లు" },
-
-  // Roles & Badges
-  "Farmer": { hi: "किसान", gu: "ખેડૂત", mr: "शेतकरी" },
-  "FPO": { hi: "एफपीओ (किसान संगठन)", gu: "એફપીઓ (ખેડૂત સંગઠન)", mr: "एफपीओ" },
-  "Logistics Partner": { hi: "लॉजिस्टिक्स पार्टनर", gu: "લોજિસ્ટિક્સ પાર્ટનર", mr: "लॉजिस्टिक्स भागीदार" },
-  "Bulk Buyer": { hi: "थोक खरीदार", gu: "જથ્થાબંધ ખરીદદાર", mr: "घाऊक खरेदीदार" },
-  "Individual Farmer": { hi: "व्यक्तिगत किसान", gu: "વ્યક્તિગત ખેડૂત", mr: "वैयक्तिक शेतकरी" },
-  "Verified FPO": { hi: "सत्यापित एफपीओ", gu: "ચકાસાયેલ એફપીઓ", mr: "सत्यापित एफपीओ" },
-
-  // Hero & Trust Badges
-  "Agricultural Marketplace · India": { hi: "कृषि मार्केटप्लेस · भारत", gu: "કૃષિ માર્કેટપ્લેસ · ભારત", mr: "कृषी बाजारपेठ · भारत" },
-  "Fresh produce.": { hi: "ताज़ी उपज।", gu: "તાજી પેદાશ.", mr: "ताजी उत्पादने." },
-  "Fresh produce": { hi: "ताज़ी उपज", gu: "તાજી પેદાશ", mr: "ताजी उत्पादने" },
-  "Direct from farmers.": { hi: "सीधे किसानों से।", gu: "સીધા ખેડૂતો પાસેથી.", mr: "थेट शेतकऱ्यांकडून." },
-  "Direct from farmers": { hi: "सीधे किसानों से", gu: "સીધા ખેડૂતો પાસેથી", mr: "थेट शेतकऱ्यांकडून" },
-  "Direct from Farmers": { hi: "सीधे किसानों से", gu: "સીધા ખેડૂતો પાસેથી", mr: "थेट शेतकऱ्यांकडून" },
-  "Buy fresh produce directly from verified farmers and FPOs, while smarter demand planning and logistics help move food efficiently from farm to market.": {
-    hi: "सत्यापित किसानों और एफपीओ से सीधे ताज़ा उत्पाद खरीदें, जबकि स्मार्ट मांग योजना और लॉजिस्टिक्स खेत से बाज़ार तक भोजन को कुशलतापूर्वक पहुँचाते हैं।",
-    gu: "ચકાસાયેલ ખેડૂતો અને એફપીઓ પાસેથી સીધી તાજી પેદાશો ખરીદો, જ્યારે સ્માર્ટ માંગ આયોજન અને લોજિસ્ટિક્સ ખેતરથી બજાર સુધી કાર્યક્ષમ રીતે માલ પહોંચાડે છે.",
-    mr: "सत्यापित शेतकरी आणि FPO कडून थेट ताजी उत्पादने खरेदी करा, तर स्मार्ट मागणी नियोजन आणि लॉजिस्टिक्स शेतातून बाजारात अन्न कार्यक्षमतेने पोहोचवण्यास मदत करतात."
-  },
-  "✓ Direct from Farmers": { hi: "✓ सीधे किसानों से", gu: "✓ સીધા ખેડૂતો પાસેથી", mr: "✓ थेट शेतकऱ्यांकडून" },
-  "✓ Fairer Prices": { hi: "✓ उचित मूल्य", gu: "✓ વાજબી ભાવ", mr: "✓ रास्त भाव" },
-  "✓ Smarter Delivery": { hi: "✓ स्मार्ट डिलीवरी", gu: "✓ સ્માર્ટ ડિલિવરી", mr: "✓ स्मार्ट डिलिव्हरी" },
-  "Fairer Prices": { hi: "उचित मूल्य", gu: "વાજબી ભાવ", mr: "रास्त भाव" },
-  "Smarter Delivery": { hi: "स्मार्ट डिलीवरी", gu: "સ્માર્ટ ડિલિવરી", mr: "स्मार्ट डिलिव्हरी" },
-  "Farmers Listed": { hi: "सूचीबद्ध किसान", gu: "નોંધાયેલા ખેડૂતો", mr: "नोंदणीकृत शेतकरी" },
-  "Orders Delivered": { hi: "ऑर्डर डिलीवर किए गए", gu: "ડિલિવર થયેલ ઓર્ડર", mr: "वितरित ऑर्डर्स" },
-
-  // Problem / Solution & Sections
-  "Why HarvestLink": { hi: "हार्वेस्टलिंक क्यों", gu: "હાર્વેસ્ટલિંક શા માટે", mr: "हार्वेस्टलिंक का" },
-  "A better connection between farms and markets.": { hi: "खेतों और बाज़ारों के बीच एक बेहतर संबंध।", gu: "ખેતરો અને બજારો વચ્ચે શ્રેષ્ઠ જોડાણ.", mr: "शेत आणि बाजारपेठ यांच्यातील उत्तम जोडणी." },
-  "Consumers": { hi: "उपभोक्ता", gu: "ગ્રાહકો", mr: "ग्राहक" },
-  "Bulk Buyers": { hi: "थोक खरीदार", gu: "જથ્થાબંધ ખરીદદારો", mr: "घाऊक खरेदीदार" },
-  "FPOs & Collectives": { hi: "एफपीओ और समूह", gu: "એફપીઓ અને મંડળીઓ", mr: "एफपीओ आणि शेतकरी गट" },
-  "How HarvestLink Works": { hi: "हार्वेस्टलिंक कैसे काम करता है", gu: "હાર્વેસ્ટલિંક કેવી રીતે કાર્ય કરે છે", mr: "हार्वेस्टलिंक कसे कार्य करते" },
-  "Browse Fresh Marketplace": { hi: "ताज़ा मार्केटप्लेस ब्राउज़ करें", gu: "તાજું માર્કેટપ્લેસ બ્રાઉઝ કરો", mr: "ताजी बाजारपेठ ब्राउझ करा" },
-  "AI-Powered Demand & Logistics": { hi: "एआई-संचालित मांग और लॉजिस्टिक्स", gu: "એઆઈ-સંચાલિત માંગ અને લોજિસ્ટિક્સ", mr: "एआय-संचालित मागणी आणि लॉजिस्टिक्स" },
-  "Farmers & FPOs on HarvestLink": { hi: "हार्वेस्टलिंक पर किसान और एफपीओ", gu: "હાર્વેસ્ટલિંક પર ખેડૂતો અને એફપીઓ", mr: "हार्वेस्टलिंकवरील शेतकरी आणि एफपीओ" },
-  "Verified Agricultural Network": { hi: "सत्यापित कृषि नेटवर्क", gu: "ચકાસાયેલ કૃષિ નેટવર્ક", mr: "सत्यापित कृषी नेटवर्क" },
-  "Ready to reshape the farm-to-table journey?": { hi: "खेत से थाली तक के सफर को बदलने के लिए तैयार हैं?", gu: "ખેતરથી થાળી સુધીની સફર બદલવા તૈયાર છો?", mr: "शेतातून ताटापर्यंतचा प्रवास बदलण्यासाठी तयार आहात का?" },
-  "Join thousands of farmers, consumers, and businesses building a fairer, fresher agricultural supply chain.": {
-    hi: "हजारों किसानों, उपभोक्ताओं और व्यवसायों के साथ जुड़ें जो एक निष्पक्ष और ताज़ा कृषि आपूर्ति श्रृंखला का निर्माण कर रहे हैं।",
-    gu: "હજારો ખેડૂતો, ગ્રાહકો અને વ્યવસાયો સાથે જોડાઓ જેઓ વધુ ન્યાયી, તાજી કૃષિ પુરવઠા શૃંખલા બનાવી રહ્યા છે.",
-    mr: "हजारो शेतकरी, ग्राहक आणि व्यवसायांमध्ये सामील व्हा जे एक न्याय्य, ताजी कृषी पुरवठा साखळी तयार करत आहेत."
-  },
-  "Get Started Today": { hi: "आज ही शुरू करें", gu: "આજે જ શરૂ કરો", mr: "आजच सुरू करा" },
-  "Browse Products": { hi: "उत्पाद देखें", gu: "પેદાશો જુઓ", mr: "उत्पादने पहा" },
-
-  // Marketplace & Filters
-  "The Marketplace": { hi: "मार्केटप्लेस", gu: "માર્કેટપ્લેસ", mr: "बाजारपेठ" },
-  "Fresh & Direct": { hi: "ताज़ा और प्रत्यक्ष", gu: "તાજું અને સીધું", mr: "ताजे आणि थेट" },
-  "Source directly from farmers and FPOs across India. No middlemen.": {
-    hi: "पूरे भारत के किसानों और एफपीओ से सीधे प्राप्त करें। कोई बिचौलिया नहीं।",
-    gu: "સમગ્ર ભારતના ખેડૂતો અને એફપીઓ પાસેથી સીધું મેળવો. કોઈ વચેટિયા નહીં.",
-    mr: "भारतातील शेतकरी आणि FPO कडून थेट खरेदी करा. मध्यस्थ नाहीत."
-  },
-  "Search for produce, farmers, or locations...": { hi: "उपज, किसान या स्थान खोजें...", gu: "ઉપજ, ખેડૂત અથવા સ્થળ શોધો...", mr: "उत्पादने, शेतकरी किंवा ठिकाण शोधा..." },
-  "Search crops, fruits, grains...": { hi: "फसलें, फल, अनाज खोजें...", gu: "પાક, ફળો, અનાજ શોધો...", mr: "पिके, फळे, धान्य शोधा..." },
-  "All Categories": { hi: "सभी श्रेणियां", gu: "બધી શ્રેણીઓ", mr: "सर्व श्रेणी" },
-  "All Produce": { hi: "सभी उपज", gu: "બધી પેદાશો", mr: "सर्व उत्पादने" },
-  "Vegetables": { hi: "सब्जियां", gu: "શાકભાજી", mr: "भाज्या" },
-  "Fruits": { hi: "फल", gu: "ફળો", mr: "फळे" },
-  "Grains": { hi: "अनाज", gu: "અનાજ", mr: "धान्य" },
-  "Spices": { hi: "मसाले", gu: "મસાલા", mr: "मसाले" },
-  "Pulses": { hi: "दालें", gu: "કઠોળ", mr: "डाळी" },
-  "Dairy": { hi: "डेयरी", gu: "ડેરી", mr: "डेअरी" },
-  "Organic": { hi: "जैविक", gu: "ઓર્ગેનિક (જૈવિક)", mr: "સेंद्रिय" },
-  "Natural": { hi: "प्राकृतिक", gu: "કુદરતી (પ્રાકૃતિક)", mr: "नैसर्गिक" },
-  "Conventional": { hi: "पारंपरिक", gu: "પરંપરાગત", mr: "पारंपरिक" },
-  "In Stock": { hi: "स्टॉक में है", gu: "સ્ટોકમાં છે", mr: "स्टॉकमध्ये उपलब्ध" },
-  "Limited Stock": { hi: "सीमित स्टॉक", gu: "મર્યાદિત સ્ટોક", mr: "मर्यादित स्टॉक" },
-  "+ Cart": { hi: "+ कार्ट", gu: "+ કાર્ટ", mr: "+ कार्ट" },
-  "View": { hi: "देखें", gu: "જુઓ", mr: "पहा" },
-  "Reset Filters": { hi: "फ़िल्टर रीसेट करें", gu: "ફિલ્ટર્સ રીસેટ કરો", mr: "फिल्टर रीसेट करा" },
-  "Sort by: Default": { hi: "क्रम: डिफ़ॉल्ट", gu: "ક્રમ: ડિફૉલ્ટ", mr: "क्रमवारी: डीफॉल्ट" },
-  "Price: Low to High": { hi: "कीमत: कम से अधिक", gu: "કિંમત: ઓછી થી વધુ", mr: "किंमत: कमी ते जास्त" },
-  "Price: High to Low": { hi: "कीमत: अधिक से कम", gu: "કિંમત: વધુ થી ઓછી", mr: "किंमत: जास्त ते कमी" },
-
-  // Products
-  "Fresh Tomatoes": { hi: "ताज़ा टमाटर", gu: "તાજા ટામેટા", mr: "ताजे टोमॅटो" },
-  "Alphonso Mango": { hi: "हापुस आम (अल्फांसो)", gu: "હાફૂસ કેરી (આલ્ફાન્સો)", mr: "हापूस आंबा" },
-  "Wheat (Lokwan)": { hi: "गेहूं (लोकवन)", gu: "ઘઉં (લોકવાન)", mr: "गहू (लोकवन)" },
-  "Turmeric Powder": { hi: "हल्दी पाउडर", gu: "હળદર પાવડર", mr: "हळद पावडर" },
-  "Onion": { hi: "प्याज", gu: "ડુંગળી", mr: "कांदा" },
-  "Potato": { hi: "आलू", gu: "બટાકા", mr: "बटाटा" },
-  "Toor Dal": { hi: "तूर दाल", gu: "તુવેર દાળ", mr: "तूर डाळ" },
-  "Fresh Milk": { hi: "ताज़ा दूध", gu: "તાજું દૂધ", mr: "ताजे दूध" },
-  "Red Chilli": { hi: "लाल मिर्च", gu: "લાલ મરચું", mr: "लाल मिरची" },
-  "Banana (Robusta)": { hi: "केला (रोबस्टा)", gu: "કેળા (રોબસ્ટા)", mr: "केळी (रोबस्टा)" },
-  "Okra (Bhindi)": { hi: "भिंडी", gu: "ભીંડા", mr: "भेंडी" },
-  "Brinjal": { hi: "बैंगन", gu: "રીંગણ", mr: "वांगी" },
-  "Bajra (Pearl Millet)": { hi: "बाजरा", gu: "બાજરી", mr: "बाजरी" },
-  "Spinach": { hi: "पालक", gu: "પાલક", mr: "पालक" },
-  "Papaya": { hi: "पपीता", gu: "પપૈયું", mr: "पपई" },
-  "Mustard Oil": { hi: "सरसों का तेल", gu: "રાઈનું તેલ", mr: "मोहरीचे तेल" },
-  "Chana Dal": { hi: "चना दाल", gu: "ચણા દાળ", mr: "हरभरा डाळ" },
-  "Sweet Corn": { hi: "स्वीट कॉर्न", gu: "સ્વીટ કોર્ન", mr: "स्वीट कॉर्न" },
-  "Garlic": { hi: "लहसुन", gu: "લસણ", mr: "लसूण" },
-  "Lemon": { hi: "नींबू", gu: "લીંબુ", mr: "लिंबू" },
-
-  // Cart & Checkout
-  "Your Cart": { hi: "आपकी कार्ट", gu: "તમારી કાર્ટ", mr: "तुमची कार्ट" },
-  "Your cart is empty.": { hi: "आपकी कार्ट खाली है।", gu: "તમારી કાર્ટ ખાલી છે.", mr: "तुमची कार्ट रिकामी आहे." },
-  "Discover fresh produce directly from farmers.": { hi: "किसानों से सीधे ताज़ी उपज खोजें।", gu: "ખેડૂતો પાસેથી સીધી તાજી ઉપજ શોધો.", mr: "शेतकऱ्यांकडून थेट ताजी उत्पादने शोधा." },
-  "Add your first item to get started.": { hi: "शुरू करने के लिए अपना पहला आइटम जोड़ें।", gu: "શરૂ કરવા માટે તમારી પ્રથમ વસ્તુ ઉમેરો.", mr: "सुरू करण्यासाठी तुमची पहिली वस्तू जोडा." },
-  "Shop Produce →": { hi: "उपज खरीदें →", gu: "તાજી ઉપજ ખરીદો →", mr: "उत्पादने खरेदी करा →" },
-  "Order Summary": { hi: "ऑर्डर सारांश", gu: "ઓર્ડર સારાંશ", mr: "ऑर्डर सारांश" },
-  "Subtotal": { hi: "उप-योग", gu: "સબટોટલ", mr: "उपएकूण" },
-  "Delivery": { hi: "डिलीवरी", gu: "ડિલિવરી", mr: "डिलिव्हरी" },
-  "Discount": { hi: "छूट", gu: "ડિસ્કાઉન્ટ", mr: "सवलत" },
-  "Total": { hi: "कुल", gu: "કુલ", mr: "एकूण" },
-  "Proceed to Checkout →": { hi: "चेकआउट के लिए आगे बढ़ें →", gu: "ચેકઆઉટ આગળ વધો →", mr: "चेकआउटकडे पुढे जा →" },
-  "← Continue Shopping": { hi: "← खरीदारी जारी रखें", gu: "← ખરીદી ચાલુ રાખો", mr: "← खरेदी सुरू ठेवा" },
-  "Remove": { hi: "हटाएं", gu: "દૂર કરો", mr: "काढून टाका" },
-  "Save for Later": { hi: "बाद के लिए सहेजें", gu: "પછી માટે સાચવો", mr: "नंतरसाठी जतन करा" },
-  "Free delivery on orders above ₹800": { hi: "₹800 से अधिक के ऑर्डर पर मुफ्त डिलीवरी", gu: "₹800 થી વધુના ઓર્ડર પર મફત ડિલિવરી", mr: "₹800 पेक्षा जास्तच्या ऑर्डरवर मोफत डिलिव्हरी" },
-  "Your Farmers": { hi: "आपके किसान", gu: "તમારા ખેડૂતો", mr: "तुमचे शेतकरी" },
-
-  // Dashboard
-  "Farmer Dashboard": { hi: "किसान डैशबोर्ड", gu: "ખેડૂત ડેશબોર્ડ", mr: "शेतकरी डॅशबोर्ड" },
-  "FPO Dashboard": { hi: "एफपीओ डैशबोर्ड", gu: "એફપીઓ ડેશબોર્ડ", mr: "एफपीओ डॅशबोर्ड" },
-  "Logistics Hub": { hi: "लॉजिस्टिक्स हब", gu: "લોજિસ્ટિક્સ હબ", mr: "लॉजिस्टिक्स केंद्र" },
-  "Overview": { hi: "अवलोकन", gu: "ઝાંખી", mr: "आढावा" },
-  "Demand Insights": { hi: "मांग अंतर्दृष्टि", gu: "માંગ વિશ્લેષણ", mr: "मागणी अंतर्दृष्टी" },
-  "Logistics": { hi: "लॉजिस्टिक्स", gu: "લોજિસ્ટિક્સ", mr: "लॉजिस्टिक्स" },
-  "Total Revenue": { hi: "कुल राजस्व", gu: "કુલ આવક", mr: "एकूण महसूल" },
-  "Active Orders": { hi: "सक्रिय ऑर्डर", gu: "સક્રિય ઓર્ડર", mr: "सक्रिय ऑर्डर्स" },
-  "Crops Listed": { hi: "सूचीबद्ध फसलें", gu: "નોંધાયેલ પાક", mr: "नोंदणीकृत पिके" },
-  "Recent Orders": { hi: "हाल के ऑर्डर", gu: "તાજેતરના ઓર્ડર", mr: "नुकत्याच झालेल्या ऑर्डर्स" },
-  "Add Product": { hi: "उत्पाद जोड़ें", gu: "ઉત્પાદન ઉમેરો", mr: "उत्पादन जोडा" },
-  "Delivered": { hi: "डिलीवर किया गया", gu: "ડિલિવર થયેલ", mr: "वितरित" },
-  "In Transit": { hi: "रास्ते में है", gu: "રસ્તામાં છે", mr: "मार्गावर" },
-  "Pending": { hi: "लंबित", gu: "બાકી", mr: "प्रलंबित" },
-
-  // Common UI & Authentication
-  "Log In to HarvestLink": { hi: "हार्वेस्टलिंक में लॉग इन करें", gu: "હાર્વેસ્ટલિંકમાં લોગિન કરો", mr: "हार्वेस्टलिंकमध्ये लॉगिन करा" },
-  "Join HarvestLink": { hi: "हार्वेस्टलिंक से जुड़ें", gu: "હાર્વેસ્ટલિંકમાં જોડાઓ", mr: "हार्वेस्टलिंकमध्ये सामील व्हा" },
-  "Select Your Role": { hi: "अपनी भूमिका चुनें", gu: "તમારી ભૂમિકા પસંદ કરો", mr: "तुमची भूमिका निवडा" },
-  "Email Address": { hi: "ईमेल पता", gu: "ઈમેલ સરનામું", mr: "ईमेल पत्ता" },
-  "Password": { hi: "पासवर्ड", gu: "પાસવર્ડ", mr: "पासवर्ड" },
-  "Sign In": { hi: "साइन इन करें", gu: "સાઇન ઇન કરો", mr: "साइन इन करा" },
-  "Create Account": { hi: "खाता बनाएं", gu: "ખાતું બનાવો", mr: "खाते तयार करा" }
-};
-
 function getCurrentLanguage() {
+  if (typeof window.getCurrentLanguage === 'function') {
+    return window.getCurrentLanguage();
+  }
   return localStorage.getItem(HL_LANG) || 'en';
-}
-
-function getTranslation(text, code) {
-  if (!text || code === 'en') return null;
-  const trimmed = text.trim();
-  if (HL_TRANSLATIONS[trimmed] && HL_TRANSLATIONS[trimmed][code]) {
-    return HL_TRANSLATIONS[trimmed][code];
-  }
-  const lower = trimmed.toLowerCase();
-  for (const [key, val] of Object.entries(HL_TRANSLATIONS)) {
-    if (key.toLowerCase() === lower && val[code]) {
-      return val[code];
-    }
-  }
-  return null;
-}
-
-let isTranslating = false;
-function applyNativeTranslation(code) {
-  if (isTranslating) return;
-  isTranslating = true;
-  try {
-    const walker = document.createTreeWalker(
-      document.body,
-      NodeFilter.SHOW_TEXT,
-      {
-        acceptNode(node) {
-          const p = node.parentElement;
-          if (!p) return NodeFilter.FILTER_REJECT;
-          const tag = p.tagName.toLowerCase();
-          if (tag === 'script' || tag === 'style' || tag === 'noscript' || p.closest('.lang-switcher-wrap') || p.classList.contains('skiptranslate')) {
-            return NodeFilter.FILTER_REJECT;
-          }
-          const t = node.textContent.trim();
-          if (!t || t.length < 2) return NodeFilter.FILTER_REJECT;
-          return NodeFilter.FILTER_ACCEPT;
-        }
-      }
-    );
-
-    const nodes = [];
-    while (walker.nextNode()) {
-      nodes.push(walker.currentNode);
-    }
-
-    nodes.forEach(node => {
-      const current = node.textContent;
-      const trimmed = current.trim();
-      if (!node._hlOrig) {
-        node._hlOrig = trimmed;
-      }
-      const orig = node._hlOrig;
-      if (code === 'en') {
-        if (trimmed !== orig) {
-          const lead = current.match(/^\s*/)[0];
-          const trail = current.match(/\s*$/)[0];
-          node.textContent = lead + orig + trail;
-        }
-      } else {
-        const trans = getTranslation(orig, code);
-        if (trans) {
-          const lead = current.match(/^\s*/)[0];
-          const trail = current.match(/\s*$/)[0];
-          node.textContent = lead + trans + trail;
-        }
-      }
-    });
-
-    // Placeholders
-    document.querySelectorAll('input[placeholder], textarea[placeholder]').forEach(input => {
-      if (!input._hlOrigPh) {
-        input._hlOrigPh = input.getAttribute('placeholder');
-      }
-      if (code === 'en') {
-        input.setAttribute('placeholder', input._hlOrigPh);
-      } else {
-        const trans = getTranslation(input._hlOrigPh.trim(), code);
-        if (trans) input.setAttribute('placeholder', trans);
-      }
-    });
-
-    document.documentElement.lang = code;
-  } catch (err) {
-    console.error('Translation error:', err);
-  } finally {
-    isTranslating = false;
-  }
-}
-
-function triggerGoogleTranslateCombo(code) {
-  try {
-    const host = window.location.hostname;
-    document.cookie = `googtrans=/en/${code}; path=/;`;
-    if (host) {
-      document.cookie = `googtrans=/en/${code}; domain=${host}; path=/;`;
-      document.cookie = `googtrans=/en/${code}; domain=.${host}; path=/;`;
-    }
-    const select = document.querySelector('.goog-te-combo');
-    if (select) {
-      select.value = code;
-      select.dispatchEvent(new Event('change'));
-    }
-  } catch(e) {}
-}
-
-function initGoogleTranslate() {
-  if (window.googleTranslateElementInitDone) return;
-  window.googleTranslateElementInitDone = true;
-
-  let gtDiv = document.getElementById('google_translate_element');
-  if (!gtDiv) {
-    gtDiv = document.createElement('div');
-    gtDiv.id = 'google_translate_element';
-    gtDiv.style.display = 'none';
-    document.body.appendChild(gtDiv);
-  }
-
-  window.googleTranslateElementInit = function() {
-    try {
-      new window.google.translate.TranslateElement({
-        pageLanguage: 'en',
-        includedLanguages: 'en,hi,gu,mr,pa,bn,ta,te',
-        autoDisplay: false
-      }, 'google_translate_element');
-
-      const current = getCurrentLanguage();
-      if (current !== 'en') {
-        setTimeout(() => triggerGoogleTranslateCombo(current), 600);
-      }
-    } catch (e) {}
-  };
-
-  if (location.protocol === 'http:' || location.protocol === 'https:') {
-    const s = document.createElement('script');
-    s.src = 'https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';
-    s.async = true;
-    document.head.appendChild(s);
-  }
 }
 
 function getLanguageSwitcherHtml() {
@@ -454,6 +146,9 @@ function getLanguageSwitcherHtml() {
     `;
   }).join('');
 
+  const chooseLangText = (typeof window.t === 'function') ? window.t('nav.choose_language', 'Choose Language') : 'Choose Language';
+  const langCountText = (typeof window.t === 'function') ? window.t('nav.languages_count', 'Languages') : 'Languages';
+
   return `
     <div class="lang-switcher-wrap" id="langSwitcherWrap">
       <button type="button" class="lang-btn" id="langBtn" aria-label="Select Language" aria-expanded="false">
@@ -466,8 +161,8 @@ function getLanguageSwitcherHtml() {
       </button>
       <div class="lang-dropdown" id="langDropdown">
         <div class="lang-dropdown-header">
-          <span>🌐 Choose Language</span>
-          <span class="lang-count">${SUPPORTED_LANGUAGES.length} Languages</span>
+          <span>🌐 <span data-i18n="nav.choose_language">${chooseLangText}</span></span>
+          <span class="lang-count">${SUPPORTED_LANGUAGES.length} <span data-i18n="nav.languages_count">${langCountText}</span></span>
         </div>
         <div class="lang-options-grid">
           ${optionsHtml}
@@ -492,26 +187,16 @@ function attachLanguageSwitcherListeners() {
       }
     };
   });
-}
-
 function setAppLanguage(code) {
-  localStorage.setItem(HL_LANG, code);
+  if (typeof window.setAppLanguage === 'function' && window.setAppLanguage !== setAppLanguage) {
+    window.setAppLanguage(code);
+  } else {
+    localStorage.setItem(HL_LANG, code);
+    if (typeof window.applyTranslations === 'function') {
+      window.applyTranslations(code);
+    }
+  }
   buildNavbarRight();
-  applyNativeTranslation(code);
-  triggerGoogleTranslateCombo(code);
-
-  const langObj = SUPPORTED_LANGUAGES.find(l => l.code === code) || { native: code };
-  const toastMap = {
-    en: 'Language set to English',
-    hi: 'भाषा बदलकर हिन्दी कर दी गई',
-    gu: 'ભાષા બદલીને ગુજરાતી કરવામાં આવી',
-    mr: 'भाषा मराठी मध्ये बदलली',
-    pa: 'ਭਾਸ਼ਾ ਪੰਜਾਬੀ ਵਿੱਚ ਬਦਲੀ ਗਈ',
-    bn: 'ভাষা বাংলায় পরিবর্তিত হয়েছে',
-    ta: 'மொழி தமிழுக்கு மாற்றப்பட்டது',
-    te: 'భాష తెలుగులోకి మార్చబడింది'
-  };
-  showToast(toastMap[code] || `Language set to ${langObj.native}`, 'success');
 }
 
 window.setAppLanguage = setAppLanguage;
@@ -924,22 +609,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Initialize Language System and apply saved language
   const savedLang = getCurrentLanguage();
-  if (savedLang && savedLang !== 'en') {
-    applyNativeTranslation(savedLang);
+  if (typeof window.applyTranslations === 'function') {
+    window.applyTranslations(savedLang);
   }
-  initGoogleTranslate();
-
-  // Dynamic observer to auto-translate any newly added product cards or items
-  let mutTimer = null;
-  const obsLang = new MutationObserver(() => {
-    const cur = getCurrentLanguage();
-    if (cur === 'en') return;
-    clearTimeout(mutTimer);
-    mutTimer = setTimeout(() => {
-      applyNativeTranslation(cur);
-    }, 60);
-  });
-  obsLang.observe(document.body, { childList: true, subtree: true });
 
   // Scroll fade sections
   const obs = new IntersectionObserver(entries => {

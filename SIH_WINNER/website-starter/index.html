@@ -18,25 +18,25 @@
     <div class="nav-container">
       <a href="index.html" class="nav-logo">
         <span class="logo-leaf">⬟</span>
-        HARVESTLINK
+        <span data-i18n="nav.brand">HARVESTLINK</span>
       </a>
 
       <ul class="nav-links" id="navLinks">
-        <li><a href="index.html" class="nav-link active">Home</a></li>
-        <li><a href="marketplace.html" class="nav-link">Marketplace</a></li>
-        <li><a href="farmers.html" class="nav-link">Farmers</a></li>
-        <li><a href="businesses.html" class="nav-link">Businesses</a></li>
-        <li><a href="#how-it-works" class="nav-link">How It Works</a></li>
-        <li><a href="#ai-logistics" class="nav-link">AI & Logistics</a></li>
-        <li><a href="about.html" class="nav-link">About</a></li>
-        <li><a href="faq.html" class="nav-link">FAQ</a></li>
+        <li><a href="index.html" class="nav-link active" data-i18n="nav.home">Home</a></li>
+        <li><a href="marketplace.html" class="nav-link" data-i18n="nav.marketplace">Marketplace</a></li>
+        <li><a href="farmers.html" class="nav-link" data-i18n="nav.farmers">Farmers</a></li>
+        <li><a href="businesses.html" class="nav-link" data-i18n="nav.businesses">Businesses</a></li>
+        <li><a href="#how-it-works" class="nav-link" data-i18n="nav.how_it_works">How It Works</a></li>
+        <li><a href="#ai-logistics" class="nav-link" data-i18n="nav.ai_logistics">AI & Logistics</a></li>
+        <li><a href="about.html" class="nav-link" data-i18n="nav.about">About</a></li>
+        <li><a href="faq.html" class="nav-link" data-i18n="nav.faq">FAQ</a></li>
       </ul>
 
       <div class="nav-actions nav-actions-inject">
         <!-- injected by app.js -->
       </div>
 
-      <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+      <button class="hamburger" id="hamburger" aria-label="Toggle menu" data-i18n-title="nav.menu">
         <span></span><span></span><span></span>
       </button>
     </div>
@@ -44,19 +44,19 @@
     <!-- Mobile menu -->
     <div class="mobile-menu" id="mobileMenu">
       <ul>
-        <li><a href="index.html">Home</a></li>
-        <li><a href="marketplace.html">Marketplace</a></li>
-        <li><a href="farmers.html">Farmers</a></li>
-        <li><a href="businesses.html">Businesses</a></li>
-        <li><a href="#how-it-works">How It Works</a></li>
-        <li><a href="#ai-logistics">AI & Logistics</a></li>
-        <li><a href="about.html">About</a></li>
-        <li><a href="faq.html">FAQ</a></li>
+        <li><a href="index.html" data-i18n="nav.home">Home</a></li>
+        <li><a href="marketplace.html" data-i18n="nav.marketplace">Marketplace</a></li>
+        <li><a href="farmers.html" data-i18n="nav.farmers">Farmers</a></li>
+        <li><a href="businesses.html" data-i18n="nav.businesses">Businesses</a></li>
+        <li><a href="#how-it-works" data-i18n="nav.how_it_works">How It Works</a></li>
+        <li><a href="#ai-logistics" data-i18n="nav.ai_logistics">AI & Logistics</a></li>
+        <li><a href="about.html" data-i18n="nav.about">About</a></li>
+        <li><a href="faq.html" data-i18n="nav.faq">FAQ</a></li>
       </ul>
       <div class="mobile-actions">
-        <a href="login.html" class="btn-outline-full">Login</a>
-        <a href="role-select.html" class="btn-primary-full">Join Free</a>
-        <a href="marketplace.html" class="btn-green-full">Shop Produce</a>
+        <a href="login.html" class="btn-outline-full" data-i18n="nav.login">Login</a>
+        <a href="role-select.html" class="btn-primary-full" data-i18n="nav.join_free">Join Free</a>
+        <a href="marketplace.html" class="btn-green-full" data-i18n="nav.shop_produce">Shop Produce</a>
       </div>
     </div>
   </nav>
@@ -65,17 +65,17 @@
   <section class="hero" id="home">
     <div class="hero-inner">
       <div class="hero-text">
-        <div class="hero-badge">Agricultural Marketplace · India</div>
-        <h1 class="hero-headline">Fresh produce.<br><em>Direct from farmers.</em></h1>
-        <p class="hero-sub">Buy fresh produce directly from verified farmers and FPOs, while smarter demand planning and logistics help move food efficiently from farm to market.</p>
+        <div class="hero-badge" data-i18n="hero.badge">Agricultural Marketplace · India</div>
+        <h1 class="hero-headline" data-i18n-html="hero.headline_html">Fresh produce.<br><em>Direct from farmers.</em></h1>
+        <p class="hero-sub" data-i18n="hero.sub">Buy fresh produce directly from verified farmers and FPOs, while smarter demand planning and logistics help move food efficiently from farm to market.</p>
         <div class="hero-buttons">
-          <a href="marketplace.html" class="btn-hero-primary">Shop Fresh Produce</a>
-          <a href="register.html" class="btn-hero-outline">Sell Your Produce</a>
+          <a href="marketplace.html" class="btn-hero-primary" data-i18n="hero.btn_shop">Shop Fresh Produce</a>
+          <a href="register.html" class="btn-hero-outline" data-i18n="hero.btn_sell">Sell Your Produce</a>
         </div>
         <div class="hero-trust">
-          <span>✓ Direct from Farmers</span>
-          <span>✓ Fairer Prices</span>
-          <span>✓ Smarter Delivery</span>
+          <span data-i18n="hero.trust_direct">✓ Direct from Farmers</span>
+          <span data-i18n="hero.trust_price">✓ Fairer Prices</span>
+          <span data-i18n="hero.trust_delivery">✓ Smarter Delivery</span>
         </div>
       </div>
       <div class="hero-visual">
@@ -85,14 +85,14 @@
             <div class="stat-icon">🌾</div>
             <div>
               <div class="stat-number">2,400+</div>
-              <div class="stat-label">Farmers Listed</div>
+              <div class="stat-label" data-i18n="hero.stat_farmers">Farmers Listed</div>
             </div>
           </div>
           <div class="hero-stat-card card-bottom">
             <div class="stat-icon">📦</div>
             <div>
               <div class="stat-number">18,000+</div>
-              <div class="stat-label">Orders Delivered</div>
+              <div class="stat-label" data-i18n="hero.stat_orders">Orders Delivered</div>
             </div>
           </div>
         </div>
@@ -216,24 +216,24 @@
   <!-- MARKETPLACE PREVIEW -->
   <section class="marketplace-preview" id="marketplace">
     <div class="container">
-      <div class="section-label">Marketplace</div>
-      <h2 class="section-heading">Fresh produce, from the<br>people who grow it.</h2>
+      <div class="section-label" data-i18n="market.badge">Marketplace</div>
+      <h2 class="section-heading" data-i18n="market.title">Fresh produce, from the<br>people who grow it.</h2>
 
       <div class="search-bar-wrap">
         <div class="search-bar">
           <span class="search-icon">🔍</span>
-          <input type="text" id="searchInput" placeholder="Search vegetables, fruits, grains..." class="search-input">
+          <input type="text" id="searchInput" placeholder="Search vegetables, fruits, grains..." data-i18n-placeholder="market.search_placeholder" class="search-input">
         </div>
       </div>
 
       <div class="category-tabs" id="categoryTabs">
-        <button class="cat-btn active" data-cat="all">All</button>
-        <button class="cat-btn" data-cat="vegetables">Vegetables</button>
-        <button class="cat-btn" data-cat="fruits">Fruits</button>
-        <button class="cat-btn" data-cat="grains">Grains</button>
-        <button class="cat-btn" data-cat="pulses">Pulses</button>
-        <button class="cat-btn" data-cat="spices">Spices</button>
-        <button class="cat-btn" data-cat="dairy">Dairy</button>
+        <button class="cat-btn active" data-cat="all" data-i18n="market.all_categories">All</button>
+        <button class="cat-btn" data-cat="vegetables" data-i18n="market.cat_vegetables">Vegetables</button>
+        <button class="cat-btn" data-cat="fruits" data-i18n="market.cat_fruits">Fruits</button>
+        <button class="cat-btn" data-cat="grains" data-i18n="market.cat_grains">Grains</button>
+        <button class="cat-btn" data-cat="pulses" data-i18n="market.cat_pulses">Pulses</button>
+        <button class="cat-btn" data-cat="spices" data-i18n="market.cat_spices">Spices</button>
+        <button class="cat-btn" data-cat="dairy" data-i18n="market.cat_dairy">Dairy</button>
       </div>
 
       <div class="products-grid" id="productsGrid">
@@ -241,7 +241,7 @@
       </div>
 
       <div class="marketplace-cta">
-        <a href="marketplace.html" class="btn-primary-lg">View All Products →</a>
+        <a href="marketplace.html" class="btn-primary-lg" data-i18n="market.view_details">View All Products →</a>
       </div>
     </div>
   </section>
@@ -764,6 +764,10 @@
     <span class="toast-msg" id="toastMsg">Added to cart</span>
   </div>
 
+  <script src="translations/en.js"></script>
+  <script src="translations/hi.js"></script>
+  <script src="translations/gu.js"></script>
+  <script src="translations/i18n.js"></script>
   <script src="api.js"></script>
   <script src="app.js"></script>
   <script src="script.js"></script>
