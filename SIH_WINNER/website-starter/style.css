@@ -353,9 +353,233 @@ a { text-decoration: none; color: inherit; }
   background: #2a2018;
 }
 
+/* ============================
+   TOP-RIGHT LANGUAGE SWITCHER
+   ============================ */
+.lang-switcher-wrap {
+  position: relative;
+  display: inline-block;
+  user-select: none;
+}
+
+.lang-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 7px 13px;
+  background: var(--warm-white);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--brown);
+  font-family: 'Manrope', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all var(--transition);
+  box-shadow: 0 1px 3px rgba(59, 48, 40, 0.04);
+}
+
+.lang-btn:hover,
+.lang-btn[aria-expanded="true"] {
+  background: #fff;
+  border-color: var(--green);
+  color: var(--green);
+  box-shadow: 0 2px 8px rgba(49, 92, 58, 0.15);
+}
+
+.lang-globe {
+  font-size: 15px;
+  line-height: 1;
+}
+
+.lang-btn-text {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.lang-flag-small {
+  font-size: 13px;
+  line-height: 1;
+}
+
+.lang-name-label {
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.lang-caret {
+  font-size: 10px;
+  color: var(--text-muted);
+  transition: transform var(--transition);
+}
+
+.lang-btn[aria-expanded="true"] .lang-caret {
+  transform: rotate(180deg);
+}
+
+/* Dropdown Menu */
+.lang-dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  width: 260px;
+  background: #ffffff;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-md);
+  box-shadow: 0 14px 34px rgba(59, 48, 40, 0.16), 0 3px 10px rgba(0, 0, 0, 0.05);
+  padding: 8px;
+  z-index: 1020;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-8px) scale(0.97);
+  transition: opacity 0.18s cubic-bezier(0.16, 1, 0.3, 1), transform 0.18s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.18s;
+  pointer-events: none;
+}
+
+.lang-dropdown.open {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+}
+
+.lang-dropdown-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 6px;
+  font-size: 11.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-secondary);
+}
+
+.lang-count {
+  font-size: 11px;
+  background: var(--cream);
+  color: var(--green);
+  padding: 2px 7px;
+  border-radius: 999px;
+  font-weight: 700;
+}
+
+.lang-options-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  max-height: 320px;
+  overflow-y: auto;
+}
+
+.lang-option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 8px 10px;
+  background: transparent;
+  border: none;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  text-align: left;
+  font-family: 'Manrope', sans-serif;
+  color: var(--brown);
+  transition: all 0.15s ease;
+}
+
+.lang-option:hover {
+  background: var(--cream);
+  color: var(--green);
+}
+
+.lang-option.active {
+  background: rgba(49, 92, 58, 0.09);
+  color: var(--green);
+  font-weight: 700;
+}
+
+.lang-opt-flag {
+  font-size: 16px;
+  line-height: 1;
+}
+
+.lang-opt-text {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.lang-opt-native {
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.lang-opt-name {
+  font-size: 11px;
+  color: var(--text-secondary);
+  line-height: 1.2;
+}
+
+.lang-check {
+  color: var(--green);
+  font-size: 13px;
+  font-weight: 800;
+  margin-left: auto;
+}
+
+/* Suppress Google Translate default intrusive banners & widgets */
+.goog-te-banner-frame,
+iframe.goog-te-banner-frame,
+.goog-te-banner-frame.skiptranslate {
+  display: none !important;
+  visibility: hidden !important;
+  height: 0 !important;
+}
+
+body {
+  top: 0 !important;
+  position: static !important;
+}
+
+#goog-gt-tt,
+.goog-tooltip,
+.goog-te-balloon-frame {
+  display: none !important;
+  visibility: hidden !important;
+}
+
+.goog-text-highlight {
+  background: none !important;
+  box-shadow: none !important;
+}
+
+.goog-te-gadget {
+  display: none !important;
+}
+
 @media (max-width: 640px) {
   .top-header {
-    padding: 0 14px;
+    padding: 0 12px;
+  }
+  .lang-btn {
+    padding: 6px 9px;
+    font-size: 12px;
+    gap: 4px;
+  }
+  .lang-name-label {
+    max-width: 54px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .lang-dropdown {
+    width: 230px;
+    right: -20px;
   }
   .top-header-actions .btn-outline-sm {
     display: none;
