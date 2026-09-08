@@ -582,7 +582,9 @@ body {
     right: -20px;
   }
   .top-header-actions .btn-outline-sm {
-    display: none;
+    padding: 6px 10px;
+    font-size: 12px;
+    display: inline-flex;
   }
   .top-header-actions .btn-primary-sm {
     padding: 7px 12px;

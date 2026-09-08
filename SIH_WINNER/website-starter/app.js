@@ -817,6 +817,18 @@ function initNavigationSystem() {
     navbar.querySelector('.nav-container')?.appendChild(langSec);
   }
 
+  // Add Join Free & Login action buttons to sidebar if guest
+  if (!getUser() && navbar && !navbar.querySelector('.sidebar-auth-actions')) {
+    const authSec = document.createElement('div');
+    authSec.className = 'sidebar-auth-actions';
+    authSec.style.cssText = 'padding: 14px 20px; border-top: 1px solid var(--border); display: flex; flex-direction: column; gap: 8px;';
+    authSec.innerHTML = `
+      <a href="role-select.html" class="btn-primary-full" style="padding: 11px; font-size: 14px; margin-bottom: 0; text-align: center;">Join Free</a>
+      <a href="login.html" class="btn-outline-full" style="padding: 10px; font-size: 13.5px; margin-bottom: 0; text-align: center;">Login</a>
+    `;
+    navbar.querySelector('.nav-container')?.appendChild(authSec);
+  }
+
   const closeBtn = document.getElementById('sidebarCloseBtn');
 
   let closeTimer = null;

@@ -125,6 +125,20 @@
     </div>
   </div>
 
+  <script src="api.js"></script>
   <script src="app.js"></script>
+  <script>
+    document.querySelectorAll('.role-card').forEach(card => {
+      card.style.cursor = 'pointer';
+      card.addEventListener('click', (e) => {
+        // If clicking directly on anchor, let default work
+        if (e.target.tagName.toLowerCase() === 'a') return;
+        const role = card.dataset.role;
+        if (role) {
+          window.location.href = `signup.html?role=${role}`;
+        }
+      });
+    });
+  </script>
 </body>
 </html>
