@@ -83,6 +83,7 @@ function setRole(role) {
 function logout() {
   localStorage.removeItem(HL_USER);
   localStorage.removeItem(HL_ROLE);
+  localStorage.removeItem('hl_token');
   window.location.href = 'index.html';
 }
 

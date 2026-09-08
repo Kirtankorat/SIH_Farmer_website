@@ -176,9 +176,10 @@
     </main>
   </div>
 
+  <script src="api.js"></script>
   <script src="app.js"></script>
   <script>
-    document.addEventListener('DOMContentLoaded', () => {
+    async function loadFPODashboard() {
       const user = getUser();
       if (user) {
         const lbl = document.getElementById('fpoNameLabel');
@@ -186,7 +187,22 @@
         document.getElementById('fpoSidebarName').textContent = user.name;
         document.getElementById('fpoHeading').textContent = user.name;
       }
-    });
+
+      try {
+        const data = await api.getFPODashboard();
+        if (data && data.stats) {
+          const statVals = document.querySelectorAll('.dash-stats .sc-value');
+          if (statVals.length >= 4) {
+            statVals[0].textContent = data.stats.member_farmers;
+            statVals[1].textContent = data.stats.available_produce;
+            statVals[2].textContent = data.stats.active_orders;
+            statVals[3].textContent = data.stats.bulk_orders;
+          }
+        }
+      } catch (err) {
+        console.warn('Backend FPO dashboard note:', err.message);
+      }
+    }
 
     function switchPanel(p) {
       document.querySelectorAll('.dash-panel').forEach(d => d.classList.remove('active'));
@@ -194,9 +210,12 @@
       document.getElementById('panel-'+p)?.classList.add('active');
       document.querySelector(`[data-panel="${p}"]`)?.classList.add('active');
     }
+
     document.querySelectorAll('.dash-nav-item').forEach(item => {
       item.addEventListener('click', () => switchPanel(item.dataset.panel));
     });
+
+    document.addEventListener('DOMContentLoaded', loadFPODashboard);
   </script>
 </body>
 </html>

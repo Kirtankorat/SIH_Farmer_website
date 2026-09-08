@@ -124,6 +124,7 @@
     }
   </style>
 
+  <script src="api.js"></script>
   <script src="app.js"></script>
   <script>
     let selectedRole = 'farmer';
@@ -140,10 +141,10 @@
     });
 
     // Pre-select farmer
-    document.querySelector('[data-role="farmer"]').classList.add('active');
+    document.querySelector('[data-role="farmer"]')?.classList.add('active');
     document.getElementById('loginId').value = 'rameshpatel@demo.in';
 
-    function doLogin(role, name) {
+    async function doLogin(role, name) {
       const btn = document.querySelector('#loginForm button[type="submit"]');
       if (btn) {
         btn.textContent = 'Signing in...';
@@ -152,22 +153,45 @@
       }
 
       const inputVal = document.getElementById('loginId')?.value?.trim();
-      const finalEmail = inputVal && inputVal.includes('@') ? inputVal : `${name.toLowerCase().replace(/\s/g,'')}@demo.in`;
-      const finalName = inputVal && !inputVal.includes('@') && inputVal.length > 0 ? inputVal : name;
+      const passwordVal = document.getElementById('loginPass')?.value || 'demo123';
 
-      setUser({ name: finalName, email: finalEmail });
-      setRole(role);
+      try {
+        let authRes;
+        // If credentials typed in manually
+        if (inputVal && inputVal.length > 0) {
+          try {
+            authRes = await api.login(inputVal, passwordVal);
+          } catch (_) {
+            // If direct login fails, fallback to demo login for this role
+            authRes = await api.demoLogin(role);
+          }
+        } else {
+          authRes = await api.demoLogin(role);
+        }
 
-      setTimeout(() => {
-        window.location.href = getDashboardUrl(role);
-      }, 400);
+        const userObj = authRes.user || { name: name, email: `${name.toLowerCase().replace(/\s/g,'')}@demo.in`, role };
+        setUser({ name: userObj.name || name, email: userObj.email });
+        setRole(userObj.role || role);
+
+        showToast('Login successful! Redirecting...');
+        setTimeout(() => {
+          window.location.href = getDashboardUrl(userObj.role || role);
+        }, 500);
+      } catch (err) {
+        if (btn) {
+          btn.textContent = 'Sign In →';
+          btn.disabled = false;
+          btn.style.opacity = '1';
+        }
+        showToast(err.message || 'Login failed. Please check credentials.');
+      }
     }
 
     function demoGoogleLogin() {
       doLogin(selectedRole, selectedName);
     }
 
-    document.getElementById('loginForm').addEventListener('submit', e => {
+    document.getElementById('loginForm')?.addEventListener('submit', e => {
       e.preventDefault();
       doLogin(selectedRole, selectedName);
     });

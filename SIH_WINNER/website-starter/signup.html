@@ -462,12 +462,43 @@
       formData['Farming Practice'] = el.dataset.val;
     }
 
-    function submitSignup() {
+    async function submitSignup() {
       const role = roleForms[chosenRole];
       const nameKey = Object.keys(formData).find(k => k.toLowerCase().includes('name')) || 'Name';
       const name = formData[nameKey] || roleForms[chosenRole].label + ' User';
-      setUser({ name, email: 'demo@harvestlink.in' });
-      setRole(chosenRole);
+      const email = formData['Email (optional)'] || formData['Email'] || `${name.toLowerCase().replace(/\s/g,'')}@harvestlink.in`;
+      const phone = formData['Phone Number'] || formData['Phone'] || null;
+
+      try {
+        const payload = {
+          email: email,
+          password: 'password123',
+          full_name: name,
+          phone: phone,
+          role: chosenRole,
+          farm_name: formData['Farm Details'] || `${name}'s Farm`,
+          village: formData['Village / Town'] || formData['Location (State)'],
+          state: formData['State'] || 'Gujarat',
+          farm_size_acres: parseFloat(formData['Farm Size (acres)']) || 5.0,
+          farming_practice: formData['Farming Practice'] || 'organic',
+          primary_crops: formData['Products You Grow'] || 'Produce',
+          business_name: formData['Business Name'] || name,
+          business_type: formData['Business Type'] || 'Restaurant',
+          fpo_name: formData['FPO Name'] || name,
+          company_name: formData['Fleet Type / Vehicle'] || name
+        };
+
+        const res = await api.register(payload);
+        const userObj = res.user || { name, email, role: chosenRole };
+        setUser({ name: userObj.name || name, email: userObj.email || email });
+        setRole(chosenRole);
+      } catch (err) {
+        console.warn('Backend registration note:', err.message);
+        // Fallback demo local user
+        setUser({ name, email });
+        setRole(chosenRole);
+      }
+
       document.getElementById('dashLink').href = getDashboardUrl(chosenRole);
       showStep('sg-success');
       setTimeout(() => { window.location.href = getDashboardUrl(chosenRole); }, 2200);
@@ -478,6 +509,7 @@
       setTimeout(startSignup, 100);
     }
   </script>
+  <script src="api.js"></script>
   <script src="app.js"></script>
 </body>
 </html>

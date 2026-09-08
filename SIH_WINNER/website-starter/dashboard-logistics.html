@@ -96,9 +96,10 @@
     </main>
   </div>
 
+  <script src="api.js"></script>
   <script src="app.js"></script>
   <script>
-    document.addEventListener('DOMContentLoaded', () => {
+    async function loadLogisticsDashboard() {
       const user = getUser();
       if (user) {
         const lbl = document.getElementById('logisticsNameLabel');
@@ -106,7 +107,21 @@
         document.getElementById('logisticsSidebarName').textContent = user.name;
         document.getElementById('logisticsHeading').textContent = user.name;
       }
-    });
+
+      try {
+        const data = await api.getLogisticsDashboard();
+        if (data && data.stats) {
+          const statVals = document.querySelectorAll('.dash-stats .sc-value');
+          if (statVals.length >= 3) {
+            statVals[0].textContent = data.stats.active_deliveries;
+            statVals[1].textContent = data.stats.completed_today;
+            statVals[2].textContent = data.stats.available_fleet;
+          }
+        }
+      } catch (err) {
+        console.warn('Backend logistics dashboard note:', err.message);
+      }
+    }
 
     function switchPanel(p) {
       document.querySelectorAll('.dash-panel').forEach(d => d.classList.remove('active'));
@@ -114,9 +129,12 @@
       document.getElementById('panel-'+p)?.classList.add('active');
       document.querySelector(`[data-panel="${p}"]`)?.classList.add('active');
     }
+
     document.querySelectorAll('.dash-nav-item').forEach(item => {
       item.addEventListener('click', () => switchPanel(item.dataset.panel));
     });
+
+    document.addEventListener('DOMContentLoaded', loadLogisticsDashboard);
   </script>
 </body>
 </html>

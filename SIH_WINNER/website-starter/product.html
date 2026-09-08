@@ -107,33 +107,34 @@
     </div>
   </div>
 
+  <script src="api.js"></script>
   <script src="app.js"></script>
   <script>
     const params = new URLSearchParams(window.location.search);
     const productId = parseInt(params.get('id')) || 1;
-    const product = PRODUCTS.find(p => p.id === productId) || PRODUCTS[0];
+    let product = PRODUCTS.find(p => p.id === productId) || PRODUCTS[0];
 
     let qty = 1;
 
     function renderProduct() {
       const practiceMap = { organic: '🌿 Organic', natural: '☀️ Natural Farming', conventional: '🏡 Conventional' };
       const sellerBadgeMap = { farmer: 'badge-farmer', fpo: 'badge-fpo' };
-      const stars = '★'.repeat(Math.floor(product.rating)) + '☆'.repeat(5 - Math.floor(product.rating));
+      const stars = '★'.repeat(Math.floor(product.rating || 4.5)) + '☆'.repeat(5 - Math.floor(product.rating || 4.5));
       const availLabel = product.availability === 'available' ? '✅ In Stock' : '⚠️ Limited Stock';
       const availColor = product.availability === 'available' ? 'var(--green)' : 'var(--terracotta)';
 
       document.getElementById('productDetailGrid').innerHTML = `
-        <div class="pd-image-area" style="font-size:120px;">${product.emoji}</div>
+        <div class="pd-image-area" style="font-size:120px;">${product.emoji || '🌾'}</div>
         <div class="pd-info">
-          <span class="seller-badge ${sellerBadgeMap[product.sellerType] || 'badge-farmer'}">${product.badge}</span>
+          <span class="seller-badge ${sellerBadgeMap[product.sellerType || product.seller_type] || 'badge-farmer'}">${product.badge || 'Verified Supplier'}</span>
           <h1 class="pd-name">${product.name}</h1>
           <div class="pd-rating-row">
             <span class="pd-rating">${stars}</span>
-            <span class="pd-reviews">${product.rating} rating · ${Math.floor(Math.random()*40+15)} reviews</span>
+            <span class="pd-reviews">${product.rating || 4.5} rating · ${Math.floor(Math.random()*40+15)} reviews</span>
             <span style="font-size:12px;font-weight:700;color:${availColor}">${availLabel}</span>
           </div>
           <div class="pd-price-wrap">
-            <span class="pd-price">${product.price}</span>
+            <span class="pd-price">₹${product.priceNum || product.price}</span>
             <span class="pd-unit"> / ${product.unit}</span>
           </div>
           <div class="pd-qty-row">
@@ -153,12 +154,12 @@
 
           <div class="pd-seller-card">
             <div class="pd-seller-title">Grown by</div>
-            <div class="pd-seller-name">${product.farmer}</div>
+            <div class="pd-seller-name">${product.farmer || product.farmer_name}</div>
             <div class="pd-seller-loc">📍 ${product.location}</div>
             <div class="pd-seller-meta">
-              <span class="seller-badge ${sellerBadgeMap[product.sellerType] || 'badge-farmer'}">${product.badge}</span>
+              <span class="seller-badge ${sellerBadgeMap[product.sellerType || product.seller_type] || 'badge-farmer'}">${product.badge || 'Verified'}</span>
               <span style="font-size:12px;color:var(--green);font-weight:700">✓ Verified</span>
-              <span style="font-size:12px;color:var(--text-muted)">${practiceMap[product.practice]}</span>
+              <span style="font-size:12px;color:var(--text-muted)">${practiceMap[product.practice || product.farming_practice] || 'Standard'}</span>
             </div>
             <a href="farmers.html" style="display:inline-block;margin-top:12px;font-size:13px;font-weight:700;color:var(--green)">View Seller Profile →</a>
           </div>
@@ -172,8 +173,7 @@
     }
 
     function addPdToCart() {
-      addToCart({ ...product, qty: 0 });
-      // update qty to actual
+      addToCart({ ...product, priceNum: product.priceNum || product.price, price: `₹${product.priceNum || product.price}`, qty: 0 });
       const cart = getCart();
       const item = cart.find(i => i.id === product.id);
       if (item) { item.qty = qty; saveCart(cart); }
@@ -181,7 +181,7 @@
     }
 
     function openBulk() {
-      document.getElementById('bulkModalSub').textContent = `Requesting bulk supply of ${product.name} from ${product.farmer}.`;
+      document.getElementById('bulkModalSub').textContent = `Requesting bulk supply of ${product.name} from ${product.farmer || product.farmer_name}.`;
       document.getElementById('bulkModal').classList.add('open');
     }
     function closeBulk() {
@@ -189,20 +189,56 @@
       document.getElementById('bulkModalForm').style.display = 'flex';
       document.getElementById('bulkSuccess').style.display = 'none';
     }
-    function submitBulk() {
+    async function submitBulk() {
+      const blkQty = parseFloat(document.getElementById('blkQty')?.value) || 500;
+      const blkUnit = document.getElementById('blkUnit')?.value || 'kg';
+      const blkLoc = document.getElementById('blkLoc')?.value || 'Ahmedabad, Gujarat';
+      const blkDate = document.getElementById('blkDate')?.value || null;
+      const blkMsg = document.getElementById('blkMsg')?.value || '';
+
+      try {
+        await api.createBulkRequest({
+          product_name: product.name,
+          quantity: blkQty,
+          unit: blkUnit,
+          delivery_location: blkLoc,
+          required_date: blkDate,
+          additional_notes: blkMsg
+        });
+      } catch (e) {
+        console.warn('Bulk request note:', e.message);
+      }
+
       document.getElementById('bulkModalForm').style.display = 'none';
       document.getElementById('bulkSuccess').style.display = 'block';
     }
 
-    // Related products
-    function renderRelated() {
-      const related = PRODUCTS.filter(p => p.id !== productId && p.category === product.category).slice(0, 4);
-      if (!related.length) return;
-      document.getElementById('relatedGrid').innerHTML = related.map(p => renderProductCard(p)).join('');
+    async function loadData() {
+      try {
+        const liveP = await api.getProduct(productId);
+        if (liveP && liveP.name) {
+          product = liveP;
+          renderProduct();
+        }
+      } catch (_) {
+        renderProduct();
+      }
+
+      try {
+        const related = await api.getRelatedProducts(productId);
+        if (Array.isArray(related) && related.length > 0) {
+          document.getElementById('relatedGrid').innerHTML = related.map(p => renderProductCard(p)).join('');
+          return;
+        }
+      } catch (_) {}
+
+      const fallbackRelated = PRODUCTS.filter(p => p.id !== productId && p.category === product.category).slice(0, 4);
+      if (fallbackRelated.length) {
+        document.getElementById('relatedGrid').innerHTML = fallbackRelated.map(p => renderProductCard(p)).join('');
+      }
     }
 
-    renderProduct();
-    renderRelated();
+    loadData();
   </script>
 </body>
 </html>

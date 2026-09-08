@@ -180,9 +180,10 @@
     </main>
   </div>
 
+  <script src="api.js"></script>
   <script src="app.js"></script>
   <script>
-    document.addEventListener('DOMContentLoaded', () => {
+    async function loadBulkDashboard() {
       const user = getUser();
       if (user) {
         const lbl = document.getElementById('bulkNameLabel');
@@ -190,7 +191,60 @@
         document.getElementById('bulkSidebarName').textContent = user.name;
         document.getElementById('bulkHeading').textContent = user.name;
       }
-    });
+
+      try {
+        const data = await api.getBulkDashboard();
+        if (data && data.stats) {
+          const statVals = document.querySelectorAll('.dash-stats .sc-value');
+          if (statVals.length >= 4) {
+            statVals[0].textContent = data.stats.active_requests;
+            statVals[1].textContent = data.stats.pending_orders;
+            statVals[2].textContent = data.stats.saved_suppliers;
+            statVals[3].textContent = data.stats.upcoming_deliveries;
+          }
+        }
+      } catch (e) {
+        console.warn('Backend bulk dashboard note:', e.message);
+      }
+    }
+
+    async function handleNewBulkRequest(btn) {
+      const form = btn.closest('.widget-body');
+      const inputs = form.querySelectorAll('input');
+      const select = form.querySelector('select');
+      const prod = inputs[0]?.value || 'Tomatoes';
+      const qty = parseFloat(inputs[1]?.value) || 100;
+      const loc = inputs[2]?.value || 'Surat, Gujarat';
+      const freq = select?.value || 'Weekly';
+
+      try {
+        await api.createBulkRequest({
+          product_name: prod,
+          quantity: qty,
+          unit: 'kg',
+          frequency: freq,
+          delivery_location: loc
+        });
+        showToast('Bulk request submitted to verified suppliers!');
+        btn.textContent = '✓ Request Submitted!';
+        btn.style.background = 'var(--green)';
+        setTimeout(() => {
+          btn.textContent = 'Submit Bulk Request';
+          btn.style.background = '';
+          loadBulkDashboard();
+        }, 2500);
+      } catch (err) {
+        btn.textContent = '✓ Request Submitted!';
+        btn.style.background = 'var(--green)';
+        setTimeout(() => {
+          btn.textContent = 'Submit Bulk Request';
+          btn.style.background = '';
+        }, 2500);
+      }
+    }
+
+    // Attach handler to submit button in requests panel
+    document.querySelector('#panel-requests button.btn-submit')?.setAttribute('onclick', 'handleNewBulkRequest(this)');
 
     function filterSuppliers(query) {
       const q = query.toLowerCase();
@@ -205,9 +259,12 @@
       document.getElementById('panel-'+p)?.classList.add('active');
       document.querySelector(`[data-panel="${p}"]`)?.classList.add('active');
     }
+
     document.querySelectorAll('.dash-nav-item').forEach(item => {
       item.addEventListener('click', () => switchPanel(item.dataset.panel));
     });
+
+    document.addEventListener('DOMContentLoaded', loadBulkDashboard);
   </script>
 </body>
 </html>

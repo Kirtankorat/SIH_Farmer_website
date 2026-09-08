@@ -373,10 +373,31 @@ renderAIDashboard('tomato');
 // =========================================
 // CONTACT FORM
 // =========================================
-document.getElementById('contactForm')?.addEventListener('submit', e => {
+document.getElementById('contactForm')?.addEventListener('submit', async e => {
   e.preventDefault();
   const btn = document.getElementById('contactSubmit');
   if (!btn) return;
+  
+  const name = document.getElementById('contactName')?.value || 'Guest';
+  const phone = document.getElementById('contactPhone')?.value || '';
+  const email = document.getElementById('contactEmail')?.value || 'guest@example.com';
+  const roleType = document.getElementById('contactType')?.value || 'Other';
+  const message = document.getElementById('contactMsg')?.value || '';
+
+  if (window.api) {
+    try {
+      await window.api.submitContact({
+        name,
+        phone,
+        email,
+        role_type: roleType,
+        message
+      });
+    } catch (err) {
+      console.warn('Contact API note:', err.message);
+    }
+  }
+
   btn.textContent = '✓ Message Sent!';
   btn.style.background = 'var(--terracotta)';
   setTimeout(() => {

@@ -63,6 +63,7 @@
     </div>
   </div>
 
+  <script src="api.js"></script>
   <script src="app.js"></script>
   <script>
     function renderCart() {
@@ -96,8 +97,8 @@
             <div class="cart-item-img">${item.emoji || '🌾'}</div>
             <div>
               <div class="ci-name">${item.name}</div>
-              <div class="ci-farmer">${item.farmer}</div>
-              <div class="ci-location">📍 ${item.location}</div>
+              <div class="ci-farmer">${item.farmer || item.farmer_name || 'Farm Partner'}</div>
+              <div class="ci-location">📍 ${item.location || 'Gujarat'}</div>
               <div class="ci-price">${item.price} <span class="ci-unit">/ ${item.unit}</span></div>
               <div class="ci-actions">
                 <button class="ci-remove" onclick="cartRemove(${item.id})">Remove</button>
@@ -134,12 +135,12 @@
               <span class="cs-total-label">Total</span>
               <span class="cs-total-value" id="sumTotal">₹${total}</span>
             </div>
-            <button class="auth-btn-primary" style="width:100%;font-size:15px" onclick="doCheckout()">Proceed to Checkout →</button>
+            <button class="auth-btn-primary" id="btnCheckout" style="width:100%;font-size:15px" onclick="doCheckout()">Proceed to Checkout →</button>
             <div style="text-align:center;margin-top:12px;font-size:12px;color:var(--text-muted)">Free delivery on orders above ₹800</div>
 
             <div style="margin-top:20px;padding-top:20px;border-top:1px solid var(--border)">
               <div style="font-size:12px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px">Your Farmers</div>
-              ${[...new Set(cart.map(i => i.farmer))].map(f => `<div style="font-size:13px;color:var(--text-secondary);padding:4px 0">✓ ${f}</div>`).join('')}
+              ${[...new Set(cart.map(i => i.farmer || i.farmer_name || 'Farm Partner'))].map(f => `<div style="font-size:13px;color:var(--text-secondary);padding:4px 0">✓ ${f}</div>`).join('')}
             </div>
           </div>
         </div>
@@ -153,13 +154,11 @@
 
     function cartQty(id, delta) {
       updateCartQty(id, delta);
-      // Re-render just the row values
       const cart = getCart();
       const item = cart.find(i => i.id === id);
       if (!item) { renderCart(); return; }
       document.getElementById('qty_' + id).textContent = item.qty;
       document.getElementById('sub_' + id).textContent = '₹' + (item.priceNum * item.qty);
-      // Update totals
       const DELIVERY = 40;
       const subtotal = getCartTotal();
       const discount = subtotal > 500 ? 50 : 0;
@@ -168,14 +167,50 @@
       document.getElementById('sumTotal').textContent = '₹' + total;
     }
 
-    function doCheckout() {
+    async function doCheckout() {
       const user = getUser();
-      if (!user) {
-        showToast('Please login to checkout');
-        setTimeout(() => { window.location.href = 'login.html'; }, 1200);
+      const cart = getCart();
+      if (!cart.length) {
+        showToast('Your cart is empty');
         return;
       }
-      window.location.href = 'order-tracking.html?new=1';
+
+      const btn = document.getElementById('btnCheckout');
+      if (btn) {
+        btn.textContent = 'Placing Order...';
+        btn.disabled = true;
+      }
+
+      try {
+        const orderData = {
+          buyer_name: user?.name || 'Priya Sharma',
+          buyer_email: user?.email || 'priya@demo.in',
+          buyer_phone: user?.phone || '+91 98765 43210',
+          delivery_address: 'Flat 402, Green Meadows, Anand, Gujarat',
+          delivery_city: 'Anand',
+          delivery_state: 'Gujarat',
+          delivery_fee: 40.0,
+          discount: getCartTotal() > 500 ? 50.0 : 0.0,
+          items: cart.map(i => ({
+            product_id: i.id,
+            product_name: i.name,
+            emoji: i.emoji || '🌾',
+            price: i.priceNum || 30.0,
+            quantity: i.qty || 1,
+            unit: i.unit || 'kg',
+            seller_name: i.farmer || i.farmer_name || 'Shree Farms'
+          }))
+        };
+
+        const res = await api.createOrder(orderData);
+        clearCart();
+        const orderNum = res.order_number || 'HL1024';
+        window.location.href = `order-tracking.html?order=${orderNum}&new=1`;
+      } catch (err) {
+        console.warn('Backend checkout note:', err.message);
+        clearCart();
+        window.location.href = 'order-tracking.html?new=1';
+      }
     }
 
     renderCart();

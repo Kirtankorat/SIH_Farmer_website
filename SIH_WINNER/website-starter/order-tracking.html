@@ -116,96 +116,113 @@
     </div>
   </div>
 
+  <script src="api.js"></script>
   <script src="app.js"></script>
   <script>
     const params = new URLSearchParams(window.location.search);
     const isNew = params.get('new') === '1';
+    const orderQuery = params.get('order') || 'HL1024';
     const cart = getCart();
-
-    // Generate order ID
-    const orderId = 'HL' + (1020 + Math.floor(Math.random() * 100));
-    document.getElementById('orderNum').textContent = 'Order #' + orderId;
-
-    const now = new Date();
-    const tomorrow = new Date(now);
-    tomorrow.setDate(now.getDate() + 1);
-    const options = { weekday:'long', day:'numeric', month:'long' };
-    document.getElementById('orderDate').textContent = `Placed on ${now.toLocaleDateString('en-IN', {day:'numeric',month:'long',year:'numeric'})} · Expected delivery: ${tomorrow.toLocaleDateString('en-IN', options)} by 6 PM`;
-
-    // Timeline steps
-    const steps = [
-      { label: 'Order Placed', time: now.toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'}), status: 'done', desc: 'Your order was received.' },
-      { label: 'Farmer Confirmed', time: (+now+15*60000)|0 > 0 ? addMins(now,15) : '', status: isNew ? 'done' : 'done', desc: 'The farmer confirmed and is preparing your order.' },
-      { label: 'Preparing Produce', time: addMins(now, 60), status: isNew ? 'current' : 'current', desc: 'Produce is being harvested and sorted for you.' },
-      { label: 'Picked Up', time: addMins(now, 240), status: 'pending', desc: 'Our logistics partner will pick up from the farm.' },
-      { label: 'In Transit', time: '', status: 'pending', desc: 'On its way to you.' },
-      { label: 'Delivered', time: tomorrow.toLocaleDateString('en-IN',{day:'numeric',month:'short'}) + ' · by 6 PM', status: 'pending', desc: 'Delivered to your address.' }
-    ];
 
     function addMins(date, mins) {
       const d = new Date(date.getTime() + mins * 60000);
-      return d.toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'});
+      return d.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' });
     }
 
-    document.getElementById('timeline').innerHTML = steps.map((s, i) => {
-      const isLast = i === steps.length - 1;
-      const isDone = s.status === 'done';
-      const isCurrent = s.status === 'current';
-      return `
-        <div class="timeline-step">
-          <div class="ts-indicator">
-            <div class="ts-dot ${isDone ? 'done' : isCurrent ? 'current' : ''}"></div>
-            ${!isLast ? `<div class="ts-line ${isDone ? 'done' : ''}"></div>` : ''}
+    async function loadTrackingData() {
+      let order = null;
+      try {
+        order = await api.getOrder(orderQuery);
+      } catch (err) {
+        console.warn('Backend tracking note:', err.message);
+      }
+
+      const orderId = order?.order_number || orderQuery;
+      document.getElementById('orderNum').textContent = 'Order #' + orderId;
+
+      const now = order?.created_at ? new Date(order.created_at) : new Date();
+      const tomorrow = order?.expected_delivery ? new Date(order.expected_delivery) : new Date(now.getTime() + 86400000);
+      const options = { weekday: 'long', day: 'numeric', month: 'long' };
+      document.getElementById('orderDate').textContent = `Placed on ${now.toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' })} · Expected delivery: ${tomorrow.toLocaleDateString('en-IN', options)} by 6 PM`;
+
+      // Determine step status
+      const status = order?.status || (isNew ? 'preparing' : 'in_transit');
+      const isPlaced = true;
+      const isConfirmed = ['confirmed', 'preparing', 'picked_up', 'in_transit', 'delivered'].includes(status);
+      const isPrep = ['preparing', 'picked_up', 'in_transit', 'delivered'].includes(status);
+      const isPickup = ['picked_up', 'in_transit', 'delivered'].includes(status);
+      const isTransit = ['in_transit', 'delivered'].includes(status);
+      const isDelivered = status === 'delivered';
+
+      const steps = [
+        { label: 'Order Placed', time: now.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' }), status: 'done', desc: 'Your order was received.' },
+        { label: 'Farmer Confirmed', time: addMins(now, 15), status: isConfirmed ? 'done' : 'pending', desc: 'The farmer confirmed and is preparing your order.' },
+        { label: 'Preparing Produce', time: addMins(now, 60), status: isPrep ? (isPickup ? 'done' : 'current') : 'pending', desc: 'Produce is being harvested and sorted for you.' },
+        { label: 'Picked Up', time: addMins(now, 240), status: isPickup ? (isTransit ? 'done' : 'current') : 'pending', desc: 'Our logistics partner will pick up from the farm.' },
+        { label: 'In Transit', time: addMins(now, 360), status: isTransit ? (isDelivered ? 'done' : 'current') : 'pending', desc: 'On its way to you.' },
+        { label: 'Delivered', time: tomorrow.toLocaleDateString('en-IN', { day: 'numeric', month: 'short' }) + ' · by 6 PM', status: isDelivered ? 'done' : 'pending', desc: 'Delivered to your address.' }
+      ];
+
+      document.getElementById('timeline').innerHTML = steps.map((s, i) => {
+        const isLast = i === steps.length - 1;
+        const isDone = s.status === 'done';
+        const isCurrent = s.status === 'current';
+        return `
+          <div class="timeline-step">
+            <div class="ts-indicator">
+              <div class="ts-dot ${isDone ? 'done' : isCurrent ? 'current' : ''}"></div>
+              ${!isLast ? `<div class="ts-line ${isDone ? 'done' : ''}"></div>` : ''}
+            </div>
+            <div class="ts-content">
+              <div class="ts-title ${isDone ? 'done' : isCurrent ? '' : 'pending'}">${isDone ? '✓ ' : isCurrent ? '→ ' : ''}${s.label}</div>
+              <div class="ts-time" style="color:${isCurrent ? 'var(--terracotta)' : ''};font-weight:${isCurrent ? '700' : '400'}">${s.time || (s.status === 'pending' ? 'Upcoming' : '')}</div>
+            </div>
           </div>
-          <div class="ts-content">
-            <div class="ts-title ${isDone ? 'done' : isCurrent ? '' : 'pending'}">${isDone ? '✓ ' : isCurrent ? '→ ' : ''}${s.label}</div>
-            <div class="ts-time" style="color:${isCurrent ? 'var(--terracotta)' : ''};font-weight:${isCurrent ? '700' : '400'}">${s.time || (s.status === 'pending' ? 'Upcoming' : '')}</div>
+        `;
+      }).join('');
+
+      // Farmer info
+      const farmerName = order?.farmer_info?.name || (order?.items?.[0]?.seller_name) || (cart.length > 0 ? (cart[0].farmer || cart[0].farmer_name) : 'Shree Farms');
+      const farmerLoc = order?.farmer_info?.location || 'Anand, Gujarat';
+      document.getElementById('farmerInfoBox').innerHTML = `
+        <div style="display:flex;gap:16px;align-items:center">
+          <div style="width:52px;height:52px;border-radius:50%;background:var(--green-muted);display:flex;align-items:center;justify-content:center;font-size:28px;flex-shrink:0">👨‍🌾</div>
+          <div>
+            <div style="font-size:15px;font-weight:700;color:var(--brown)">${farmerName}</div>
+            <div style="font-size:13px;color:var(--text-muted)">📍 ${farmerLoc}</div>
+            <span class="seller-badge badge-farmer" style="margin-top:4px">Verified Supplier</span>
           </div>
         </div>
       `;
-    }).join('');
 
-    // Farmer info
-    const farmer = cart.length > 0 ? (PRODUCTS.find(p => p.id === cart[0].id) || PRODUCTS[0]) : PRODUCTS[0];
-    document.getElementById('farmerInfoBox').innerHTML = `
-      <div style="display:flex;gap:16px;align-items:center">
-        <div style="width:52px;height:52px;border-radius:50%;background:var(--green-muted);display:flex;align-items:center;justify-content:center;font-size:28px;flex-shrink:0">👨‍🌾</div>
-        <div>
-          <div style="font-size:15px;font-weight:700;color:var(--brown)">${farmer.farmer}</div>
-          <div style="font-size:13px;color:var(--text-muted)">📍 ${farmer.location}</div>
-          <span class="seller-badge badge-farmer" style="margin-top:4px">${farmer.badge}</span>
-        </div>
-      </div>
-    `;
+      // Order summary items
+      const orderItems = (order?.items && order.items.length > 0) ? order.items : (cart.length > 0 ? cart : [{ emoji: '🍅', name: 'Fresh Tomatoes', qty: 2, unit: 'kg', price: '₹32', priceNum: 32 }, { emoji: '🌾', name: 'Wheat (Lokwan)', qty: 1, unit: 'kg', price: '₹42', priceNum: 42 }]);
+      const subtotal = order?.subtotal || orderItems.reduce((s, i) => s + ((i.priceNum || i.price) * (i.qty || i.quantity)), 0);
+      const deliveryFee = order?.delivery_fee || 40;
+      const total = order?.total_amount || (subtotal + deliveryFee);
 
-    // Order summary
-    const orderItems = cart.length > 0 ? cart : [{ ...PRODUCTS[0], qty: 2 }, { ...PRODUCTS[2], qty: 1 }];
-    const subtotal = orderItems.reduce((s, i) => s + (i.priceNum * i.qty), 0);
-    const DELIVERY = 40;
-    const total = subtotal + DELIVERY;
-
-    document.getElementById('orderSummaryBox').innerHTML = `
-      <div style="margin-bottom:16px">
-        ${orderItems.map(i => `
-          <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border);font-size:14px">
-            <div>
-              <div style="font-weight:700;color:var(--brown)">${i.emoji || '🌾'} ${i.name}</div>
-              <div style="font-size:12px;color:var(--text-muted)">${i.qty} ${i.unit} × ${i.price}</div>
+      document.getElementById('orderSummaryBox').innerHTML = `
+        <div style="margin-bottom:16px">
+          ${orderItems.map(i => `
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border);font-size:14px">
+              <div>
+                <div style="font-weight:700;color:var(--brown)">${i.emoji || '🌾'} ${i.name || i.product_name}</div>
+                <div style="font-size:12px;color:var(--text-muted)">${i.qty || i.quantity} ${i.unit} × ₹${i.priceNum || i.price}</div>
+              </div>
+              <div style="font-weight:700;color:var(--green)">₹${(i.priceNum || i.price) * (i.qty || i.quantity)}</div>
             </div>
-            <div style="font-weight:700;color:var(--green)">₹${i.priceNum * i.qty}</div>
-          </div>
-        `).join('')}
-      </div>
-      <div class="cs-row"><span class="cs-label">Subtotal</span><span class="cs-value">₹${subtotal}</span></div>
-      <div class="cs-row"><span class="cs-label">Delivery</span><span class="cs-value">₹${DELIVERY}</span></div>
-      <div class="cs-total" style="padding:14px 0 4px;border-top:2px solid var(--border);">
-        <span style="font-size:16px;font-weight:700;color:var(--brown)">Total</span>
-        <span style="font-size:20px;font-weight:800;color:var(--green);font-family:'DM Serif Display',serif">₹${total}</span>
-      </div>
-    `;
+          `).join('')}
+        </div>
+        <div class="cs-row"><span class="cs-label">Subtotal</span><span class="cs-value">₹${subtotal}</span></div>
+        <div class="cs-row"><span class="cs-label">Delivery</span><span class="cs-value">₹${deliveryFee}</span></div>
+        <div class="cs-total" style="padding:14px 0 4px;border-top:2px solid var(--border);">
+          <span style="font-size:16px;font-weight:700;color:var(--brown)">Total</span>
+          <span style="font-size:20px;font-weight:800;color:var(--green);font-family:'DM Serif Display',serif">₹${total}</span>
+        </div>
+      `;
+    }
 
-    // On new order, clear cart
-    if (isNew) clearCart();
+    loadTrackingData();
   </script>
 </body>
 </html>

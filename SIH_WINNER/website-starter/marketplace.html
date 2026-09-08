@@ -141,6 +141,7 @@
     </div>
   </div>
 
+  <script src="api.js"></script>
   <script src="app.js"></script>
   <script src="script.js"></script>
   <script>
@@ -164,7 +165,7 @@
       }
     }
 
-    function applyFilters() {
+    async function applyFilters() {
       const searchQ = document.getElementById('searchInput').value.toLowerCase();
       
       const cats = Array.from(document.querySelectorAll('#filter-category input:checked')).map(el => el.value);
@@ -172,6 +173,29 @@
       const sellers = Array.from(document.querySelectorAll('#filter-sellerType input:checked')).map(el => el.value);
       const maxPrice = parseInt(document.getElementById('priceRange').value);
       const sort = document.getElementById('sortSelect').value;
+
+      try {
+        const liveProducts = await api.getProducts({
+          search: searchQ || undefined,
+          category: cats.length === 1 ? cats[0] : undefined,
+          practice: pracs.length === 1 ? pracs[0] : undefined,
+          seller_type: sellers.length === 1 ? sellers[0] : undefined,
+          max_price: maxPrice < 500 ? maxPrice : undefined,
+          sort: sort
+        });
+        if (Array.isArray(liveProducts) && liveProducts.length > 0) {
+          currentProducts = liveProducts.filter(p => {
+            if (cats.length > 1 && !cats.includes(p.category)) return false;
+            if (pracs.length > 1 && !pracs.includes(p.practice)) return false;
+            if (sellers.length > 1 && !sellers.includes(p.seller_type || p.sellerType)) return false;
+            return true;
+          });
+          renderMarketplace();
+          return;
+        }
+      } catch (err) {
+        console.warn('Using local dataset fallback:', err.message);
+      }
 
       currentProducts = PRODUCTS.filter(p => {
         // Search
@@ -189,7 +213,6 @@
       if (sort === 'price-low') currentProducts.sort((a,b) => a.priceNum - b.priceNum);
       else if (sort === 'price-high') currentProducts.sort((a,b) => b.priceNum - a.priceNum);
       else if (sort === 'rating') currentProducts.sort((a,b) => b.rating - a.rating);
-      // else 'recommended' uses default order
 
       renderMarketplace();
     }
@@ -216,7 +239,6 @@
 
     // Init
     document.addEventListener('DOMContentLoaded', () => {
-      // Allow app.js to build navbar first
       setTimeout(() => {
         applyFilters();
       }, 50);

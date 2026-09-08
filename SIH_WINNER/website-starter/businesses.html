@@ -359,9 +359,9 @@
           </div>
           <div class="form-group">
             <label>Additional Notes</label>
-            <textarea rows="3" placeholder="Any specific requirements, certifications needed, etc."></textarea>
+            <textarea rows="3" id="bizNotes" placeholder="Any specific requirements, certifications needed, etc."></textarea>
           </div>
-          <button class="btn-submit" onclick="this.textContent='✓ Request Submitted!'; this.style.background='var(--terracotta)'; setTimeout(() => { this.textContent='Request Bulk Order'; this.style.background=''; }, 3000);">
+          <button class="btn-submit" onclick="handleBizBulkSubmit(this)">
             Request Bulk Order
           </button>
         </div>
@@ -383,7 +383,52 @@
     </div>
   </footer>
 
+  <script src="api.js"></script>
   <script src="app.js"></script>
   <script src="script.js"></script>
+  <script>
+    async function handleBizBulkSubmit(btn) {
+      const form = btn.closest('.bulk-form');
+      const inputs = form.querySelectorAll('input');
+      const selects = form.querySelectorAll('select');
+      const textarea = form.querySelector('textarea');
+
+      const bizName = inputs[0]?.value || 'Business Buyer';
+      const bizType = selects[0]?.value || 'Restaurant';
+      const contactName = inputs[1]?.value || 'Buyer Contact';
+      const phone = inputs[2]?.value || '';
+      const products = inputs[3]?.value || 'Bulk Produce';
+      const qty = parseFloat(inputs[4]?.value) || 500;
+      const location = inputs[5]?.value || 'Ahmedabad, Gujarat';
+      const freq = selects[1]?.value || 'Weekly';
+      const notes = textarea?.value || '';
+
+      if (window.api) {
+        try {
+          await window.api.createBulkRequest({
+            business_name: bizName,
+            business_type: bizType,
+            contact_name: contactName,
+            phone: phone,
+            product_name: products,
+            quantity: qty,
+            unit: 'kg',
+            frequency: freq,
+            delivery_location: location,
+            additional_notes: notes
+          });
+        } catch (e) {
+          console.warn('Bulk request note:', e.message);
+        }
+      }
+
+      btn.textContent = '✓ Request Submitted!';
+      btn.style.background = 'var(--terracotta)';
+      setTimeout(() => {
+        btn.textContent = 'Request Bulk Order';
+        btn.style.background = '';
+      }, 3000);
+    }
+  </script>
 </body>
 </html>
